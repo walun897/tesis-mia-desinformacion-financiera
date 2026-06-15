@@ -51,7 +51,7 @@ Orquestado con LangGraph (grafos de estados con nodos condicionales).
 | Trinh et al. — Multi-Agent FC | 2025 | arXiv:2506.17878 | +12.3% F1 con 4 agentes especializados |
 | DelphiAgent — Xiong et al. | 2025 | IPM Vol. 62 | Framework multi-agente confiable |
 
-La bibliografía completa anotada está en [`bibliografia/`](./bibliografia/).
+La bibliografía completa anotada está en [`bibliografia/`](./01_bibliografia/).
 
 ## Stack Tecnológico
 
