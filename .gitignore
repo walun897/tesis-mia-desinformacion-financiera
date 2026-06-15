@@ -1,1 +1,15 @@
+# API keys
+.env
 
+# Python
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# Data pesada
+02-corpus/raw/*.json
+02-corpus/raw/*.csv
+
+# OS
+.DS_Store
+Thumbs.db
