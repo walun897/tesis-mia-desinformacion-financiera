@@ -1,7 +1,7 @@
 # Sistema Híbrido LLM-Agente para Detección de Desinformación Financiera en Colombia
 
 **Proyecto de Maestría en Inteligencia Artificial**
-Universidad Sergio Arboled
+Universidad Sergio Arboleda
 Wilmar Andrey Pachón Adames | 2026–2027
 
 ---
