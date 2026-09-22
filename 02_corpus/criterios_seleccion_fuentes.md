@@ -66,6 +66,17 @@ había sido verificada:**
   bloqueo en robots.txt (solo bloquea herramientas de descarga masiva).
   Incluida por la misma recomendación. Medio especializado en
   economía/mercados, credibilidad editorial comparable a Portafolio.
+- **Bloomberg Línea, sección Colombia** — agregada 2026-09-22, sin bloqueo
+  en robots.txt (solo bloquea PetalBot y rutas internas). Feed RSS
+  dedicado a Colombia con fecha real por ítem. Marca de periodismo
+  financiero de primer nivel, mejor credibilidad editorial que Halcones y
+  Palomas para la clase "verdadera".
+- ~~Forbes Colombia (forbes.co)~~ — **excluida** (verificado 2026-09-22):
+  el dominio principal `forbes.co` tiene robots.txt permisivo, pero el
+  contenido real vive en `editorial.forbes.co`, que declara
+  `Disallow: /` para todos los bots (solo permite `/wp-content/uploads/`,
+  imágenes). El propio scraper respetó el bloqueo automáticamente
+  (`ROBOTSTXT_OBEY=True`) — no se intentó evadir.
 
 ## Balance de clases: no es automático
 
