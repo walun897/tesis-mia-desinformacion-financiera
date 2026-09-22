@@ -11,6 +11,13 @@ __pycache__/
 02_corpus/raw/*.csv
 02_corpus/raw/*.parquet
 
+# Scrapy (cache local, no versionar)
+03_scraping/.scrapy/
+03_scraping/httpcache/
+
 # OS
 .DS_Store
 Thumbs.db
+
+# Archivos de bloqueo de Office (se crean al tener el archivo abierto)
+~$*

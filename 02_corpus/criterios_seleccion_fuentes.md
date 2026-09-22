@@ -33,18 +33,55 @@ el sistema que se está construyendo).
 
 ## Fuentes incluidas
 
+**Verificado 2026-09-22 contra robots.txt real (ver `03_scraping/README.md`
+para el detalle completo) — esto reemplaza la lista original, que no
+había sido verificada:**
+
 **Verdaderas / comunicados oficiales:**
-- Portafolio (portafolio.co)
-- La República (larepublica.co)
-- El Tiempo, sección Economía
-- Comunicados oficiales: Banco de la República, Superintendencia
-  Financiera de Colombia, DANE
+- ~~Portafolio (portafolio.co)~~ — **excluida**: su `robots.txt` bloquea
+  explícitamente bots de IA (`anthropic-ai`, `ClaudeBot`, `GPTBot`, etc.).
+  Incluirla violaría la regla de este mismo documento de respetar
+  robots.txt.
+- La República (larepublica.co), sección Economía — sin bloqueo, incluida.
+- ~~El Tiempo, sección Economía~~ — **excluida**: bloquea bots de IA y
+  además sus términos de servicio prohíben explícitamente el uso del
+  contenido para "development of any software, machine learning,
+  artificial intelligence (AI), and/or large language models (LLMs)" sin
+  autorización previa.
+- Comunicados oficiales: Banco de la República (verificado, sin
+  restricciones), Superintendencia Financiera de Colombia (sin
+  restricciones, pero la sección de prensa es un menú de subcategorías —
+  falta mapear la URL exacta), DANE (sin restricciones, spider pendiente
+  de construir).
+- **Halcones y Palomas** (halconesypalomas.com) — agregada 2026-09-22,
+  sin bloqueo en robots.txt. Incluida por recomendación de un experto que
+  trabajó en la BVC (decisión del usuario). Nota: también publica
+  contenido no financiero (Cannabis, Gadgets) — se apoya en
+  `DomainFilterPipeline` para quedarse solo con lo relevante.
+- **Valora Analitik** (valoraanalitik.com) — agregada 2026-09-22, sin
+  bloqueo en robots.txt (solo bloquea herramientas de descarga masiva).
+  Incluida por la misma recomendación. Medio especializado en
+  economía/mercados, credibilidad editorial comparable a Portafolio.
+
+**Impacto**: al perder Portafolio y El Tiempo, la clase "verdadera" se
+compensó agregando Halcones y Palomas y Valora Analitik — ya no depende
+solo de La República + comunicados oficiales. Las 5 fuentes de "verdadera"
+(La República, BanRep, Superfinanciera, Halcones y Palomas, Valora
+Analitik) ya están verificadas técnicamente; falta correr los spiders a
+escala para confirmar que el volumen combinado alcanza 300-400.
 
 **Falsas / dudosas (fact-checking):**
-- ColombiaCheck (colombiacheck.com) — señalado como verificador certificado
-  IFCN en el anteproyecto; confirmar vigencia del sello en el momento del
-  scraping, ya que las certificaciones IFCN se renuevan periódicamente.
-- AFP Factual Colombia — filtrado a dominio financiero/bancario
+- ColombiaCheck (colombiacheck.com) — verificado, sin bloqueo a bots de
+  IA. Señalado como verificador certificado IFCN en el anteproyecto;
+  confirmar vigencia del sello en el momento del scraping, ya que las
+  certificaciones IFCN se renuevan periódicamente. Taxonomía de
+  calificación real (verificada en `/metodologia`, no la genérica asumida
+  antes en este documento): **Verdadero, Verdadero pero, Cuestionable,
+  Falso** — ver `guia_anotacion.md` y `03_scraping/scraper/rating_maps.py`.
+- AFP Factual Colombia — **pendiente de verificar**: no fue posible
+  acceder al dominio (`factcheck.afp.com`) con las herramientas
+  disponibles en esta sesión para confirmar robots.txt/ToS. No construir
+  el spider hasta verificarlo manualmente.
 
 **Datasets públicos complementarios:**
 - FakeDeS / IberLEF 2021 (Corpus de noticias falsas en español, 971 items,

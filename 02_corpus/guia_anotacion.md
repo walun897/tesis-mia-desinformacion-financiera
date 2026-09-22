@@ -19,16 +19,25 @@ directamente de:
 
 ### Falsa
 La afirmación central es contradicha explícitamente por evidencia
-verificable, o un fact-checker IFCN la calificó como falsa/engañosa.
+verificable, o un fact-checker IFCN la calificó como falsa.
 
 Se etiqueta automáticamente como **falsa** cuando el ítem proviene de un
-fact-checker IFCN (ColombiaCheck, AFP Factual Colombia) con calificación
-equivalente a "falso" o "engañoso".
+fact-checker IFCN con calificación "Falso" (ColombiaCheck) o equivalente
+verificado (AFP Factual Colombia — pendiente de verificar su taxonomía,
+ver `criterios_seleccion_fuentes.md`).
 
 ### Dudosa
 No cumple los criterios claros de verdadera ni falsa. Incluye:
-- Calificada por el fact-checker como "parcialmente cierta",
-  "descontextualizada" o "sin evidencia suficiente".
+- Calificada por el fact-checker con una categoría intermedia — en
+  ColombiaCheck, específicamente **"Cuestionable"** o **"Verdadero, pero"**
+  (taxonomía real verificada en colombiacheck.com/metodologia el
+  2026-09-22; reemplaza la redacción genérica "parcialmente cierta /
+  descontextualizada / sin evidencia suficiente" que tenía esta sección
+  antes de verificar contra el sitio real — ver `03_scraping/scraper/rating_maps.py`).
+- "Chequeo Múltiple" de ColombiaCheck (varias afirmaciones verificadas en
+  un solo artículo) no es una calificación de verdad — se trata como
+  candidata a dudosa por defecto y requiere revisión manual para separar
+  las afirmaciones individuales.
 - Contenido viral (cadenas, redes sociales) sobre temas financieros **sin**
   verificación institucional, pero con apariencia plausible.
 - Mezcla elementos verdaderos y falsos en la misma pieza.

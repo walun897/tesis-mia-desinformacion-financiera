@@ -1,1 +1,5 @@
-
+# 03_scraping/ - recolección
+scrapy>=2.11
+trafilatura>=1.12
+pandas>=2.2
+pyarrow>=17.0
