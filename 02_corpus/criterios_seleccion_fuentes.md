@@ -48,11 +48,15 @@ había sido verificada:**
   contenido para "development of any software, machine learning,
   artificial intelligence (AI), and/or large language models (LLMs)" sin
   autorización previa.
-- Comunicados oficiales: Banco de la República (verificado, sin
-  restricciones), Superintendencia Financiera de Colombia (sin
-  restricciones, pero la sección de prensa es un menú de subcategorías —
-  falta mapear la URL exacta), DANE (sin restricciones, spider pendiente
-  de construir).
+- Comunicados oficiales: Banco de la República (verificado, spider
+  construido), Superintendencia Financiera de Colombia (verificado
+  2026-09-22, spider construido — tabla de comunicados en
+  `superfinanciera.gov.co/10102692`, cubre solo el año en curso, falta el
+  histórico). DANE: sin restricciones de robots.txt, pero sus comunicados
+  son mayormente **PDF**, no HTML (`M06-Methodology.tex` no lo anticipó) —
+  el feed RSS de la categoría de comunicados (`?format=feed&type=rss`)
+  existe pero está vacío al momento de verificar. Necesita un pipeline de
+  extracción de PDF distinto a Trafilatura — no construido en esta sesión.
 - **Halcones y Palomas** (halconesypalomas.com) — agregada 2026-09-22,
   sin bloqueo en robots.txt. Incluida por recomendación de un experto que
   trabajó en la BVC (decisión del usuario). Nota: también publica
@@ -78,10 +82,20 @@ escala para confirmar que el volumen combinado alcanza 300-400.
   calificación real (verificada en `/metodologia`, no la genérica asumida
   antes en este documento): **Verdadero, Verdadero pero, Cuestionable,
   Falso** — ver `guia_anotacion.md` y `03_scraping/scraper/rating_maps.py`.
-- AFP Factual Colombia — **pendiente de verificar**: no fue posible
-  acceder al dominio (`factcheck.afp.com`) con las herramientas
-  disponibles en esta sesión para confirmar robots.txt/ToS. No construir
-  el spider hasta verificarlo manualmente.
+- ~~AFP Factual Colombia~~ — **excluida** (verificado 2026-09-22): el
+  dominio `factcheck.afp.com` bloquea activamente las solicitudes
+  automatizadas a nivel de CDN (Akamai devuelve "Access Denied" incluso al
+  pedir `/robots.txt` con un User-Agent identificado honestamente). No es
+  una política declarada como la de El Tiempo, es un bloqueo técnico
+  activo — no se puede scrapear sin evadirlo, y evadirlo violaría el
+  mismo principio de no burlar restricciones de acceso.
+
+**Impacto en falsa/dudosa**: con AFP Factual excluida, ColombiaCheck queda
+como el único fact-checker scrapeable — mismo riesgo de volumen que ya se
+señaló para "verdadera". El dataset FakeDeS/IberLEF (abajo) es el único
+respaldo si ColombiaCheck solo no alcanza 300-400 falsas + 200-300
+dudosas; si tampoco alcanza, hace falta buscar otro fact-checker IFCN
+colombiano scrapeable (pendiente, no resuelto en esta sesión).
 
 **Datasets públicos complementarios:**
 - FakeDeS / IberLEF 2021 (Corpus de noticias falsas en español, 971 items,

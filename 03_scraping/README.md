@@ -15,11 +15,11 @@ Complementa `02_corpus/criterios_seleccion_fuentes.md` (qué se recolecta) y
 | Banco de la República | Sin bloqueo a bots de IA | ✅ Incluida | `banrep_spider.py` |
 | Halcones y Palomas | Sin bloqueo a bots de IA (`Disallow:` vacío) | ✅ Incluida — agregada 2026-09-22 para compensar la exclusión de Portafolio/El Tiempo, por recomendación de un experto de la BVC (decisión del usuario). Ver nota de credibilidad en `halconesypalomas_spider.py`: también publica contenido no financiero (Cannabis, Gadgets). | `halconesypalomas_spider.py` |
 | Valora Analitik | Sin bloqueo a bots de IA (solo bloquea herramientas de descarga masiva) | ✅ Incluida — agregada 2026-09-22, misma razón que arriba. Medio especializado en economía/mercados, credibilidad comparable a Portafolio. | `valoraanalitik_spider.py` |
-| Superintendencia Financiera | Sin restricciones (`Allow: /`) | ⏳ Pendiente | No construido — la sección de prensa es un menú de subcategorías, falta mapear la URL exacta de "Comunicados generales" |
-| DANE | Sin bloqueo a bots de IA | ⏳ Pendiente | No construido — falta identificar la sección de comunicados |
+| Superintendencia Financiera | Sin restricciones (`Allow: /`) | ✅ Incluida | `superfinanciera_spider.py` — cubre el año en curso vía la tabla de `/10102692`; falta el histórico (otro enlace, otra estructura) |
+| DANE | Sin bloqueo a bots de IA | ⏳ Pendiente — no es un problema de permisos | Sus comunicados son mayormente **PDF**, no HTML. El feed RSS de la categoría existe (`comunicados-y-boletines?format=feed&type=rss`) pero está vacío al verificar. Necesita extracción de PDF (pipeline distinto a Trafilatura), no construido |
 | **Portafolio** | **Bloquea explícitamente `anthropic-ai`, `ClaudeBot`, `GPTBot`, etc.** | ❌ **Excluida** | No se construye — violaría la propia regla del proyecto de respetar robots.txt |
 | **El Tiempo** (incluye sección Economía) | **Bloquea bots de IA + ToS prohíbe explícitamente uso para "machine learning, artificial intelligence (AI), and/or large language models"** | ❌ **Excluida** | No se construye |
-| AFP Factual | No se pudo verificar — el dominio `factcheck.afp.com` no respondió a las herramientas de este sesión | ⏳ Pendiente de verificar manualmente antes de construir el spider | No construido |
+| AFP Factual | `factcheck.afp.com` bloquea activamente a nivel de CDN (Akamai "Access Denied" incluso para `/robots.txt`) | ❌ **Excluida** — bloqueo técnico activo, no una política declarada; evadirlo violaría el mismo principio de no burlar restricciones de acceso | No construido |
 
 **Impacto en `criterios_seleccion_fuentes.md`**: ese documento listaba
 Portafolio y El Tiempo como 2 de las 3 fuentes de referencia para la clase
