@@ -7,8 +7,9 @@ __pycache__/
 .ipynb_checkpoints/
 
 # Data pesada
-02-corpus/raw/*.json
-02-corpus/raw/*.csv
+02_corpus/raw/*.json
+02_corpus/raw/*.csv
+02_corpus/raw/*.parquet
 
 # OS
 .DS_Store

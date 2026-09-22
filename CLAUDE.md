@@ -39,6 +39,47 @@ resuelve explícitamente con el usuario antes de implementar, no se asume.
   acuerdo inter-anotador clásico entre 2+ humanos como describe
   `M06-Methodology.tex` — esto debe declararse explícitamente como
   limitación metodológica en el capítulo de metodología de la tesis.
+- **Recurso adicional — Fable 5.1**: crédito de $100 USD (regalo, sesión
+  Claude separada), vía API, **adicional** al tope de $50 de
+  Gemini/GPT-4o-mini — no reemplaza ningún modelo del clasificador.
+  Verificado: $10/1M tokens input, $50/1M output (60-80x más caro que
+  GPT-4o-mini/Gemini Flash-Lite), fuerte en razonamiento extendido,
+  tool-calling y tareas financieras.
+  Reparto aprobado 2026-09-21 (aprovechando el crédito completo, no solo lo
+  mínimo, según sus fortalezas por fase):
+  - **Fase 1 (Corpus) ~$15-20**: segunda opinión ampliada en casos dudosos
+    (no solo árbitro de desacuerdos) + apoyo en el control de calidad del
+    muestreo del 10% de verdadera/falsa automática.
+  - **Fase 2 (Clasificador) ~$10-15**: asistente de análisis de errores y de
+    iteración de prompts de los otros 3 LLMs antes de fijar la versión
+    final evaluada — **nunca** como una configuración evaluada/reportada en
+    la tabla comparativa (ver línea roja abajo).
+  - **Fase 3 (Agente validador ReAct) ~$35-40**: uso principal — motor de
+    razonamiento + tool-calling, donde más rinden sus fortalezas (extended
+    reasoning, tool-calling, tareas financieras) y núcleo metodológico del
+    agente.
+  - **Fase 4 (Evaluación/redacción) ~$15-20**: apoyo en análisis cualitativo
+    de resultados, discusión, limitaciones y síntesis de literatura
+    relacionada.
+  - Total estimado ≈ $75-95, dentro del crédito de $100.
+  - **Línea roja, la única restricción real**: no usarlo como una
+    configuración evaluada y reportada en la tabla comparativa del
+    clasificador (Fase 2) — el conjunto de ≥3 LLMs comparados es el
+    aprobado en el anteproyecto (`M06-Methodology.tex`); añadir a Fable ahí
+    cambiaría la metodología formal sin aval del director. Aparte de esto,
+    el crédito es del usuario y puede usarse con libertad.
+
+### Tabla de recursos por fase
+| Fase | Recurso | Uso | Presupuesto | Costo estimado |
+|---|---|---|---|---|
+| 1. Corpus | Fable 5.1 | Segunda opinión en dudosas + QA del muestreo automático | Crédito $100 | ~$15-20 |
+| 2. Clasificador | Fable 5.1 | Análisis de errores + iteración de prompts (no evaluado) | Crédito $100 | ~$10-15 |
+| 2. Clasificador | Gemini Pro | Uno de los ≥3 LLMs comparados | Tope $50 | ~$2-5 |
+| 2. Clasificador | Gemini 3.5 Flash-Lite | Uno de los ≥3 LLMs comparados | Tope $50 | $0 (free tier) |
+| 2. Clasificador | GPT-4o-mini | Uno de los ≥3 LLMs comparados | Tope $50 | ~$3-10 |
+| 2. Clasificador | Llama 3.1 8B / Mistral 7B | Modelo open-source local en Colab | $0 | $0 |
+| 3. Agente validador | Fable 5.1 | Razonamiento + tool-calling del ReAct (uso principal) | Crédito $100 | ~$35-40 |
+| 4. Evaluación/redacción | Fable 5.1 | Análisis cualitativo, discusión, síntesis de literatura | Crédito $100 | ~$15-20 |
 
 ## Estructura de carpetas
 - 01_bibliografia/ → .bib + anotada, solo referencias reales y verificables
