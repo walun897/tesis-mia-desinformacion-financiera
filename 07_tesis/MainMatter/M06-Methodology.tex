@@ -12,31 +12,41 @@ El proyecto adopta un enfoque experimental cuantitativo con diseño cuasi-experi
 
 \subsubsection{Universo y muestra}
 
-El universo de estudio comprende las noticias financieras y bancarias que circulan en medios digitales colombianos y que han sido objeto de verificación por organizaciones certificadas por la IFCN, así como noticias publicadas por medios económicos de referencia. La muestra objetivo es de 800 a 1.000 noticias, distribuidas en tres clases:
+El universo de estudio comprende las noticias financieras y bancarias que circulan en medios digitales colombianos y que han sido objeto de verificación por organizaciones certificadas por la IFCN, así como noticias publicadas por medios económicos de referencia. La muestra objetivo es de 800 a 1.000 noticias, distribuidas en tres clases.
+
+\textbf{Nota sobre fuentes (actualizado durante la ejecución de Fase 1):} la lista de fuentes descrita originalmente en el anteproyecto incluía Portafolio, El Tiempo y AFP Factual Colombia. Al verificar técnicamente cada fuente (ver \texttt{03\_scraping/README.md}), se encontró que Portafolio y El Tiempo bloquean explícitamente bots de IA en su \texttt{robots.txt} (nombran \texttt{anthropic-ai} y \texttt{ClaudeBot} por nombre) y que AFP Factual bloquea activamente cualquier solicitud automatizada a nivel de firewall de aplicación (Akamai). Las tres quedaron excluidas -- no por decisión metodológica, sino porque scrapearlas violaría la propia regla de este documento de respetar \texttt{robots.txt}. Se compensó agregando dos medios de referencia adicionales verificados como técnicamente accesibles (Halcones y Palomas, Valora Analitik), y las clases finales usadas son:
 
 \begin{itemize}
-    \item \textbf{Verdaderas (300--400):} Noticias publicadas por medios con credibilidad editorial verificable (Portafolio, La República, sección económica de El Tiempo) y comunicados oficiales del Banco de la República, Superintendencia Financiera y DANE.
-    \item \textbf{Falsas (300--400):} Noticias verificadas y clasificadas como falsas o engañosas por ColombiaCheck o AFP Factual Colombia, filtradas al dominio financiero y bancario.
-    \item \textbf{Dudosas (200--300):} Noticias clasificadas por los verificadores como ``parcialmente cierta'', ``sin evidencia suficiente'' o ``descontextualizada'', así como contenido viral financiero sin verificación institucional.
+    \item \textbf{Verdaderas (300--400):} La República, Halcones y Palomas, Valora Analitik (medios de referencia), y comunicados oficiales del Banco de la República y la Superintendencia Financiera de Colombia.
+    \item \textbf{Falsas (300--400):} Noticias calificadas como ``Falso'' por ColombiaCheck, único fact-checker certificado IFCN que resultó técnicamente accesible.
+    \item \textbf{Dudosas (200--300):} Noticias calificadas por ColombiaCheck como ``Cuestionable'' o ``Verdadero, pero'' (taxonomía real verificada en \texttt{colombiacheck.com/metodologia}, ver Estado del Arte), así como contenido viral financiero sin verificación institucional.
 \end{itemize}
+
+El DANE quedó pendiente: sus comunicados de prensa con cifras económicas (IPC, PIB) son mayoritariamente PDF, no HTML, lo que requiere un extractor distinto al usado para el resto de fuentes (Trafilatura, que opera sobre HTML) -- no implementado en esta fase.
 
 \subsubsection{Adquisición}
 
-La recolección se realiza mediante tres mecanismos:
+La recolección se implementa como un proyecto Scrapy (\texttt{03\_scraping/}), con Trafilatura para la extracción de texto limpio a partir del HTML crudo de cada artículo -- se prefirió Trafilatura sobre selectores CSS por sitio porque detecta el contenido principal de forma genérica, sin depender de la estructura particular de cada página. El pipeline de procesamiento aplica, en orden, sobre cada ítem candidato: (1) un filtro de dominio financiero basado en palabras clave (recall amplio, deliberadamente simple para no introducir un clasificador LLM en la etapa de recolección y contaminar la evaluación de Fase 2); (2) una lista de exclusión manual persistida en código (\texttt{scraper/exclusiones\_manuales.py}), resultado de una calibración inicial donde se revisaron a mano 58 ítems de ColombiaCheck con coincidencia incidental de una sola palabra clave -- 53 resultaron ser ruido temático (contenido político con una mención financiera incidental) y se excluyeron permanentemente; (3) deduplicación por similitud de n-gramas de caracteres (umbral $>0.85$), con el índice sembrado con \emph{todo} lo ya recolectado de las demás fuentes, no solo de la corrida en curso, para detectar la misma noticia reportada por dos medios distintos; y (4) validación de esquema, incluyendo que un ítem sin fecha de publicación verificable se descarta, no se etiqueta con una fecha inventada.
 
-\begin{enumerate}
-    \item \textbf{Scraping automatizado:} Desarrollo de scrapers con Scrapy y Trafilatura para extracción de ColombiaCheck (verificaciones del dominio financiero), Portafolio, La República y comunicados oficiales. Se respetan los archivos robots.txt y términos de servicio.
-    \item \textbf{Datasets públicos existentes:} Integración de corpus públicos en español (IberLEF, FakeDeS) con re-etiquetado según la taxonomía propuesta cuando sea pertinente.
-    \item \textbf{Pipeline automatizado:} Configuración de GitHub Actions para recolección periódica y actualización del corpus.
-\end{enumerate}
+Cada ítem recibe un identificador determinístico: \texttt{id = SHA-256(url)[:16]}. Esto tiene dos propiedades relevantes para la reproducibilidad de la limpieza de datos: la misma URL produce siempre el mismo id entre corridas distintas (permite deduplicar y hacer seguimiento de un ítem específico sin depender de un contador incremental que cambiaría de corrida a corrida), y el id no requiere una base de datos central ni coordinación entre spiders para evitar colisiones.
 
-Cada noticia incluye los siguientes metadatos: URL original, fuente, fecha de publicación, categoría temática financiera, enlace a la verificación del fact-checker (cuando aplique), y texto completo.
+El resultado de cada spider se escribe en formato \textbf{Parquet} (\texttt{02\_corpus/raw/\{fuente\}.parquet}), un formato columnar comprimido, elegido sobre CSV por preservar tipos de datos (fechas, booleanos) sin ambigüedad de parseo y por su eficiencia de lectura con pandas/PyArrow para los volúmenes del proyecto. El esquema completo de columnas está documentado en \texttt{02\_corpus/README.md}. Los datos crudos no se versionan en git (son datos pesados y algunos artículos tienen derechos de autor de terceros, ver Marco Normativo); el código que los produce sí.
+
+Se respetan estrictamente los archivos \texttt{robots.txt} de cada sitio (\texttt{ROBOTSTXT\_OBEY=True} a nivel de configuración del proyecto, sin excepciones) y se usa un \textit{User-Agent} que identifica honestamente el propósito académico del scraper, en lugar de simular un navegador para evadir bloqueos.
+
+Como mecanismo complementario, se integrarán datasets públicos en español (FakeDeS/IberLEF 2021, 971 ítems, re-etiquetados según la taxonomía trinaria cuando pertenezcan al dominio financiero) y se dejó diseñado -- no implementado todavía -- un pipeline periódico vía GitHub Actions para recolección incremental.
+
+\subsubsection{Reproducibilidad de la recolección}
+
+Es importante declarar explícitamente qué parte de este proceso es reproducible y cuál no. El \textbf{código} es completamente reproducible: está versionado en git, es determinístico dado el mismo HTML de entrada (mismo filtro, mismo umbral de deduplicación, mismas reglas de exclusión ya persistidas), y cualquier persona con acceso al repositorio puede ejecutar los mismos spiders con la misma configuración.
+
+El \textbf{corpus resultante no es perfectamente reproducible}, y esto es una limitación inherente a cualquier corpus construido por scraping de sitios web en vivo, no un defecto específico de este proyecto: los sitios fuente publican contenido nuevo y en ocasiones retiran o editan contenido antiguo, de modo que ejecutar el mismo scraper en una fecha distinta no produce exactamente el mismo conjunto de noticias. Se mitiga este problema de dos formas: (1) cada ítem registra su \texttt{fecha\_recoleccion} además de su \texttt{fecha\_publicacion}, de modo que cualquier resultado reportado en esta tesis puede vincularse a una versión fechada específica del corpus, no a ``lo que el scraper produzca en cualquier momento''; y (2) el corpus final usado para los resultados reportados (no solo el código para generarlo) se conservará como un artefacto versionado y fechado, para que la evaluación de Fase 2 y 3 sea reproducible contra esa versión específica, aunque el sitio origen cambie después.
 
 \subsubsection{Etiquetado y validación}
 
-Las noticias verdaderas y falsas reciben su etiqueta de la fuente primaria (medio de referencia o fact-checker IFCN). Las noticias dudosas requieren anotación manual por al menos dos anotadores independientes, con medición de acuerdo inter-anotador mediante el coeficiente Kappa de Cohen (meta: $\kappa \geq 0.70$, acuerdo sustancial). Las discrepancias se resuelven por consenso con un tercer anotador.
+Las noticias verdaderas y falsas reciben su etiqueta de la fuente primaria (medio de referencia o fact-checker IFCN). Las noticias dudosas requieren anotación humano-LLM (no inter-anotador humano clásico, ver limitación metodológica declarada en \texttt{02\_corpus/guia\_anotacion.md}), con medición de acuerdo mediante el coeficiente Kappa de Cohen (meta: $\kappa \geq 0.70$, acuerdo sustancial) entre la etiqueta humana y la del LLM. Los desacuerdos se resuelven con Fable 5.1 como árbitro de razonamiento extendido.
 
-Se implementan controles de calidad: detección de duplicados mediante similitud de n-gramas (umbral $> 0.85$), validación de balance por clase, y anonimización de información personal identificable.
+Se implementan controles de calidad ya ejecutados sobre el corpus recolectado hasta ahora, no solo planeados: detección de duplicados mediante similitud de n-gramas (umbral $> 0.85$, con siembra cruzada entre fuentes), un control de calidad manual del 10\% del etiquetado automático (muestra de 25 ítems, 0\% de error encontrado en la primera ejecución), y anonimización pendiente de información personal identificable (campo \texttt{pii\_revisado} en el esquema, ver Marco Normativo).
 
 \section{Proceso metodológico}
 
@@ -65,7 +75,7 @@ Se implementa el agente basado en ReAct~\cite{Yao2023} con las siguientes herram
     \item \texttt{consultar\_superfinanciera}: Consulta de comunicados y alertas de la Superintendencia Financiera de Colombia.
     \item \texttt{verificar\_banco\_republica}: Consulta de comunicados oficiales y datos del Banco de la República.
     \item \texttt{buscar\_colombiacheck}: Búsqueda en la base de datos de verificaciones de ColombiaCheck.
-    \item \texttt{buscar\_medios\_economicos}: Verificación en Portafolio y La República.
+    \item \texttt{buscar\_medios\_economicos}: Verificación en La República, Halcones y Palomas y Valora Analitik (Portafolio excluido, ver sección de Adquisición).
     \item \texttt{validar\_fuente\_citada}: Comprobación de la existencia de la fuente citada en la noticia.
 \end{itemize}
 
@@ -80,7 +90,7 @@ El agente se integra con el clasificador mediante LangGraph. El flujo de decisi�
     \item El sistema retorna el veredicto final con las fuentes consultadas y el razonamiento.
 \end{enumerate}
 
-Se experimenta con múltiples umbrales (0.70, 0.75, 0.80, 0.85) para determinar el valor óptimo.
+El umbral no se fija por conveniencia: se determina empíricamente siguiendo el protocolo de clasificación selectiva documentado en \texttt{05\_agente/seleccion\_umbral\_confianza.md} (fundamentado en Chow~\cite{Chow1970} y Geifman y El-Yaniv~\cite{GeifmanElYaniv2017}, ver Marco Tecnológico) -- se barren los valores 0.70, 0.75, 0.80 y 0.85 sobre el split de calibración (\texttt{calibracion\_prompts}, no el de evaluación final, para no sobreajustar el umbral al conjunto que se reporta), se construye la curva riesgo-cobertura, y se elige el umbral según el criterio fijado antes de ver los resultados (maximizar F1 macro del sistema híbrido). Antes de este paso se verifica además que la confianza reportada por el LLM esté razonablemente calibrada (reliability diagram / ECE), ya que no puede asumirse que un LLM reporte una confianza numérica fiable sin verificarlo.
 
 \subsection{Fase 4: Evaluación comparativa y redacción (Diciembre 2026--Enero 2027)}
 
