@@ -152,7 +152,9 @@ class ParquetWriterPipeline:
         # CSV en paralelo, solo para inspección humana (abrir en Excel,
         # mostrar avance) -- Parquet sigue siendo el formato de trabajo del
         # pipeline (ver M06-Methodology.tex, justificación de tipos/eficiencia).
+        # sep=';' porque Excel en español espera punto y coma (usa la coma
+        # como separador decimal) -- con coma, las columnas no separaban bien.
         csv_path = OUTPUT_DIR / f"{self.spider_name}.csv"
-        df.to_csv(csv_path, index=False, encoding="utf-8-sig")  # BOM para que Excel detecte UTF-8 solo
+        df.to_csv(csv_path, index=False, encoding="utf-8-sig", sep=";")  # BOM para que Excel detecte UTF-8 solo
 
         logger.info("Escritos %d ítems en %s y %s", len(df), parquet_path, csv_path)

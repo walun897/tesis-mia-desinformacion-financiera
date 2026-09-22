@@ -49,7 +49,11 @@ def main() -> None:
     parquet_path = RAW_DIR / "corpus_consolidado.parquet"
     csv_path = RAW_DIR / "corpus_consolidado.csv"
     consolidado.to_parquet(parquet_path, index=False)
-    consolidado.to_csv(csv_path, index=False, encoding="utf-8-sig")
+    # sep=';' porque Excel en configuración regional en español espera
+    # punto y coma como separador de columnas (usa la coma como separador
+    # decimal) -- con coma como separador, Excel no divide bien las
+    # columnas al abrir el archivo directamente.
+    consolidado.to_csv(csv_path, index=False, encoding="utf-8-sig", sep=";")
 
     print(f"Consolidado: {len(consolidado)} ítems de {len(frames)} fuentes")
     print(f"  -> {parquet_path}")
