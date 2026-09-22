@@ -13,7 +13,7 @@ import scrapy
 
 from ..extraction import extract_article
 from ..items import NoticiaItem
-from ..rating_maps import map_colombiacheck_rating
+from ..rating_maps import es_chequeo_individual, map_colombiacheck_rating
 from ..utils import make_id, parse_date_safe, today_iso
 
 CARD_RE = re.compile(
@@ -56,6 +56,12 @@ class ColombiaCheckSpider(scrapy.Spider):
             )
 
     def parse_chequeo(self, response, rating_raw: str):
+        if not es_chequeo_individual(rating_raw):
+            # ej. "Podcast": no es un chequeo individual con veredicto,
+            # no encaja en la taxonomía trinaria -- se descarta, no se
+            # fuerza. Ver REGISTRO_CORRECCIONES.md #2.
+            return
+
         extracted = extract_article(response.text, response.url)
         if extracted is None:
             return

@@ -15,17 +15,29 @@ logger = logging.getLogger(__name__)
 
 # Verificado en colombiacheck.com el 2026-09-22: algunos sitios tienen
 # banners/cintas decorativas (ej. `<p class="Portada-franja-texto">`) que
-# repiten una palabra muchas veces para efecto visual (ribbon de
-# calificación sobre la imagen destacada) y quedan pegadas al contenedor
-# principal, así que Trafilatura las incluye como si fueran texto del
-# artículo. Se colapsan repeticiones consecutivas de la misma palabra
-# (>=3 veces) en vez de dejarlas — es una limpieza genérica, no específica
-# de un sitio.
-_REPEATED_WORD_RE = re.compile(r"\b(\w+)\b(?:\s+\1\b){2,}", re.IGNORECASE)
+# repiten una palabra o frase corta muchas veces para efecto visual (ribbon
+# de calificación sobre la imagen destacada) y quedan pegadas al
+# contenedor principal, así que Trafilatura las incluye como si fueran
+# texto del artículo. Se colapsan repeticiones consecutivas (>=3 veces) de
+# frases de 1 a 4 palabras -- limpieza genérica, no específica de un sitio.
+# Corregido 2026-09-22: la versión original solo colapsaba una palabra
+# repetida ("Cuestionable Cuestionable..."), pero se encontraron 86 items
+# de ColombiaCheck con el mismo problema para una frase de DOS palabras
+# ("Chequeo Múltiple Chequeo Múltiple..."), que no coincidía con el patrón
+# de una sola palabra.
+_REPEATED_PHRASE_PATTERNS = [
+    re.compile(r"((?:\S+\s+){" + str(n - 1) + r"}\S+)(?:\s+\1\b){2,}", re.IGNORECASE)
+    for n in (4, 3, 2, 1)
+]
 
 
 def _collapse_repeated_words(text: str) -> str:
-    return _REPEATED_WORD_RE.sub(r"\1", text)
+    # Se prueba de frases largas a cortas: si no se colapsara primero la
+    # frase de 4 palabras, el patrón de 1 palabra podría "morder" solo una
+    # parte de la repetición y dejar residuos.
+    for pattern in _REPEATED_PHRASE_PATTERNS:
+        text = pattern.sub(r"\1", text)
+    return text
 
 
 # Verificado en larepublica.co el 2026-09-22 (encontrado en el 100% de los

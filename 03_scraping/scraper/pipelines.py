@@ -74,14 +74,25 @@ class DeduplicationPipeline:
     que cada spider escribe su propio Parquet. Se excluye el Parquet del
     propio spider en curso porque se reescribe completo al final de esta
     corrida (ver ParquetWriterPipeline).
+
+    Corregido 2026-09-22 (REGISTRO_CORRECCIONES.md #4): también se excluye
+    `corpus_consolidado.parquet` -- es un archivo DERIVADO (generado por
+    02_corpus/consolidar_corpus.py a partir de los demás), no una fuente.
+    Al vivir en la misma carpeta y no excluirlo, cada spider terminaba
+    comparando sus propios ítems contra su propia copia ya incluida en el
+    consolidado, descartando el 100% como "duplicado" (similitud 1.00).
     """
+
+    # Nombres de archivo en OUTPUT_DIR que NO son una fuente individual y
+    # no deben sembrar el índice de deduplicación.
+    ARCHIVOS_DERIVADOS = {"corpus_consolidado"}
 
     def open_spider(self, spider):
         self.index = DuplicateIndex()
         if not OUTPUT_DIR.exists():
             return
         for path in OUTPUT_DIR.glob("*.parquet"):
-            if path.stem == spider.name:
+            if path.stem == spider.name or path.stem in self.ARCHIVOS_DERIVADOS:
                 continue
             try:
                 df = pd.read_parquet(path)

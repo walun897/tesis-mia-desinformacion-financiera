@@ -23,6 +23,11 @@ from ..items import NoticiaItem
 from ..utils import make_id, parse_date_safe, today_iso
 
 ARTICLE_URL_RE = re.compile(r"/\d{4}/\d{2}/\d{2}/[\w-]+/$")
+# Corregido 2026-09-22 (REGISTRO_CORRECCIONES.md #3): el sufijo no siempre
+# tiene espacio antes del guion (ej. "...(ii)- Halcones y Palomas"), un
+# .removesuffix(" - Halcones y Palomas") literal dejaba 7/232 títulos con
+# el sufijo pegado. El espacio antes del guion es opcional en el regex.
+TITLE_SUFFIX_RE = re.compile(r"\s*-\s*Halcones y Palomas\s*$")
 
 
 class HalconesYPalomasSpider(scrapy.Spider):
@@ -61,7 +66,7 @@ class HalconesYPalomasSpider(scrapy.Spider):
         # (patrón típico de plugin SEO de WordPress); se recorta porque no
         # es parte del titular real.
         titulo = extracted.titulo or ""
-        titulo = titulo.removesuffix(" - Halcones y Palomas")
+        titulo = TITLE_SUFFIX_RE.sub("", titulo)
 
         item = NoticiaItem()
         item["id"] = make_id(response.url)
