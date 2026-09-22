@@ -28,6 +28,22 @@ def _collapse_repeated_words(text: str) -> str:
     return _REPEATED_WORD_RE.sub(r"\1", text)
 
 
+# Verificado en larepublica.co el 2026-09-22 (encontrado en el 100% de los
+# 11 ítems ya recolectados, vía la auditoría de calidad del 10%): un
+# widget de "seleccionar noticias personalizadas" queda pegado al inicio
+# del contenedor principal del artículo. Se recorta si aparece al inicio
+# del texto extraído — es un prefijo fijo conocido, no una heurística
+# genérica como la de arriba.
+_LAREPUBLICA_WIDGET_PREFIX_RE = re.compile(
+    r"^MI SELECCIÓN DE NOTICIAS\s*\n\s*Noticias personalizadas,? de acuerdo a sus temas de interés\s*\n",
+    re.IGNORECASE,
+)
+
+
+def _strip_known_boilerplate(text: str) -> str:
+    return _LAREPUBLICA_WIDGET_PREFIX_RE.sub("", text)
+
+
 @dataclass
 class ExtractedArticle:
     texto: str
@@ -58,7 +74,7 @@ def extract_article(html: str, url: str) -> ExtractedArticle | None:
     import json
 
     data = json.loads(result)
-    texto = _collapse_repeated_words((data.get("text") or "").strip())
+    texto = _strip_known_boilerplate(_collapse_repeated_words((data.get("text") or "").strip()))
     if not texto:
         logger.warning("Trafilatura devolvió texto vacío para %s", url)
         return None

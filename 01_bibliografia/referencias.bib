@@ -23,10 +23,11 @@
 }
 
 @article{Wu2024,
-    title={Exposing Out-of-Context Misinformation: A Multi-Agent Approach with Multi-Grained Retrieval},
+    title={EXCLAIM: An Explainable Cross-Modal Agentic System for Misinformation Detection with Hierarchical Retrieval},
     author={Wu, Yin and Zhang, Zhengxuan and Wang, Fuling and Luo, Yuyu and Xiong, Hui and Tang, Nan},
     journal={arXiv preprint arXiv:2504.06269},
-    year={2024}
+    year={2024},
+    note={T{\'i}tulo verificado 2026-09-22 contra arxiv.org/abs/2504.06269 -- el nombre "MACAW" y los agentes "Retrieval/Detective/Analyst" citados en versiones previas de este documento no existen en el paper real, se corrigieron}
 }
 
 @article{Yao2023,
@@ -41,7 +42,8 @@
     title={Hybrid Fact-Checking that Integrates Knowledge Graphs, Large Language Models, and Search-Based Retrieval Agents Improves Interpretable Claim Verification},
     author={Kolli, Shaghayegh and Rosenbaum, Richard and Cavelius, Timo and Strothe, Lasse and Lata, Andrii and Diesner, Jana},
     journal={arXiv preprint arXiv:2511.03217},
-    year={2025}
+    year={2025},
+    note={Aceptado en el 9th wiNLP workshop @ EMNLP. F1 verificado 2026-09-22: 0,93 en el split Supported/Refuted de FEVER (no 0,78/0,77 como figuraba antes). C{\'o}digo en github.com/AndriiLata/aiFactCheck}
 }
 
 @article{Trinh2025,
@@ -53,12 +55,14 @@
 
 @article{Xiong2025,
     title={DelphiAgent: A trustworthy multi-agent verification framework for automated fact verification},
-    author={Xiong, Bo and others},
+    author={Xiong, Cheng and Zheng, Gengfeng and Ma, Xiao and Li, Chunlin and Zeng, Jiangfeng},
     journal={Information Processing \& Management},
     volume={62},
+    number={6},
     pages={104241},
     year={2025},
-    publisher={Elsevier}
+    publisher={Elsevier},
+    note={Autores corregidos 2026-09-22: el primer autor es Cheng Xiong, no "Bo Xiong and others" como figuraba antes}
 }
 
 @article{Hoes2023,
@@ -66,7 +70,16 @@
     author={Hoes, Emma and Altay, Sacha and Bermeo, Juan},
     journal={Frontiers in Artificial Intelligence},
     year={2024},
-    publisher={Frontiers Media SA}
+    publisher={Frontiers Media SA},
+    note={Verificado 2026-09-22: solo eval{\'u}a ChatGPT/GPT-3.5 contra PolitiFact (21.152 afirmaciones). 72\% es la coincidencia general; la coincidencia EXACTA de etiqueta con PolitiFact es 29,96\%. No eval{\'u}a GPT-4, Bard ni Bing AI -- esos datos pertenecen a Caramancion2023, no a este paper}
+}
+
+@article{Caramancion2023,
+    title={News Verifiers Showdown: A Comparative Performance Evaluation of ChatGPT 3.5, ChatGPT 4.0, Bing AI, and Bard in News Fact-Checking},
+    author={Caramancion, Kevin Matthe},
+    journal={arXiv preprint arXiv:2306.17176},
+    year={2023},
+    note={Tambi{\'e}n publicado en IEEE (DOI v{\'i}a IEEE Xplore 10.1109/access.10520446). 100 noticias verificadas, 3 categor{\'i}as. Resultados: GPT-4.0=71, Bard/LaMDA=64, Bing AI=64, GPT-3.5=62 sobre 100; promedio 65,25 -- esta es la fuente real del dato "64-71\%" atribuido antes a Hoes2023}
 }
 
 @inproceedings{Canete2020,
@@ -84,26 +97,33 @@
     year={2020}
 }
 
-@article{AlvarezOrtiz2024,
-    title={Detección de noticias falsas en español mexicano mediante BETO},
-    author={{\'A}lvarez-Ortiz, Fernando and Mart{\'i}nez-Gallego, Roberto},
+@article{BlancoFernandez2024,
+    title={Enhancing Misinformation Detection in Spanish Language with Deep Learning: BERT and RoBERTa Transformer Models},
+    author={Blanco-Fern{\'a}ndez, Yolanda and Otero-Vizoso, Jos{\'e} and Gil-Solla, Alberto and Garc{\'i}a-Duque, Jorge},
+    journal={Applied Sciences},
+    volume={14},
+    number={21},
+    pages={9729},
     year={2024},
-    note={Reporta 98\% de accuracy con BETO fine-tuned}
+    doi={10.3390/app14219729},
+    note={Reemplaza a AlvarezOrtiz2024 (retirada 2026-09-22: no se pudo verificar que existiera). BETO obtuvo 89,18\% de exactitud como el mejor modelo para detecci{\'o}n de contenido enga{\~n}oso en espa{\~n}ol}
 }
 
 @article{Nature2025,
-    title={Factors explaining the spread and control of fake news in Latin America},
-    author={{Investigadores varios}},
-    journal={Nature},
+    title={Explanatory factors for the dissemination and control of fake news in the Latin American context},
+    author={L{\'o}pez-L{\'o}pez, Pablo Christian and Pereira-L{\'o}pez, Miguel and Jar{\'a}iz-Gul{\'i}as, Erika and Lagares-D{\'i}ez, N{\'u}ria},
+    journal={Humanities and Social Sciences Communications},
+    volume={12},
     year={2025},
-    note={Primer estudio de fake news en LATAM con datos de Latinobar{\'o}metro 2023}
+    doi={10.1057/s41599-025-05100-7},
+    note={Autores y journal corregidos 2026-09-22 -- no es "Nature" a secas sino Humanities and Social Sciences Communications (del grupo Nature); primer estudio de fake news en LATAM con datos de Latinobar{\'o}metro 2023 (Argentina, Brasil, Chile, Colombia, M{\'e}xico, Per{\'u})}
 }
 
 @techreport{ActivaResearch2022,
     title={Fake News -- Desinformaci{\'o}n en Chile y LatAm},
     author={{Activa Research} and {WIN International}},
     year={2022},
-    note={Muestra de 6.049 participantes en 8 pa{\'i}ses latinoamericanos}
+    note={Muestra de 6.049 participantes en 8 pa{\'i}ses latinoamericanos. Verificado 2026-09-22: la cifra regional "80\% de latinoamericanos considera la desinformaci{\'o}n una amenaza" se confirm{\'o}; la cifra espec{\'i}fica "53\% de colombianos expuestos a diario" NO se pudo confirmar independientemente (solo se encontr{\'o} el dato equivalente de Chile, 52\%) -- pendiente de verificar contra el informe original antes de citarla en la tesis}
 }
 
 @techreport{WEF2024,
@@ -114,11 +134,13 @@
     address={Geneva, Switzerland}
 }
 
-@article{Oshikawa2020,
+@inproceedings{Oshikawa2020,
     title={A Survey on Natural Language Processing for Fake News Detection},
     author={Oshikawa, Ray and Qian, Jing and Wang, William Yang},
-    journal={arXiv preprint arXiv:1811.00770},
-    year={2020}
+    booktitle={Proceedings of the Twelfth Language Resources and Evaluation Conference (LREC 2020)},
+    pages={6086--6093},
+    year={2020},
+    note={Corregido 2026-09-22: es un paper revisado por pares en LREC 2020, no solo un preprint de arXiv (arXiv:1811.00770 es la versi{\'o}n preprint)}
 }
 
 @article{Lazer2018,
@@ -129,7 +151,8 @@
     number={6380},
     pages={1094--1096},
     year={2018},
-    publisher={American Association for the Advancement of Science}
+    publisher={American Association for the Advancement of Science},
+    doi={10.1126/science.aao2998}
 }
 
 @article{Brown2020,
@@ -169,6 +192,39 @@
     author={{Meta AI}},
     year={2024},
     note={arXiv preprint arXiv:2407.21783}
+}
+
+@misc{Ley15812012,
+    title={Ley Estatutaria 1581 de 2012, por la cual se dictan disposiciones generales para la protecci{\'o}n de datos personales},
+    author={{Congreso de la Rep{\'u}blica de Colombia}},
+    year={2012},
+    note={Verificado 2026-09-22 contra funcionpublica.gov.co/eva/gestornormativo/norma.php?i=49981. Reglamenta el r{\'e}gimen de habeas data en Colombia; autoridad de vigilancia: Superintendencia de Industria y Comercio (SIC)}
+}
+
+@misc{CONPES3975,
+    title={Documento CONPES 3975: Pol{\'i}tica Nacional para la Transformaci{\'o}n Digital y la Inteligencia Artificial},
+    author={{Departamento Nacional de Planeaci{\'o}n (DNP)}},
+    year={2019},
+    month={Noviembre},
+    institution={Consejo Nacional de Pol{\'i}tica Econ{\'o}mica y Social},
+    address={Bogot{\'a} D.C., Colombia},
+    note={Verificado 2026-09-22 contra colaboracion.dnp.gov.co/CDT/Conpes/Econ{\'o}micos/3975.pdf. Aprobado el 8 de noviembre de 2019}
+}
+
+@misc{MarcoEticoIA2021,
+    title={Marco {\'E}tico para la Inteligencia Artificial en Colombia},
+    author={{Ministerio de Ciencia, Tecnolog{\'i}a e Innovaci{\'o}n (MinCiencias)}},
+    year={2021},
+    address={Bogot{\'a} D.C., Colombia},
+    note={Verificado 2026-09-22 contra minciencias.gov.co/sites/default/files/marco-etico-ia-colombia-2021.pdf. Basado en recomendaciones de {\'e}tica en IA de la UNESCO; complementado por la gu{\'i}a t{\'e}cnica de MinTIC (2022): transparencia, explicabilidad, justicia, no discriminaci{\'o}n y responsabilidad}
+}
+
+@misc{Ley12732009,
+    title={Ley 1273 de 2009, por medio de la cual se modifica el C{\'o}digo Penal, se crea un nuevo bien jur{\'i}dico tutelado denominado ``de la protecci{\'o}n de la informaci{\'o}n y de los datos'' y se preservan integralmente los sistemas que utilicen las tecnolog{\'i}as de la informaci{\'o}n y las comunicaciones},
+    author={{Congreso de la Rep{\'u}blica de Colombia}},
+    year={2009},
+    month={Enero},
+    note={Verificado 2026-09-22 contra sic.gov.co/recursos\_user/documentos/normatividad/Ley\_1273\_2009.pdf. Diario Oficial 47.223 del 5 de enero de 2009}
 }
 
 @book{NTC14862008,

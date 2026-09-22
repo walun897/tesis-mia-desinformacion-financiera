@@ -1,0 +1,96 @@
+%        1         2         3         4         5         6         7         8         9         0         1         2
+%23456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890
+\documentclass[12pt]{MIA-USA}
+
+\usepackage{layout}
+\usepackage{subcaption}
+\usepackage{paralist}
+\usepackage{breakcites}
+
+\usepackage[pagebackref=true,breaklinks=true]{hyperref}
+\hypersetup{
+	pdftitle={Sistema h\'ibrido LLM-agente para detecci\'on y verificaci\'on de desinformaci\'on financiera en Colombia},
+	pdfauthor={Wilmar Andrey Pach\'on Adames},
+	pdfsubject={},
+	pdfcreator={LaTeX},
+	colorlinks=true,
+	linkcolor=GrisUno,
+	citecolor=AzulInstitucional,
+	filecolor=AzulClaro,
+	urlcolor=AzulInstitucional,
+	linktoc=all
+}
+
+\graphicspath{{Images/}}
+
+\renewcommand\spanishtablename{Tabla}
+
+\title{Sistema h\'ibrido LLM-agente para detecci\'on y verificaci\'on de desinformaci\'on financiera en Colombia}
+\author{Wilmar Andrey Pach\'on Adames}
+\documenttype{Tesis de Maestr\'ia}
+
+\advisor{[Nombre del Director -- por confirmar]}
+
+% Si hay un coasesor
+% \coadvisor{Nombres y apellidos Co-Asesor}
+
+% NOTA: este es el documento de tesis EN CONSTRUCCION, no el anteproyecto.
+% Parte del contenido de MainMatter/ viene del anteproyecto (Documentacion/v2/anteproyecto/)
+% corregido y verificado contra fuentes reales el 2026-09-22 -- ver 01_bibliografia/referencias.bib
+% para el detalle de qu\'e se corrigi\'o y por qu\'e.
+% Los cap\'itulos de resultados/evaluaci\'on/discusi\'on/conclusiones a\'un no existen:
+% dependen de trabajo emp\'irico de Fase 2 y 3 que todav\'ia no se ha ejecutado.
+
+% Aqui comienza el documento
+% - -- --- ----- ------- ------- ----- --- -- -
+\begin{document}
+	\maketitle
+
+    \tableofcontents
+    \listoffigures
+    \listoftables
+
+    \chapter*{Glosario}
+ 	\input{FrontMatter/F01-Glossary}
+
+	\chapter*{Resumen}
+ 	\input{FrontMatter/F02-Abstract}
+
+    \chapter{Introducci\'on}
+    \input{MainMatter/M01-Introduction}
+
+    \chapter{Estado del Arte}
+    \input{MainMatter/M02-PreviousWork}
+
+    \chapter{Problema de investigaci\'on}
+    \input{MainMatter/M03-ResearchProblem}
+
+    \chapter{Justificaci\'on}
+    \input{MainMatter/M04-Justification}
+
+    \chapter{Objetivos}
+    \input{MainMatter/M05-Objectives}
+
+    \chapter{Metodolog\'ia}
+    \input{MainMatter/M06-Methodology}
+
+    \chapter{Cronograma}
+    \input{MainMatter/M07-Schedule}
+
+    \chapter{Presupuesto}
+    \input{MainMatter/M08-Budget}
+
+    % PENDIENTE: estos capitulos dependen de resultados empiricos que aun no existen
+    % (Fase 2: evaluacion del clasificador: Fase 3: agente validador).
+    % M09-ExpectedResults.tex se deja como esta (resultados ESPERADOS, no reales)
+    % hasta que haya resultados reales que reemplacen esta seccion.
+    \chapter{Resultados esperados}
+    \input{MainMatter/M09-ExpectedResults}
+
+    \chapter*{Anexos}
+    \input{BackMatter/B01-Anexos}
+
+	\bibliographystyle{apalike}
+ 	\bibliography{../01_bibliografia/referencias}
+
+\end{document}

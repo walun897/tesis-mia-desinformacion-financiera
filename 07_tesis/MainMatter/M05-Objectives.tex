@@ -1,0 +1,11 @@
+\section{Objetivo general}
+
+Diseñar, implementar y evaluar un sistema híbrido de detección de desinformación financiera en español colombiano que integre clasificación mediante modelos de lenguaje de gran escala y validación agéntica de fuentes institucionales, midiendo su mejora en precisión y explicabilidad frente a modelos de lenguaje utilizados de forma independiente.
+
+\section{Objetivos específicos}
+\begin{itemize}
+    \item Construir un benchmark de evaluación de desinformación financiera colombiana compuesto por 800 a 1.000 noticias etiquetadas en tres categorías (verdadera, dudosa, falsa), recopiladas de verificadores certificados por la IFCN y medios económicos de referencia.
+    \item Evaluar y comparar el desempeño de al menos tres modelos de lenguaje de gran escala como clasificadores de desinformación financiera en configuraciones zero-shot, few-shot y chain-of-thought, utilizando métricas de F1, precisión y recall.
+    \item Diseñar e implementar un agente verificador de fuentes basado en el framework ReAct, equipado con herramientas de consulta a la Superintendencia Financiera de Colombia, el Banco de la República, el DANE y ColombiaCheck, que se active condicionalmente cuando el clasificador presente confianza inferior a un umbral definido.
+    \item Integrar el clasificador y el agente verificador mediante un orquestador basado en LangGraph, y evaluar la mejora del sistema híbrido frente al clasificador independiente en métricas de precisión, recall, F1 y explicabilidad.
+\end{itemize}

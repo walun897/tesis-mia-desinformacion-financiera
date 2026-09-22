@@ -1,0 +1,19 @@
+\section{Antecedentes del problema}
+
+La desinformación sobre el sistema financiero colombiano se manifiesta en múltiples formas: rumores virales sobre quiebras de entidades bancarias, noticias falsas sobre congelamiento de cuentas por reformas tributarias, fraudes presentados como comunicados oficiales del Banco de la República, y datos fabricados sobre tasas de interés y créditos hipotecarios. Este tipo de contenido circula principalmente a través de redes sociales y servicios de mensajería instantánea, donde la velocidad de propagación supera ampliamente la capacidad de respuesta de los verificadores humanos.
+
+Los datos respaldan la magnitud del problema. El estudio de Activa Research y WIN~\cite{ActivaResearch2022} reveló que el 80\% de los latinoamericanos considera la desinformación una amenaza para la democracia\footnote{La cifra específica de exposición diaria en Colombia citada en versiones previas de este documento (53\%) no se pudo confirmar contra el informe original; se usa aquí solo el dato regional agregado que sí está verificado.}. El Foro Económico Mundial clasificó la desinformación como el riesgo global número uno a corto plazo en su Informe de Riesgos Globales 2024~\cite{WEF2024}. Y la investigación seminal de Vosoughi et al. (2018) demostró que las noticias falsas se propagan seis veces más rápido que las verdaderas en plataformas digitales~\cite{Vosoughi2018}.
+
+\section{Formulación del problema}
+
+El problema central que aborda esta investigación es la ausencia de herramientas automatizadas de verificación de noticias adaptadas al dominio financiero colombiano. Esta ausencia se compone de tres dimensiones:
+
+\textbf{Dimensión lingüística y cultural.} La mayoría de los datasets de referencia para detección de noticias falsas (LIAR, FEVER, FakeNewsNet, entre otros) están construidos en inglés~\cite{Oshikawa2020}. Los recursos en español son limitados y no cubren las particularidades del lenguaje financiero colombiano, que incluye terminología regulatoria específica (Superintendencia Financiera, circulares, PUC) y jerga bancaria local.
+
+\textbf{Dimensión técnica.} Los modelos de lenguaje de gran escala (LLMs) utilizados de forma independiente no alcanzan un desempeño confiable en tareas de verificación de hechos: Hoes et al.~\cite{Hoes2023} reportan solo 29,96\% de coincidencia exacta con las calificaciones de PolitiFact, y Caramancion~\cite{Caramancion2023} encontró precisiones entre 62\% y 71\% comparando cuatro sistemas (GPT-3.5, GPT-4.0, Bard, Bing AI). Estos modelos no consultan fuentes externas, no verifican la existencia de las entidades citadas y no pueden acceder a información actualizada del ecosistema regulatorio colombiano.
+
+\textbf{Dimensión institucional.} No existe ningún sistema automatizado que integre fuentes institucionales colombianas (Superintendencia Financiera, Banco de la República, DANE) como herramientas de verificación. Los fact-checkers humanos como ColombiaCheck realizan esta labor manualmente, lo que limita su capacidad de respuesta ante el volumen creciente de desinformación.
+
+\section{Pregunta de investigación}
+
+¿Puede un sistema híbrido que combina clasificación mediante modelos de lenguaje de gran escala con agentes de verificación de fuentes institucionales detectar desinformación sobre el sistema financiero colombiano con mayor precisión y explicabilidad que modelos de lenguaje utilizados de manera independiente?

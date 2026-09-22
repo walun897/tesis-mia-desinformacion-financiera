@@ -12,8 +12,23 @@ from scrapy.exceptions import DropItem
 
 from .dedup import DuplicateIndex
 from .domain_filter import matches_financial_domain
+from .exclusiones_manuales import EXCLUSIONES_MANUALES
 
 logger = logging.getLogger(__name__)
+
+
+class ManualCalibrationExclusionPipeline:
+    """Descarta ítems ya revisados y rechazados manualmente en la calibración inicial.
+
+    Ver 02_corpus/criterios_seleccion_fuentes.md y exclusiones_manuales.py.
+    Solo cubre URLs ya vistas antes — no reemplaza futuras rondas de
+    calibración sobre contenido nuevo.
+    """
+
+    def process_item(self, item, spider):
+        if item.get("url") in EXCLUSIONES_MANUALES:
+            raise DropItem(f"Excluido por calibración manual: {item.get('url')}")
+        return item
 
 REQUIRED_FIELDS = [
     "id",
@@ -51,10 +66,34 @@ class DomainFilterPipeline:
 
 
 class DeduplicationPipeline:
-    """Calcula similitud_ngramas_max y descarta duplicados exactos (>umbral)."""
+    """Calcula similitud_ngramas_max y descarta duplicados exactos (>umbral).
+
+    El índice se siembra con el texto de TODAS las fuentes ya recolectadas
+    (no solo la que está corriendo ahora) — si no, la misma noticia
+    reportada por dos medios distintos no se detecta como duplicado, ya
+    que cada spider escribe su propio Parquet. Se excluye el Parquet del
+    propio spider en curso porque se reescribe completo al final de esta
+    corrida (ver ParquetWriterPipeline).
+    """
 
     def open_spider(self, spider):
         self.index = DuplicateIndex()
+        if not OUTPUT_DIR.exists():
+            return
+        for path in OUTPUT_DIR.glob("*.parquet"):
+            if path.stem == spider.name:
+                continue
+            try:
+                df = pd.read_parquet(path)
+            except Exception:
+                logger.warning("No se pudo leer %s para deduplicación cruzada, se omite.", path)
+                continue
+            for item_id, texto in zip(df["id"], df["texto"]):
+                self.index.add(item_id, texto)
+        logger.info(
+            "DeduplicationPipeline: índice sembrado con %d ítems de otras fuentes ya recolectadas.",
+            len(self.index._seen),
+        )
 
     def process_item(self, item, spider):
         texto = item.get("texto", "")

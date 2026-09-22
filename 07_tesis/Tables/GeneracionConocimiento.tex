@@ -1,0 +1,20 @@
+\section{Generación de Nuevo Conocimiento}
+
+\begin{table}[htbp!]
+    \centering
+    \caption{Resultados o productos esperados de nuevo conocimiento.}
+    \pgfplotstabletypeset[
+	  col sep=colon, 
+	  trim cells=true,
+	  column type={|p{0.52\textwidth}|p{0.22\textwidth}|p{0.18\textwidth}}, 
+	  columns/Resultado/.style = {column name={\cellcolor{AzulInstitucional}\textbf{\color{Blanco}Resultado o Producto esperado}}}, 
+	  columns/Indicador/.style = {column name={\cellcolor{AzulInstitucional}\textbf{\color{Blanco}Indicador }}},
+	  columns/Beneficiario/.style = {column name={\cellcolor{AzulInstitucional}\textbf{\color{Blanco}Beneficiario}}},
+	  every head row = { \hline},
+	  after row = {\hline},
+	  string type,
+	  skip rows between index={10}{20}
+	]
+	{Tables/NuevoConocimiento.csv}
+    \label{tab:resEspNuecoConocimiento}
+\end{table}

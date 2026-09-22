@@ -67,6 +67,69 @@ había sido verificada:**
   Incluida por la misma recomendación. Medio especializado en
   economía/mercados, credibilidad editorial comparable a Portafolio.
 
+## Balance de clases: no es automático
+
+El scraper no garantiza el balance 300-400/300-400/200-300 por sí solo —
+cada spider recolecta lo que existe y pasa el filtro de dominio, sin
+detenerse por cuota. Estado al 2026-09-22 tras la primera recolección real
+(no de prueba): 288 ítems totales (verdadera=176, falsa=73, dudosa=39).
+"Verdadera" avanza mucho más rápido porque hay 5 fuentes para esa clase
+contra 1 sola (ColombiaCheck) para falsa/dudosa, y en ColombiaCheck solo
+~14% del contenido es financiero (ver `03_scraping/README.md`).
+
+**Regla operativa mientras no se resuelva de otra forma**: una vez que
+"verdadera" se acerque a 300-400, pausar las fuentes de esa clase y
+concentrar las corridas en ColombiaCheck (falsa/dudosa) hasta parejar. Si
+ColombiaCheck agota su archivo relevante antes de llegar a la cuota, hace
+falta un fact-checker adicional (AFP Factual está excluido, ver arriba) —
+pendiente sin resolver.
+
+## Verificación de calidad de los datos ya recolectados
+
+No es solo "confiar" en el scraper — esto es lo que ya se verificó
+contra los datos reales (no contra el código, contra el resultado):
+- **Deduplicación cruzada entre fuentes**: corregido 2026-09-22 — el
+  índice de deduplicación originalmente solo comparaba dentro de una
+  misma corrida de un spider; se corrigió para sembrarse con todo lo ya
+  recolectado de las demás fuentes (ver `pipelines.py`). Sobre los 288
+  ítems ya recolectados: 0 duplicados cruzados encontrados.
+- **Longitud de texto**: sin textos vacíos ni truncados sospechosamente
+  (mínimos entre 296 y 2399 caracteres según la fuente, consistente con
+  el tipo de contenido — comunicados cortos vs. artículos largos).
+- **Lo que falta verificar y es responsabilidad humana, no del código**:
+  el etiquetado automático `label_fuente="verdadera"` para medios de
+  referencia asume que lo que publican es cierto, sin verificar cada
+  afirmación — por diseño (ver `guia_anotacion.md`). Esto se valida con
+  el control de calidad del 10% ya definido en `guia_anotacion.md`.
+
+**Ejecutado 2026-09-22 — control de calidad del 10% (muestra de 25 ítems,
+estratificada por fuente, semilla=42)**: revisión manual del usuario sobre
+atribución de fuente y calidad de extracción — **0 errores de 25 (0%)**,
+muy por debajo del umbral de 5% definido en `guia_anotacion.md`. Valida
+que el mecanismo de scraping/extracción funciona correctamente.
+
+**Ejecutado 2026-09-22 — calibración inicial del filtro de dominio**: al
+revisar la muestra, el usuario identificó un patrón de falso positivo real
+no relacionado con la extracción: coincidencias incidentales de una sola
+palabra clave (ej. "impuestos" citado en un insulto dentro de una nota
+sobre una protesta política) dejaban pasar contenido sin relación
+financiera real. Se probó una regla automática (exigir ≥2 menciones o
+coincidencia en el título) pero **se descartó por evidencia empírica**:
+sobre los 114 ítems de ColombiaCheck de ese momento, la regla habría
+descartado 58 (51%), incluyendo casos legítimos con una sola mención (ej.
+"inflación" en una nota sobre pobreza). Se optó por revisión manual en vez
+de automatizar un juicio semántico que un regex no puede hacer bien — los
+58 candidatos se revisaron uno por uno (ver metodología: fragmento de
+contexto de cada coincidencia, no el artículo completo). Resultado: 53
+excluidos por ruido temático (mayormente política sin relación
+financiera), 5 mantenidos por relación financiera real (estafa de
+inversión con IA, salario mínimo, peajes/Sarmiento, administración de
+riqueza del Estado, entre otros). `colombiacheck.parquet` pasó de 114 a
+61 ítems tras esta calibración. El filtro de dominio automático
+(`domain_filter.py`) **no se modificó** — sigue siendo de recall amplio a
+propósito; esta calibración fue un paso manual puntual sobre los datos ya
+recolectados, no un cambio de regla permanente.
+
 **Impacto**: al perder Portafolio y El Tiempo, la clase "verdadera" se
 compensó agregando Halcones y Palomas y Valora Analitik — ya no depende
 solo de La República + comunicados oficiales. Las 5 fuentes de "verdadera"
@@ -92,8 +155,12 @@ escala para confirmar que el volumen combinado alcanza 300-400.
 
 **Impacto en falsa/dudosa**: con AFP Factual excluida, ColombiaCheck queda
 como el único fact-checker scrapeable — mismo riesgo de volumen que ya se
-señaló para "verdadera". El dataset FakeDeS/IberLEF (abajo) es el único
-respaldo si ColombiaCheck solo no alcanza 300-400 falsas + 200-300
+señaló para "verdadera", y **se agrava** tras la calibración manual del
+2026-09-22 (arriba): de 114 ítems de ColombiaCheck quedaron 61 reales
+(falsa=34, dudosa=26) tras sacar el ruido político. La tasa de relevancia
+financiera real de ColombiaCheck es más baja de lo que sugería el
+filtro automático sin calibrar. El dataset FakeDeS/IberLEF (abajo) es el
+único respaldo si ColombiaCheck solo no alcanza 300-400 falsas + 200-300
 dudosas; si tampoco alcanza, hace falta buscar otro fact-checker IFCN
 colombiano scrapeable (pendiente, no resuelto en esta sesión).
 

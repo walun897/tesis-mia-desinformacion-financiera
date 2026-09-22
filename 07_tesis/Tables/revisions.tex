@@ -1,0 +1,16 @@
+\begin{table}[htbp!]
+%    Name,Date,Description,Version,
+    \pgfplotstabletypeset[
+	  col sep=comma, 
+	  trim cells=true,
+	  column type={|p{0.18\textwidth}|c|p{0.5\textwidth}|c}, 
+	  columns/Name/.style = {column name={\cellcolor{AzulOscuro}\textbf{\color{Blanco}Nombre}}}, 
+	  columns/Date/.style = {column name={\cellcolor{AzulOscuro}\textbf{\color{Blanco}Fecha }}},
+	  columns/Description/.style = {column name={\cellcolor{AzulOscuro}\textbf{\color{Blanco}Razón de modificación}}},
+	  columns/Version/.style = {column name={\cellcolor{AzulOscuro}\textbf{\color{Blanco}Versión}}},
+	  every head row = { \hline},
+	  after row = {\hline},
+	  string type
+	]
+	{Tables/revisiones.csv}
+\end{table}

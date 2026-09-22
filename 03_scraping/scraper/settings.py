@@ -35,6 +35,7 @@ HTTPCACHE_DIR = "httpcache"
 
 ITEM_PIPELINES = {
     "scraper.pipelines.DomainFilterPipeline": 100,
+    "scraper.pipelines.ManualCalibrationExclusionPipeline": 150,
     "scraper.pipelines.DeduplicationPipeline": 200,
     "scraper.pipelines.SchemaValidationPipeline": 300,
     "scraper.pipelines.ParquetWriterPipeline": 900,
