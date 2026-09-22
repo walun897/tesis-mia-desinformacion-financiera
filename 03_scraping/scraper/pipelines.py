@@ -155,6 +155,12 @@ class ParquetWriterPipeline:
         # sep=';' porque Excel en español espera punto y coma (usa la coma
         # como separador decimal) -- con coma, las columnas no separaban bien.
         csv_path = OUTPUT_DIR / f"{self.spider_name}.csv"
-        df.to_csv(csv_path, index=False, encoding="utf-8-sig", sep=";")  # BOM para que Excel detecte UTF-8 solo
+        df_csv = df.copy()
+        # Aplana saltos de línea internos del texto -- ver nota en
+        # 02_corpus/consolidar_corpus.py, mismo motivo (visores simples,
+        # incluido Excel con doble clic, fragmentan filas con saltos de
+        # línea dentro de un campo aunque sea CSV válido).
+        df_csv["texto"] = df_csv["texto"].str.replace(r"[\r\n]+", " ", regex=True)
+        df_csv.to_csv(csv_path, index=False, encoding="utf-8-sig", sep=";")  # BOM para que Excel detecte UTF-8 solo
 
         logger.info("Escritos %d ítems en %s y %s", len(df), parquet_path, csv_path)
