@@ -1,0 +1,19 @@
+\section{Antecedentes del problema}
+
+La desinformación sobre el sistema financiero colombiano se manifiesta en múltiples formas: rumores virales sobre quiebras de entidades bancarias, noticias falsas sobre congelamiento de cuentas por reformas tributarias, fraudes presentados como comunicados oficiales del Banco de la República, y datos fabricados sobre tasas de interés y créditos hipotecarios. Este tipo de contenido circula principalmente a través de redes sociales y servicios de mensajería instantánea, donde la velocidad de propagación supera ampliamente la capacidad de respuesta de los verificadores humanos.
+
+Los datos respaldan la magnitud del problema. El estudio de Activa Research y WIN (2022) reveló que el 53\% de los colombianos enfrenta noticias falsas todos o casi todos los días. El Foro Económico Mundial clasificó la desinformación como el riesgo global número uno a corto plazo en su Informe de Riesgos Globales 2024~\cite{WEF2024}. Y la investigación seminal de Vosoughi et al. (2018) demostró que las noticias falsas se propagan seis veces más rápido que las verdaderas en plataformas digitales~\cite{Vosoughi2018}.
+
+\section{Formulación del problema}
+
+El problema central que aborda esta investigación es la ausencia de herramientas automatizadas de verificación de noticias adaptadas al dominio financiero colombiano. Esta ausencia se compone de tres dimensiones:
+
+\textbf{Dimensión lingüística y cultural.} El 81,5\% de los datasets existentes para detección de noticias falsas están en inglés~\cite{Oshikawa2020}. Los recursos en español son limitados y no cubren las particularidades del lenguaje financiero colombiano, que incluye terminología regulatoria específica (Superintendencia Financiera, circulares, PUC) y jerga bancaria local.
+
+\textbf{Dimensión técnica.} Los modelos de lenguaje de gran escala (LLMs) utilizados de forma independiente alcanzan precisiones de apenas 64--71\% en tareas de verificación de hechos~\cite{Hoes2023}. Estos modelos no consultan fuentes externas, no verifican la existencia de las entidades citadas y no pueden acceder a información actualizada del ecosistema regulatorio colombiano.
+
+\textbf{Dimensión institucional.} No existe ningún sistema automatizado que integre fuentes institucionales colombianas (Superintendencia Financiera, Banco de la República, DANE) como herramientas de verificación. Los fact-checkers humanos como ColombiaCheck realizan esta labor manualmente, lo que limita su capacidad de respuesta ante el volumen creciente de desinformación.
+
+\section{Pregunta de investigación}
+
+¿Puede un sistema híbrido que combina clasificación mediante modelos de lenguaje de gran escala con agentes de verificación de fuentes institucionales detectar desinformación sobre el sistema financiero colombiano con mayor precisión y explicabilidad que modelos de lenguaje utilizados de manera independiente?

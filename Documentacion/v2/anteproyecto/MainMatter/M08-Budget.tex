@@ -1,0 +1,48 @@
+El presupuesto del proyecto se estima considerando los recursos computacionales, las APIs de modelos de lenguaje, el recurso humano y los costos académicos. La Tabla~\ref{tab:presupuesto} presenta el desglose.
+
+\begin{table}[htbp!]
+	\centering
+	\caption{Presupuesto general del proyecto}
+    \footnotesize
+    \begin{tabular}{| p{0.35\textwidth} | r | r | r |}
+    	\rowcolor{AzulInstitucional} \textbf{\color{Blanco}Categoría} & \textbf{\color{Blanco}Investigador} & \textbf{\color{Blanco}Universidad} & \textbf{\color{Blanco}Total (COP)} \\
+        \hline
+        \hline
+        \rowcolor{GrisNueve}\textbf{Personal} & & & \\
+        \hline
+        Horas investigador (640 h $\times$ \$25.000/h) & 16.000.000 & 0 & 16.000.000 \\
+        \hline
+        Anotadores corpus (2 $\times$ 40 h $\times$ \$20.000/h) & 1.600.000 & 0 & 1.600.000 \\
+        \hline
+        \hline
+        \rowcolor{GrisNueve}\textbf{Infraestructura computacional} & & & \\
+        \hline
+        Google Colab Pro (8 meses $\times$ \$50.000/mes) & 400.000 & 0 & 400.000 \\
+        \hline
+        APIs LLMs (Gemini, GPT-4o-mini) & 600.000 & 0 & 600.000 \\
+        \hline
+        \hline
+        \rowcolor{GrisNueve}\textbf{Hardware} & & & \\
+        \hline
+        Equipo de cómputo (existente, depreciación) & 2.000.000 & 0 & 2.000.000 \\
+        \hline
+        \hline
+        \rowcolor{GrisNueve}\textbf{Software} & & & \\
+        \hline
+        Herramientas de desarrollo (código abierto) & 0 & 0 & 0 \\
+        \hline
+        \hline
+        \rowcolor{GrisNueve}\textbf{Costos académicos} & & & \\
+        \hline
+        Matrícula maestría (estimado proporcional) & 8.000.000 & 0 & 8.000.000 \\
+        \hline
+        \hline
+        \rowcolor{GrisOcho}\textbf{Total} & \textbf{28.600.000} & \textbf{0} & \textbf{28.600.000} \\
+        \hline
+        \multicolumn{4}{l}{\scriptsize Valores estimados en pesos colombianos (COP). El proyecto utiliza}\\
+        \multicolumn{4}{l}{\scriptsize predominantemente herramientas de código abierto e infraestructura en la nube.}
+	\end{tabular}
+	\label{tab:presupuesto}
+\end{table}
+
+El proyecto se diseña intencionalmente para ejecutarse con infraestructura accesible: Google Colab para entrenamiento y experimentación, APIs comerciales con costos controlados, y herramientas de código abierto (LangGraph, Scrapy, Python). Esto garantiza la reproducibilidad y reduce las barreras de entrada para investigadores que deseen extender el trabajo.

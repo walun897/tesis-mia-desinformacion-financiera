@@ -1,0 +1,57 @@
+El presente capítulo desarrolla el marco referencial del proyecto, abordando los fundamentos teóricos, el contexto tecnológico y los antecedentes científicos relevantes, organizados de lo general a lo específico.
+
+\section{Marco teórico}
+
+\subsection{Desinformación y verificación de hechos}
+
+La desinformación se define como información falsa o engañosa creada y difundida deliberadamente con el propósito de causar daño o confundir~\cite{Lazer2018}. Vosoughi, Roy y Aral~\cite{Vosoughi2018} demostraron mediante el análisis de 126.000 historias de noticias que la información falsa se propaga aproximadamente seis veces más rápido que la verdadera en redes sociales, un hallazgo que subraya la urgencia de desarrollar mecanismos automatizados de detección.
+
+La verificación de hechos (\textit{fact-checking}) es el proceso de evaluar la veracidad de afirmaciones mediante la consulta de fuentes primarias y evidencia verificable. La International Fact-Checking Network (IFCN) certifica organizaciones que cumplen con principios de transparencia, imparcialidad y metodología rigurosa. En Colombia, ColombiaCheck opera como el principal verificador certificado por la IFCN desde 2016.
+
+\subsection{Modelos de lenguaje de gran escala (LLMs)}
+
+Los modelos de lenguaje de gran escala son sistemas de inteligencia artificial entrenados sobre grandes volúmenes de texto que pueden comprender y generar lenguaje natural. Modelos como GPT-4~\cite{OpenAI2023}, Gemini~\cite{Google2024} y Llama 3~\cite{Meta2024} han demostrado capacidades notables en tareas de clasificación, razonamiento y generación de texto.
+
+Sin embargo, evaluaciones recientes han demostrado que los LLMs utilizados de forma independiente presentan limitaciones significativas en tareas de verificación de hechos. Hoes et al.~\cite{Hoes2023} evaluaron el desempeño de GPT-3.5, GPT-4, Google Bard y Bing AI en la clasificación de afirmaciones verificadas por PolitiFact, obteniendo precisiones entre 64\% y 71\%. Estos resultados sugieren que los LLMs por sí solos no son suficientes para verificación de hechos confiable, particularmente en dominios especializados.
+
+\subsection{Agentes inteligentes y el framework ReAct}
+
+Yao et al.~\cite{Yao2023} propusieron ReAct (\textit{Reasoning and Acting}), un framework que permite a los LLMs generar trazas de razonamiento intercaladas con acciones sobre herramientas externas. En ReAct, el modelo alterna entre pasos de ``pensamiento'' (donde planifica y razona) y pasos de ``acción'' (donde consulta bases de datos, APIs o motores de búsqueda). Este enfoque fue evaluado en benchmarks como HotPotQA y FEVER, demostrando mejoras significativas sobre métodos que solo razonan o solo actúan. ReAct constituye la base teórica del agente validador propuesto en este proyecto.
+
+\section{Marco tecnológico}
+
+\subsection{LangGraph como orquestador}
+
+LangGraph es una biblioteca de orquestación de agentes desarrollada por LangChain que permite definir flujos de trabajo basados en grafos de estados. Cada nodo del grafo representa una operación (clasificación, decisión, consulta de fuentes) y las aristas definen las transiciones condicionales entre ellos. Esta arquitectura es particularmente adecuada para el sistema propuesto, donde la activación del agente validador depende del nivel de confianza del clasificador.
+
+\subsection{Técnicas de prompting para clasificación}
+
+La clasificación mediante LLMs puede realizarse en múltiples configuraciones~\cite{Brown2020}: (a) \textit{zero-shot}, donde el modelo recibe únicamente la instrucción sin ejemplos; (b) \textit{few-shot}, donde se proporcionan entre 3 y 5 ejemplos de cada clase; y (c) \textit{chain-of-thought}~\cite{Wei2022}, donde se solicita al modelo que descomponga su razonamiento en pasos explícitos. La comparación sistemática de estas configuraciones para el dominio financiero colombiano constituye uno de los aportes experimentales de este proyecto.
+
+\section{Antecedentes científicos}
+
+\subsection{Sistemas multi-agente para verificación de hechos}
+
+La investigación reciente ha demostrado que los sistemas multi-agente superan consistentemente a los enfoques de un solo componente en tareas de verificación de hechos. A continuación se presentan los referentes más relevantes, organizados cronológicamente.
+
+Li, Zhang y Malthouse~\cite{Li2024} propusieron \textbf{FactAgent}, un enfoque agéntico para detección de noticias falsas presentado en la European Conference on Artificial Intelligence (ECAI 2024). FactAgent emula el comportamiento de verificadores humanos mediante un flujo de trabajo estructurado donde el LLM integra conocimiento interno y herramientas externas en subpasos especializados. El sistema opera sin datos de entrenamiento anotados (\textit{zero-shot}) y genera explicaciones transparentes en cada paso, lo que lo hace altamente adaptable a dominios específicos.
+
+Wu et al.~\cite{Wu2024} desarrollaron \textbf{MACAW}, un framework multi-agente con tres agentes especializados (Retrieval, Detective y Analyst) para validación cruzada de evidencia a múltiples granularidades. MACAW indexa conocimiento externo y extrae información a diferentes niveles de detalle para evaluar la integridad contextual de afirmaciones. Esta arquitectura de agentes especializados por función es la más cercana al sistema propuesto en este proyecto.
+
+Kolli et al.~\cite{Kolli2025} propusieron un \textbf{sistema híbrido} que integra grafos de conocimiento (Wikidata, DBpedia), LLMs y agentes de búsqueda web para verificación de hechos. El sistema utiliza un mecanismo de activación por \textit{fallback}: cuando el componente basado en grafos de conocimiento retorna ``insuficiente información'', se activa automáticamente el módulo de búsqueda web con reescritura de afirmaciones. Reportaron F1 de 0,78 en el benchmark FEVER y 0,77 en FactKG. Este trabajo valida directamente la arquitectura de activación condicional propuesta en este proyecto.
+
+Trinh, Nguyen y Hy~\cite{Trinh2025} presentaron un \textbf{sistema multi-agente con cuatro agentes especializados}: Input Ingestion (descomposición de afirmaciones), Query Generation (formulación de subconsultas), Evidence Retrieval (recuperación de evidencia verificable) y Verdict Prediction (síntesis de veredictos con explicaciones interpretables). Evaluado en FEVEROUS, HOVER y SciFact, el sistema logró una mejora del 12,3\% en Macro F1 sobre métodos de referencia. El código fuente está disponible públicamente.
+
+Xiong et al.~\cite{Xiong2025} propusieron \textbf{DelphiAgent}, un framework multi-agente de verificación confiable publicado en \textit{Information Processing \& Management}. DelphiAgent enfatiza la generación de justificaciones trazables a lo largo del flujo de verificación, reforzando el argumento de que los sistemas multi-agente mejoran no solo la precisión sino también la confiabilidad del proceso.
+
+\subsection{Detección de noticias falsas en español}
+
+Los recursos para detección de noticias falsas en español son significativamente más limitados que los disponibles en inglés. Cañete et al.~\cite{Canete2020} desarrollaron BETO, un modelo transformer preentrenado exclusivamente en texto en español, que ha sido utilizado exitosamente en tareas de clasificación de texto. Álvarez-Ortiz y Martínez-Gallego~\cite{AlvarezOrtiz2024} reportaron 98\% de exactitud utilizando BETO para detección de noticias falsas en español mexicano, demostrando la efectividad de modelos en español para esta tarea.
+
+Conneau et al.~\cite{Conneau2020} propusieron XLM-RoBERTa, un modelo multilingüe entrenado en 100 idiomas que permite comparaciones \textit{cross-lingual} y ha sido utilizado en benchmarks de clasificación de texto en español.
+
+\subsection{Contexto latinoamericano}
+
+Un estudio publicado en \textit{Nature} en 2025~\cite{Nature2025} analizó por primera vez los factores que explican la diseminación y el control de noticias falsas en América Latina, utilizando datos del Latinobarómetro 2023 para Argentina, Brasil, Chile, Colombia, México y Perú. Los autores confirman que las contribuciones científicas previas provenían predominantemente del Norte Global, validando la brecha de investigación que este proyecto busca abordar.
+
+Activa Research y WIN~\cite{ActivaResearch2022} condujeron un estudio con 6.049 participantes en ocho países latinoamericanos, encontrando que el 53\% de los colombianos está expuesto diariamente a desinformación y que el 80\% de los latinoamericanos considera la desinformación una amenaza para la democracia.

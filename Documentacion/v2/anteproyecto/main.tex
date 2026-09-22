@@ -1,0 +1,116 @@
+%        1         2         3         4         5         6         7         8         9         0         1         2
+%23456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890
+\documentclass[12pt]{MIA-USA}
+
+\usepackage{layout}
+\usepackage{subcaption}
+\usepackage{paralist}
+\usepackage{breakcites}
+
+\usepackage[pagebackref=true,breaklinks=true]{hyperref}
+\hypersetup{
+	pdftitle={Documento de trabajo Makers}, 
+	pdfauthor={MAKERS}, 
+	pdfsubject={}, 
+	pdfcreator={DarMart with Latex}, 
+	colorlinks=true,
+	linkcolor=GrisUno,
+	citecolor=AzulInstitucional,
+	filecolor=AzulClaro,
+	urlcolor=AzulInstitucional,
+	linktoc=all
+}
+
+\graphicspath{{Imagenes/}}
+
+\renewcommand\spanishtablename{Tabla}
+
+\title{Sistema h\'ibrido LLM-agente para detecci\'on y verificaci\'on de desinformaci\'on financiera en Colombia}
+\author{Wilmar Andrey Pach\'on Adames}
+\documenttype{Anteproyecto de Maestr\'ia}
+
+\advisor{[Nombre del Director -- por confirmar]}
+
+% Si hay un coasesor 
+% \coadvisor{Nombres y apellidos Co-Asesor}
+
+
+% Aqui comienza el documento
+% - -- --- ----- ------- ------- ----- --- -- -
+\begin{document}
+    % \layout{}
+	
+	\maketitle
+    
+    % Crea la tabla de contenidos a partir de la estructura del documento
+    \tableofcontents
+    % Crea la lista de figuras
+    \listoffigures
+    % Crea la lista de tablas
+    \listoftables
+    
+    % A partir de este punto se crea la estructura del documento para el espacio de práctica con la siguiente 
+    % jerarquía
+    % chapter (Capitulo)
+    %   - section (sección)
+    %       - subsection (subsección)
+    %           - subsubsection (subsubsección)
+    
+    
+    % Glosario
+    \chapter*{Glosario}
+ 	\input{FrontMatter/F01-Glossary}
+ 	
+ 	% Resumen
+	\chapter*{Resumen}
+ 	\input{FrontMatter/F02-Abstract}
+
+    % Introduction
+    \chapter{Introducci\'on}
+    \input{MainMatter/M01-Introduction}
+    
+    % Trabajos previos
+    \chapter{Estado del Arte}
+    \input{MainMatter/M02-PreviousWork}
+    
+    % Problema de investigacion
+    \chapter{Problema de investigaci\'on}
+    \input{MainMatter/M03-ResearchProblem}
+    
+    % Justificación
+    \chapter{Justificaci\'on}
+    \input{MainMatter/M04-Justification}
+    
+    % Objetivos
+    \chapter{Objetivos}
+    \input{MainMatter/M05-Objectives}
+    
+    % Metodologia
+    \chapter{Metodolog\'ia}
+    \input{MainMatter/M06-Methodology}
+    
+    % Cronograma
+    \chapter{Cronograma}
+    \input{MainMatter/M07-Schedule}
+    
+    % Presupuesto
+    \chapter{Presupuesto}
+    \input{MainMatter/M08-Budget}
+    
+    % Resultados esperados
+    \chapter{Resultados esperados}
+    \input{MainMatter/M09-ExpectedResults}
+    
+    % Anexos
+    \chapter*{Anexos}
+    \input{BackMatter/B01-Anexos}
+    
+    % Indices
+    % \chapter*{\'Indices}
+    % \input{BackMatter/B10-Index}
+    
+	% Incluye las referencias
+    \bibliographystyle{apalike}
+ 	\bibliography{Bibliography/referencias}
+
+\end{document}

@@ -1,0 +1,110 @@
+El diseño metodológico se estructura en cuatro fases secuenciales, cada una con criterios de validez, instrumentos y entregables definidos.
+
+\section{Aspectos principales de la metodología}
+
+El proyecto adopta un enfoque experimental cuantitativo con diseño cuasi-experimental, donde la variable independiente es la configuración del sistema (LLM solo vs. sistema híbrido LLM + agente) y las variables dependientes son las métricas de desempeño (F1, precisión, recall) y explicabilidad. Se utilizan múltiples modelos de lenguaje y configuraciones de prompting para controlar el efecto del modelo específico sobre los resultados.
+
+\textbf{Hipótesis:} El sistema híbrido que combina un LLM clasificador con un agente verificador de fuentes institucionales colombianas alcanza un F1 macro significativamente superior al LLM utilizado de forma independiente en la detección de desinformación financiera colombiana.
+
+\section{Método de investigación}
+
+\subsection{Datos}
+
+\subsubsection{Universo y muestra}
+
+El universo de estudio comprende las noticias financieras y bancarias que circulan en medios digitales colombianos y que han sido objeto de verificación por organizaciones certificadas por la IFCN, así como noticias publicadas por medios económicos de referencia. La muestra objetivo es de 800 a 1.000 noticias, distribuidas en tres clases:
+
+\begin{itemize}
+    \item \textbf{Verdaderas (300--400):} Noticias publicadas por medios con credibilidad editorial verificable (Portafolio, La República, sección económica de El Tiempo) y comunicados oficiales del Banco de la República, Superintendencia Financiera y DANE.
+    \item \textbf{Falsas (300--400):} Noticias verificadas y clasificadas como falsas o engañosas por ColombiaCheck o AFP Factual Colombia, filtradas al dominio financiero y bancario.
+    \item \textbf{Dudosas (200--300):} Noticias clasificadas por los verificadores como ``parcialmente cierta'', ``sin evidencia suficiente'' o ``descontextualizada'', así como contenido viral financiero sin verificación institucional.
+\end{itemize}
+
+\subsubsection{Adquisición}
+
+La recolección se realiza mediante tres mecanismos:
+
+\begin{enumerate}
+    \item \textbf{Scraping automatizado:} Desarrollo de scrapers con Scrapy y Trafilatura para extracción de ColombiaCheck (verificaciones del dominio financiero), Portafolio, La República y comunicados oficiales. Se respetan los archivos robots.txt y términos de servicio.
+    \item \textbf{Datasets públicos existentes:} Integración de corpus públicos en español (IberLEF, FakeDeS) con re-etiquetado según la taxonomía propuesta cuando sea pertinente.
+    \item \textbf{Pipeline automatizado:} Configuración de GitHub Actions para recolección periódica y actualización del corpus.
+\end{enumerate}
+
+Cada noticia incluye los siguientes metadatos: URL original, fuente, fecha de publicación, categoría temática financiera, enlace a la verificación del fact-checker (cuando aplique), y texto completo.
+
+\subsubsection{Etiquetado y validación}
+
+Las noticias verdaderas y falsas reciben su etiqueta de la fuente primaria (medio de referencia o fact-checker IFCN). Las noticias dudosas requieren anotación manual por al menos dos anotadores independientes, con medición de acuerdo inter-anotador mediante el coeficiente Kappa de Cohen (meta: $\kappa \geq 0.70$, acuerdo sustancial). Las discrepancias se resuelven por consenso con un tercer anotador.
+
+Se implementan controles de calidad: detección de duplicados mediante similitud de n-gramas (umbral $> 0.85$), validación de balance por clase, y anonimización de información personal identificable.
+
+\section{Proceso metodológico}
+
+\subsection{Fase 1: Construcción del benchmark (Junio--Julio 2026)}
+
+Recolección, etiquetado y validación del corpus. Redacción del marco teórico y estado del arte.
+
+\subsection{Fase 2: Evaluación del LLM como clasificador (Agosto--Septiembre 2026)}
+
+Se evalúan al menos tres LLMs en el benchmark construido, en cuatro configuraciones progresivas:
+
+\begin{enumerate}
+    \item \textbf{Nivel 1 -- Zero-shot genérico:} Prompt básico sin contexto de dominio. Constituye el \textit{baseline} ingenuo (equivalente a ``pegar la noticia en ChatGPT'').
+    \item \textbf{Nivel 2 -- Zero-shot con prompt de dominio:} Prompt especializado con rol de experto financiero colombiano, instrucciones detalladas sobre indicadores de veracidad y formato de salida estructurado con puntuación de confianza.
+    \item \textbf{Nivel 3 -- Few-shot con ejemplos del corpus:} Se proporcionan 3--5 ejemplos reales de cada clase, seleccionados estratégicamente del dominio financiero colombiano.
+    \item \textbf{Nivel 4 -- Few-shot con chain-of-thought:} Se solicita al modelo razonar paso a paso: ¿la fuente citada existe?, ¿el dato es verificable?, ¿el lenguaje es neutral o sensacionalista?, ¿menciona entidades regulatorias reales?
+\end{enumerate}
+
+Los modelos candidatos incluyen: Gemini Pro/Flash (Google), GPT-4o-mini (OpenAI), y un modelo de código abierto ejecutable en Google Colab (Llama 3.1 8B o Mistral 7B con cuantización).
+
+\subsection{Fase 3: Implementación del agente verificador (Octubre--Noviembre 2026)}
+
+Se implementa el agente basado en ReAct~\cite{Yao2023} con las siguientes herramientas de dominio:
+
+\begin{itemize}
+    \item \texttt{consultar\_superfinanciera}: Consulta de comunicados y alertas de la Superintendencia Financiera de Colombia.
+    \item \texttt{verificar\_banco\_republica}: Consulta de comunicados oficiales y datos del Banco de la República.
+    \item \texttt{buscar\_colombiacheck}: Búsqueda en la base de datos de verificaciones de ColombiaCheck.
+    \item \texttt{buscar\_medios\_economicos}: Verificación en Portafolio y La República.
+    \item \texttt{validar\_fuente\_citada}: Comprobación de la existencia de la fuente citada en la noticia.
+\end{itemize}
+
+El agente se integra con el clasificador mediante LangGraph. El flujo de decisión es:
+
+\begin{enumerate}
+    \item La noticia ingresa al sistema.
+    \item El LLM clasificador emite predicción (verdadera/dudosa/falsa) con puntuación de confianza.
+    \item Si la confianza es $\geq 0.80$: se acepta la clasificación del modelo.
+    \item Si la confianza es $< 0.80$: se activa el agente verificador.
+    \item El agente consulta las fuentes institucionales y emite veredicto con justificación.
+    \item El sistema retorna el veredicto final con las fuentes consultadas y el razonamiento.
+\end{enumerate}
+
+Se experimenta con múltiples umbrales (0.70, 0.75, 0.80, 0.85) para determinar el valor óptimo.
+
+\subsection{Fase 4: Evaluación comparativa y redacción (Diciembre 2026--Enero 2027)}
+
+La evaluación compara cinco configuraciones (los cuatro niveles del clasificador más el sistema híbrido completo) utilizando las siguientes métricas:
+
+\textbf{Métricas primarias:}
+\begin{itemize}
+    \item F1 macro: promedio de F1 por clase, métrica principal por su robustez ante desbalance.
+    \item Precisión y recall por clase: desagregados para verdadera, dudosa y falsa.
+    \item Matriz de confusión: visualización de patrones de error.
+\end{itemize}
+
+\textbf{Métricas del sistema híbrido:}
+\begin{itemize}
+    \item Tasa de activación del agente: porcentaje de noticias que activan la verificación.
+    \item Mejora marginal: ganancia de precisión cuando el agente interviene.
+    \item Latencia: tiempo promedio de procesamiento por noticia.
+    \item Cobertura de evidencia: porcentaje de casos donde el agente encontró evidencia relevante.
+\end{itemize}
+
+\textbf{Métricas de explicabilidad:}
+\begin{itemize}
+    \item Fidelidad: consistencia entre la explicación del agente y el veredicto emitido.
+    \item Trazabilidad: porcentaje de veredictos con fuentes verificables citadas.
+\end{itemize}
+
+\textbf{Significancia estadística:} Se aplica la prueba de McNemar para determinar si las diferencias entre el clasificador solo y el sistema híbrido son estadísticamente significativas ($p < 0.05$).

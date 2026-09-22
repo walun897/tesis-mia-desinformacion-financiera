@@ -1,0 +1,380 @@
+# REUNIÓN CON DIRECTOR DE TESIS — Mayo 2026
+
+## Información del estudiante
+- **Nombre:** Wilmar Andrey Pachón Adames
+- **Programa:** Maestría en Inteligencia Artificial
+- **Director de tesis:** Por confirmar en la reunión
+- **Periodo de ejecución propuesto:** Junio 2026 – Enero 2027 (8 meses)
+
+---
+
+## 1. TÍTULO PROPUESTO
+
+"Sistema híbrido de detección de desinformación financiera en español colombiano: clasificación contextual con BETO/XLM-RoBERTa y validación agéntica de fuentes institucionales"
+
+---
+
+## 2. PLANTEAMIENTO DEL PROBLEMA
+
+La desinformación es el riesgo global número uno a corto plazo según el Informe Global de Riesgos del Foro Económico Mundial 2024. En América Latina, el problema es particularmente agudo: un estudio de Activa Research y WIN (2022) con una muestra de 6,049 personas en 8 países reveló que el 53% de los colombianos, 52% de los chilenos, 51% de los argentinos y 43% de los mexicanos enfrentan noticias falsas todos o casi todos los días. Estas cifras superan sustancialmente los promedios globales.
+
+En el dominio específico del sistema financiero colombiano, la desinformación causa daño económico directo: rumores sobre quiebras bancarias, noticias falsas sobre congelamiento de cuentas por reformas tributarias, fraudes presentados como políticas del Banco de la República, y desinformación sobre tasas de interés y créditos hipotecarios.
+
+Las noticias falsas se propagan 6 veces más rápido que las verdaderas según la investigación seminal de Vosoughi, Roy y Aral publicada en Science en 2018, que analizó 126,000 historias de noticias difundidas por aproximadamente 3 millones de personas en Twitter.
+
+A pesar de la gravedad del problema, el 81.5% de los datasets existentes para detección de fake news están en inglés. Los pocos recursos en español no cubren el dominio financiero colombiano, y no existe ningún sistema que combine clasificación con embeddings contextuales y verificación agéntica de fuentes para este contexto.
+
+---
+
+## 3. PREGUNTA DE INVESTIGACIÓN
+
+¿Puede un sistema híbrido que combina clasificación mediante embeddings contextuales (BETO, XLM-RoBERTa) con agentes de verificación de fuentes detectar desinformación sobre el sistema financiero colombiano con mayor precisión y explicabilidad que modelos de clasificación independientes?
+
+---
+
+## 4. OBJETIVO GENERAL
+
+Diseñar, implementar y evaluar un sistema híbrido de detección de desinformación financiera en español colombiano, que integre clasificación contextual con transformers y validación agéntica de fuentes institucionales, superando en precisión y explicabilidad a clasificadores independientes.
+
+---
+
+## 5. OBJETIVOS ESPECÍFICOS
+
+1. Construir un corpus etiquetado de noticias financiero-bancarias colombianas (verdadera / dudosa / falsa) a partir de fuentes certificadas por la International Fact-Checking Network (IFCN), con un mínimo de 800 a 1,500 noticias validadas.
+
+2. Implementar y comparar clasificadores basados en BETO y XLM-RoBERTa para clasificación trinaria de desinformación financiera en español colombiano, evaluando su rendimiento con métricas estándar (F1, precisión, recall).
+
+3. Diseñar e implementar un agente validador de fuentes basado en el framework ReAct, que consulte fuentes institucionales colombianas (Superintendencia Financiera, Banco de la República, DANE, ColombiaCheck) cuando el clasificador tenga confianza baja (umbral menor a 0.80).
+
+4. Integrar ambos componentes mediante un orquestador (LangGraph), evaluando la mejora del sistema híbrido frente al clasificador independiente en precisión, recall, F1 y métricas de explicabilidad.
+
+5. Documentar y publicar el pipeline completo como recurso reproducible para la comunidad académica.
+
+---
+
+## 6. EVOLUCIÓN DEL ENFOQUE (CONTEXTO PARA EL DIRECTOR)
+
+El proyecto original consistía en un pipeline de clasificación puro usando transformers (BETO, ALBETO, XLM-RoBERTa) para clasificar noticias falsas en español latinoamericano de 4 países (Colombia, Chile, Argentina, México). El nuevo enfoque evoluciona a un sistema híbrido que combina el clasificador NLP con un agente validador de fuentes, enfocado específicamente en el dominio financiero colombiano.
+
+Razones del cambio:
+- Los LLMs solos alcanzan precisiones de apenas 64-71% en tareas de fact-checking (evaluaciones de GPT-3.5, GPT-4, Bard, BingAI reportadas en Frontiers in Artificial Intelligence, 2024).
+- Los sistemas híbridos multi-agente superan consistentemente a clasificadores independientes en la literatura reciente.
+- La delimitación al dominio financiero colombiano da mayor profundidad, novedad y viabilidad en 8 meses.
+- El investigador trabaja en una entidad financiera colombiana, aportando criterio de dominio único.
+
+---
+
+## 7. ARQUITECTURA DEL SISTEMA
+
+El sistema tiene tres componentes principales orquestados por LangGraph:
+
+### 7.1 Agente Recolector
+- Scraping automatizado de fuentes colombianas: Portafolio, La República, ColombiaCheck
+- Pipeline de recolección con GitHub Actions
+
+### 7.2 Clasificador NLP
+- Modelos: BETO (Cañete et al., 2020) y XLM-RoBERTa (Conneau et al., 2020)
+- Clasificación trinaria: Verdadera / Dudosa / Falsa
+- Genera puntuación de confianza para cada predicción
+
+### 7.3 Agente Validador de Fuentes
+- Se activa condicionalmente cuando la confianza del clasificador es menor a 0.80
+- Basado en framework ReAct (Yao et al., 2022/2023)
+- Herramientas de dominio financiero colombiano:
+  - consultar_superfinanciera: Superintendencia Financiera de Colombia
+  - verificar_banco_republica: Comunicados oficiales del Banco de la República
+  - buscar_colombiacheck: Base de datos de fact-checking
+  - buscar_portafolio_larepublica: Medios económicos verificados
+  - validar_fuente_citada: Verificar si la fuente citada en la noticia existe
+
+### Flujo de decisión:
+1. Una noticia entra al sistema
+2. El clasificador la procesa y emite predicción + confianza
+3. Si confianza >= 0.80: se acepta la clasificación del modelo
+4. Si confianza < 0.80: se activa el agente validador
+5. El agente consulta fuentes institucionales
+6. El sistema emite veredicto final con explicación trazable
+
+---
+
+## 8. TRES CONTRIBUCIONES ORIGINALES
+
+### 8.1 Dataset propio
+Primer corpus etiquetado de noticias financiero-bancarias colombianas con clasificación trinaria (verdadera / dudosa / falsa), construido desde fuentes IFCN verificadas. El 81.5% de datasets de fake news existentes están en inglés, y los pocos en español no cubren el dominio financiero colombiano.
+
+### 8.2 Arquitectura con umbral de confianza
+Activación condicional del agente validador solo cuando el clasificador tiene confianza baja (umbral < 0.80). La literatura existente usa umbrales de confianza en sistemas de un solo componente, pero nunca como detonador de un agente secundario de verificación.
+
+### 8.3 Agente con herramientas de dominio financiero colombiano
+El agente consulta Superfinanciera, Banco de la República, DANE y ColombiaCheck. Ningún sistema existente en la literatura tiene herramientas específicas para el ecosistema regulatorio financiero latinoamericano.
+
+---
+
+## 9. REFERENTES CLAVE VALIDADOS (INFORMACIÓN REAL Y VERIFICADA)
+
+Todos los referentes listados a continuación fueron verificados mediante búsqueda web en mayo de 2026. Se incluyen los identificadores de acceso reales.
+
+### 9.1 Sistemas híbridos multi-agente para fact-checking
+
+**Referente 1: FactAgent**
+- Autores: Xinyi Li, Yongfeng Zhang, Edward C. Malthouse
+- Título: "Large Language Model Agent for Fake News Detection"
+- Publicación: ECAI 2024 (27th European Conference on Artificial Intelligence), Santiago de Compostela, España. También disponible como preprint arXiv:2405.01593.
+- DOI: 10.3233/FAIA240787
+- Páginas: 2572-2579 en Frontiers in Artificial Intelligence and Applications, vol. 392, IOS Press.
+- Resumen: Introduce FactAgent, un enfoque agéntico para detección de fake news que emula el comportamiento de expertos humanos a través de un workflow estructurado. El LLM integra conocimiento interno y herramientas externas para verificación de noticias en sub-pasos dentro del workflow. Opera sin datos de entrenamiento anotados (zero-shot). Ofrece explicaciones transparentes en cada paso y es altamente adaptable a diferentes dominios.
+- Relevancia para la tesis: Referente directo de la arquitectura agéntica. Demuestra que modularizar el fact-checking en pasos (recuperación de evidencia, verificación temporal, referencia cruzada de fuentes) mejora la interpretabilidad. FactAgent es adaptable a dominios específicos mediante actualización de herramientas, lo cual fundamenta el diseño del agente con tools financieras colombianas.
+
+**Referente 2: MACAW**
+- Autores: Yin Wu, Zhengxuan Zhang, Fuling Wang, Yuyu Luo, Hui Xiong, Nan Tang
+- Afiliación: The Hong Kong University of Science and Technology (Guangzhou)
+- Título: "Exposing Out-of-Context Misinformation: A Multi-Agent Approach with Multi-Grained Retrieval"
+- Disponibilidad: arXiv:2504.06269 (abril 2025). También fue sometido a ICLR 2025 vía OpenReview (ID: xS6uKkJ9Uz).
+- Resumen: Propone MACAW, un framework multi-agente con tres agentes especializados (Retrieval, Detective, Analyst) para validación cruzada de evidencia a múltiples granularidades. Indexa conocimiento externo y extrae información multi-granularidad para evaluar la integridad contextual de afirmaciones.
+- Relevancia para la tesis: Es la arquitectura más cercana al sistema propuesto en esta tesis. Demuestra que la especialización de agentes por función (recuperación, análisis, veredicto) mejora la precisión en detección de desinformación.
+
+**Referente 3: Kolli et al. — Hybrid Fact-Checking con KG + LLM + Agentes**
+- Autores: Shaghayegh Kolli, Richard Rosenbaum, Timo Cavelius, Lasse Strothe, Andrii Lata, Jana Diesner
+- Afiliación: Technical University of Munich (TUM)
+- Título: "Hybrid Fact-Checking that Integrates Knowledge Graphs, Large Language Models, and Search-Based Retrieval Agents Improves Interpretable Claim Verification"
+- Disponibilidad: arXiv:2511.03217 (noviembre 2025)
+- Resumen: Propone un pipeline híbrido con un pase inicial basado en Knowledge Graphs (Wikidata/DBpedia) y un fallback basado en Web-RAG. Cuando el sistema de KG retorna "Not Enough Information", se activa la búsqueda web con reescritura de claims. Reporta resultados en FEVER (F1=0.78) y FactKG (F1=0.77).
+- Relevancia para la tesis: Valida directamente la arquitectura de "activación condicional" propuesta en esta tesis. Demuestra que combinar KG + LLM + agentes de búsqueda supera a cada componente individual, y que la activación por fallback es una estrategia efectiva.
+
+**Referente 4: ReAct Framework**
+- Autores: Shunyu Yao, Jeffrey Zhao, Dian Yu, Nan Du, Izhak Shafran, Karthik Narasimhan, Yuan Cao
+- Afiliaciones: Princeton University, Google Research Brain Team
+- Título: "ReAct: Synergizing Reasoning and Acting in Language Models"
+- Publicación: ICLR 2023 (International Conference on Learning Representations), Kigali, Rwanda
+- Preprint: arXiv:2210.03629 (octubre 2022)
+- Código fuente: https://github.com/ysymyth/ReAct
+- Resumen: Framework fundacional que explora el uso de LLMs para generar tanto trazas de razonamiento como acciones específicas de tarea de manera intercalada. Las trazas de razonamiento ayudan al modelo a inducir, rastrear y actualizar planes de acción, mientras que las acciones permiten interfaz con fuentes externas como Wikipedia. Evaluado en HotPotQA, FEVER, ALFWorld y WebShop.
+- Relevancia para la tesis: Base teórica y arquitectónica del agente validador. ReAct es el paradigma que fundamenta la capacidad del agente de razonar paso a paso mientras consulta fuentes externas del dominio financiero.
+
+**Referente 5: Trinh, Nguyen & Hy — Multi-Agent Fact-Checking con 4 agentes**
+- Autores: Tam Trinh, Manh Nguyen, Truong-Son Hy
+- Afiliaciones: National Economics University (Vietnam), Deakin University (Australia), University of Alabama at Birmingham (USA)
+- Título: "Towards Robust Fact-Checking: A Multi-Agent System with Advanced Evidence Retrieval"
+- Disponibilidad: arXiv:2506.17878 (junio 2025)
+- Código fuente: https://github.com/HySonLab/FactAgent
+- Resumen: Sistema multi-agente con 4 agentes especializados: Input Ingestion Agent (descomposición de claims), Query Generation Agent (formulación de subconsultas), Evidence Retrieval Agent (recuperación de evidencia creíble), y Verdict Prediction Agent (síntesis de veredictos con explicaciones interpretables). Evaluado en FEVEROUS, HOVER y SciFact, logra una mejora del 12.3% en Macro F1-score sobre métodos baseline.
+- Relevancia para la tesis: Demuestra con datos empíricos que la arquitectura multi-agente especializada supera a baselines en fact-checking automatizado. Además, su código está disponible públicamente, lo que permite comparación directa.
+
+**Referente 6: DelphiAgent**
+- Autores: Xiong et al.
+- Título: "DelphiAgent: A trustworthy multi-agent verification framework for automated fact verification"
+- Publicación: Information Processing & Management, Vol. 62, 104241 (2025)
+- DOI: disponible en ScienceDirect
+- Resumen: Framework multi-agente de verificación confiable con generación de justificaciones a lo largo del workflow. Enfatiza la trazabilidad y confiabilidad del proceso de verificación.
+- Relevancia para la tesis: Refuerza el argumento de que los sistemas multi-agente no solo mejoran precisión sino también la confiabilidad y explicabilidad del fact-checking, que es uno de los objetivos explícitos de esta tesis.
+
+### 9.2 Modelos NLP para español
+
+**BETO — Cañete et al. (2020)**
+- Título: "Spanish Pre-trained BERT Model and Evaluation Data"
+- Descripción: Transformer pre-entrenado exclusivamente en texto en español. Base del clasificador propuesto en esta tesis.
+- Repositorio: https://github.com/dccuchile/beto
+
+**XLM-RoBERTa — Conneau et al. (2020)**
+- Título: "Unsupervised Cross-lingual Representation Learning at Scale"
+- Publicación: ACL 2020
+- Descripción: Modelo multilingüe entrenado en 100 idiomas. Se incluye para comparación cross-lingual.
+
+**Álvarez-Ortiz & Martínez-Gallego (2024)**
+- Logran 98% de accuracy con BETO en español mexicano para detección de fake news. Demuestra que BETO es efectivo para esta tarea en variantes del español latinoamericano.
+
+**Togni et al. (2023)**
+- Análisis lingüístico e interpretabilidad en clasificación de noticias falsas en español.
+
+### 9.3 Contexto latinoamericano
+
+**Estudio Nature (2025)**
+- Primer estudio de su naturaleza en América Latina que analiza factores explicativos para diseminación y control de fake news usando datos del Latinobarómetro 2023 para Argentina, Brasil, Chile, Colombia, México y Perú. Confirma que las contribuciones científicas existentes provenían principalmente del Norte Global, validando la brecha de investigación regional.
+
+**Activa Research & WIN (2022)**
+- Estudio "Fake news - Desinformación en Chile y LatAm"
+- Muestra: 6,049 participantes en 8 países latinoamericanos
+- Dato clave: Colombia 53%, Chile 52%, Argentina 51%, México 43% expuestos diariamente a desinformación
+- El 80% de latinoamericanos cree que la desinformación es una amenaza para la democracia
+
+**Vosoughi, Roy & Aral (2018)**
+- Título: "The spread of true and false news online"
+- Publicación: Science, Vol. 359, Issue 6380, pp. 1146-1151
+- Hallazgo: Las noticias falsas se propagan 6 veces más rápido que las verdaderas. Analizaron 126,000 historias.
+
+**WEF Global Risks Report 2024**
+- La desinformación es clasificada como el riesgo global #1 a corto plazo.
+
+### 9.4 Cadena argumentativa verificable
+
+1. LLMs solos son insuficientes para fact-checking (64-71% precisión)
+2. Sistemas híbridos con agentes mejoran consistentemente el desempeño (FactAgent, MACAW, Trinh et al.)
+3. Existe un framework arquitectónico validado para activación condicional (Kolli et al., 2025)
+4. El framework ReAct es la base teórica adecuada para agentes con herramientas (Yao et al., ICLR 2023)
+5. El dominio financiero en español no tiene cobertura con sistemas agénticos (gap de investigación)
+6. América Latina sigue sin cobertura específica en este tipo de sistemas (Nature 2025)
+
+---
+
+## 10. PLAN DE TRABAJO DETALLADO POR ACTIVIDADES
+
+### FASE 1: Construcción del Corpus y Estado del Arte (Junio – Julio 2026)
+
+**Semana 1-2 (Junio 1-14):**
+- Definir criterios de selección de fuentes: noticias financieras/bancarias colombianas
+- Configurar entorno de scraping: Scrapy + Trafilatura
+- Implementar scrapers para ColombiaCheck (verificaciones financieras)
+- Implementar scrapers para medios económicos: Portafolio, La República, Dinero
+- Probar extracción de al menos 100 noticias piloto
+
+**Semana 3-4 (Junio 15-28):**
+- Escalar scraping a las fuentes completas
+- Implementar pipeline de GitHub Actions para recolección automatizada
+- Diseñar esquema de etiquetado trinario: Verdadera / Dudosa / Falsa
+- Crear guía de anotación con ejemplos del dominio financiero colombiano
+- Definir criterios de clasificación "dudosa" basados en la práctica de fact-checkers
+
+**Semana 5-6 (Julio 1-14):**
+- Etiquetar manualmente las primeras 200 noticias (calibración)
+- Reclutar 2 anotadores adicionales para validación inter-anotador
+- Calcular acuerdo inter-anotador con Cohen's Kappa
+- Resolver discrepancias y ajustar guía de anotación
+- Meta: alcanzar kappa >= 0.70 (acuerdo sustancial)
+
+**Semana 7-8 (Julio 15-31):**
+- Completar etiquetado del corpus (meta: 800-1,500 noticias)
+- Limpiar y normalizar textos: eliminar HTML, normalizar URLs, unificar encoding
+- Dividir corpus en train/validation/test (70/15/15)
+- Redactar capítulos 1 y 2: Planteamiento del problema y Marco teórico
+- Compilar estado del arte con los referentes validados
+
+**Entregable Fase 1:** Corpus etiquetado y validado + Capítulos 1-2 en borrador
+
+---
+
+### FASE 2: Implementación del Clasificador NLP (Agosto – Septiembre 2026)
+
+**Semana 9-10 (Agosto 1-14):**
+- Configurar entorno de entrenamiento: Google Colab Pro / GPU disponible
+- Preprocesamiento del corpus: tokenización con tokenizers de BETO y XLM-RoBERTa
+- Implementar pipeline de fine-tuning para BETO con clasificación trinaria
+- Entrenar primera iteración con hiperparámetros base
+
+**Semana 11-12 (Agosto 15-31):**
+- Implementar pipeline de fine-tuning para XLM-RoBERTa
+- Grid search de hiperparámetros: learning rate, batch size, epochs, warm-up
+- Implementar baselines tradicionales: SVM, Logistic Regression (para comparación)
+- Evaluar métricas: F1 macro, precisión, recall por clase
+
+**Semana 13-14 (Septiembre 1-14):**
+- Análisis de errores: ¿en qué tipos de noticias falla cada modelo?
+- Implementar LIME/SHAP para explicabilidad del clasificador
+- Determinar umbral de confianza óptimo (experimentar con 0.70, 0.75, 0.80, 0.85)
+- Análisis de la distribución de confianza: ¿qué porcentaje cae debajo del umbral?
+
+**Semana 15-16 (Septiembre 15-30):**
+- Redactar capítulo 3: Metodología (arquitectura del clasificador)
+- Documentar resultados experimentales del clasificador
+- Seleccionar el mejor modelo como componente del sistema híbrido
+- Preparar informe de avance para el director
+
+**Entregable Fase 2:** Clasificador entrenado y evaluado + Capítulo 3 en borrador + Informe de avance
+
+---
+
+### FASE 3: Implementación del Agente Validador (Octubre – Noviembre 2026)
+
+**Semana 17-18 (Octubre 1-14):**
+- Instalar y configurar LangGraph como orquestador
+- Diseñar el grafo de estados del sistema híbrido
+- Implementar nodo de decisión basado en umbral de confianza
+- Crear estructura base del agente validador con ReAct
+
+**Semana 19-20 (Octubre 15-31):**
+- Implementar herramientas del agente:
+  - Tool 1: consultar_superfinanciera (scraping de comunicados de la Superfinanciera)
+  - Tool 2: verificar_banco_republica (API/scraping de comunicados del BanRep)
+  - Tool 3: buscar_colombiacheck (búsqueda en base de datos de ColombiaCheck)
+  - Tool 4: buscar_portafolio_larepublica (verificación en medios económicos)
+  - Tool 5: validar_fuente_citada (verificar existencia de la fuente citada)
+- Probar cada herramienta individualmente con casos de prueba
+
+**Semana 21-22 (Noviembre 1-14):**
+- Integrar agente validador con clasificador vía LangGraph
+- Probar flujo completo: noticia -> clasificador -> decisión -> agente (si aplica) -> veredicto
+- Implementar logging de razonamiento del agente (trazabilidad)
+- Depurar casos donde el agente falla o alucina
+
+**Semana 23-24 (Noviembre 15-30):**
+- Evaluar sistema híbrido completo en el dataset de test
+- Comparar: clasificador solo vs. sistema híbrido
+- Experimentar con diferentes umbrales de activación
+- Medir latencia del sistema (tiempo promedio de verificación)
+- Redactar sección de metodología del agente
+
+**Entregable Fase 3:** Sistema híbrido funcional + Métricas comparativas
+
+---
+
+### FASE 4: Evaluación Final, Redacción y Preparación de Sustentación (Diciembre 2026 – Enero 2027)
+
+**Semana 25-26 (Diciembre 1-14):**
+- Ejecutar evaluación final exhaustiva
+- Calcular todas las métricas: F1, precisión, recall, accuracy
+- Calcular métricas de explicabilidad: fidelidad de explicaciones, cobertura de evidencia
+- Análisis estadístico: pruebas de significancia (McNemar test)
+- Crear tablas y gráficos de resultados
+
+**Semana 27-28 (Diciembre 15-31):**
+- Redactar capítulo 4: Experimentos y Resultados
+- Redactar capítulo 5: Discusión (limitaciones, implicaciones, trabajo futuro)
+- Limitaciones a discutir: latencia del agente, disponibilidad de fuentes, posibles alucinaciones del LLM, costo de API
+- Trabajo futuro: extensión a otros dominios, multimodalidad, escalabilidad regional
+
+**Semana 29-30 (Enero 1-14, 2027):**
+- Redactar introducción final y conclusiones
+- Compilar bibliografía completa en formato requerido
+- Revisión interna completa del documento
+- Enviar borrador al director para retroalimentación
+
+**Semana 31-32 (Enero 15-31, 2027):**
+- Incorporar correcciones del director
+- Preparar presentación de sustentación
+- Ensayar presentación (timing, preguntas anticipadas)
+- Entrega final de tesis
+
+**Entregable Fase 4:** Documento de tesis completo + Presentación de sustentación
+
+---
+
+## 11. TEMAS PARA VALIDAR EN LA SESIÓN CON EL DIRECTOR
+
+### Tema 1: Aprobación del nuevo enfoque híbrido
+Pregunta para el director: ¿Está de acuerdo con la transición de clasificador puro a sistema híbrido clasificador + agente validador? ¿Considera que esto sigue siendo viable como trabajo de maestría?
+
+### Tema 2: Estrategia de construcción del corpus
+Pregunta: ¿Es aceptable la meta de 800-1,500 noticias etiquetadas? Papers exitosos han trabajado con datasets similares o menores: Posadas-Durán et al. (2019) usó 480 noticias, Álvarez-Ortiz (2024) usó aproximadamente 1,000 titulares. ¿El director tiene sugerencias sobre fuentes adicionales?
+
+### Tema 3: Fuentes institucionales del agente
+Pregunta: ¿Son suficientes la Superintendencia Financiera, Banco de la República, DANE y ColombiaCheck como herramientas del agente? ¿Debería agregar la Bolsa de Valores de Colombia, la DIAN, o alguna otra?
+
+### Tema 4: Métricas de comparación
+Pregunta: ¿Cuáles métricas de evaluación son prioritarias para el comité? Se proponen: F1 macro, precisión, recall por clase, y métricas de explicabilidad. ¿Es necesario incluir evaluación humana?
+
+### Tema 5: Viabilidad del cronograma
+Pregunta: ¿8 meses (junio 2026 – enero 2027) son realistas para el alcance propuesto? ¿Hay fechas institucionales de entrega que deba considerar?
+
+### Tema 6: Formato y capítulos
+Pregunta: ¿El programa tiene una plantilla o formato específico para el documento de tesis? ¿La estructura propuesta (planteamiento, marco teórico, metodología, experimentos, discusión) se alinea con lo esperado?
+
+### Tema 7: Publicación
+Pregunta: ¿Existe expectativa de publicar un artículo derivado de la tesis? Si es así, ¿en qué conferencia o revista se podría apuntar? Candidatos: CLEF, IberLEF, o una revista de procesamiento de lenguaje natural en español.
+
+### Tema 8: Recursos computacionales
+Pregunta: ¿La universidad provee acceso a GPUs para entrenamiento? ¿Se cuenta con presupuesto para APIs de LLMs (OpenAI, Anthropic) necesarias para el agente validador?
+
+---
+
+## 12. RESUMEN EJECUTIVO (ELEVATOR PITCH)
+
+Mi tesis propone el primer sistema híbrido que combina un clasificador de desinformación basado en transformers (BETO/XLM-RoBERTa) con un agente inteligente que verifica automáticamente fuentes institucionales del sistema financiero colombiano. Cuando el clasificador no está seguro de su predicción, el agente consulta la Superfinanciera, el Banco de la República y ColombiaCheck para emitir un veredicto fundamentado. Esto no existe en la literatura: ni la combinación clasificador-agente para este dominio, ni herramientas de verificación para el ecosistema regulatorio financiero latinoamericano, ni un corpus etiquetado de desinformación financiera colombiana. Los referentes que sustentan esta arquitectura incluyen FactAgent (ECAI 2024), MACAW (HKUST 2024), el framework ReAct (ICLR 2023), y trabajos recientes de sistemas multi-agente que demuestran mejoras del 12.3% en F1 sobre baselines. El proyecto es ejecutable en 8 meses y produce contribuciones publicables.

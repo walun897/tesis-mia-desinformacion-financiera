@@ -1,0 +1,22 @@
+\section{Diagrama de arquitectura del sistema}
+
+El sistema híbrido propuesto se compone de tres capas principales:
+
+\begin{enumerate}
+    \item \textbf{Capa de entrada (Frontend):} Interfaz donde el usuario ingresa la URL o el texto de la noticia financiera a verificar.
+    \item \textbf{Capa de clasificación (LLM):} Un modelo de lenguaje de gran escala clasifica la noticia en tres categorías (verdadera, dudosa, falsa) y emite una puntuación de confianza.
+    \item \textbf{Capa de verificación (Agente):} Cuando la confianza del clasificador es inferior al umbral definido, un agente inteligente basado en ReAct consulta fuentes institucionales colombianas y emite un veredicto fundamentado.
+\end{enumerate}
+
+El flujo completo es orquestado por LangGraph mediante un grafo de estados con nodos condicionales.
+
+\section{Listado de fuentes institucionales del agente}
+
+\begin{itemize}
+    \item Superintendencia Financiera de Colombia (\url{https://www.superfinanciera.gov.co})
+    \item Banco de la República (\url{https://www.banrep.gov.co})
+    \item Departamento Administrativo Nacional de Estadística -- DANE (\url{https://www.dane.gov.co})
+    \item ColombiaCheck (\url{https://colombiacheck.com})
+    \item Portafolio (\url{https://www.portafolio.co})
+    \item La República (\url{https://www.larepublica.co})
+\end{itemize}

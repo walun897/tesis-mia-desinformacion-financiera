@@ -1,0 +1,19 @@
+\section{Justificación científica}
+
+La literatura reciente ha demostrado que los sistemas multi-agente superan consistentemente a los enfoques de un solo componente en tareas de verificación de hechos. FactAgent~\cite{Li2024} demostró la viabilidad de agentes adaptativos a dominios específicos. MACAW~\cite{Wu2024} probó que la especialización de agentes por función mejora la detección. Trinh et al.~\cite{Trinh2025} reportaron mejoras del 12,3\% en F1 con arquitecturas multi-agente. Y Kolli et al.~\cite{Kolli2025} validaron que la activación condicional por \textit{fallback} es una estrategia efectiva.
+
+Sin embargo, ninguno de estos sistemas ha sido aplicado al dominio financiero en español, ni integra fuentes institucionales latinoamericanas. Este proyecto llena ese vacío al adaptar las arquitecturas validadas en la literatura al contexto regulatorio financiero colombiano.
+
+\section{Justificación práctica}
+
+Colombia cuenta con un ecosistema de verificación de hechos activo (ColombiaCheck, AFP Factual) pero manual, con capacidad limitada frente al volumen creciente de desinformación. Un sistema automatizado de verificación podría servir como herramienta de apoyo para verificadores humanos, entidades financieras y reguladores, permitiendo priorizar las noticias que requieren verificación urgente.
+
+Adicionalmente, el benchmark de evaluación que se construirá constituye un recurso reutilizable: cualquier investigador o entidad podrá evaluar nuevos modelos o herramientas de verificación contra este conjunto de datos, extendiendo el impacto del proyecto más allá de su alcance inmediato.
+
+\section{Justificación social}
+
+La desinformación financiera afecta desproporcionadamente a poblaciones con menor alfabetización financiera y mediática. Un sistema que pueda identificar y explicar por qué una noticia es falsa contribuye a la protección del ciudadano y a la estabilidad del sistema financiero colombiano. El enfoque de explicabilidad adoptado en este proyecto (donde cada veredicto incluye las fuentes consultadas y el razonamiento del agente) es especialmente relevante para generar confianza en la herramienta.
+
+\section{Alcance}
+
+El proyecto se delimita al dominio de noticias financieras y bancarias colombianas en formato textual. No se abordan contenidos multimodales (imágenes, videos), ni se cubren otros países de la región (aunque la arquitectura es extensible). El sistema se evalúa como herramienta de apoyo a la verificación, no como reemplazo de verificadores humanos.
