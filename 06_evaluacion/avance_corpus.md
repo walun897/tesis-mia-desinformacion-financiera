@@ -7,6 +7,12 @@ aparte cuando arranque Fase 2), es solo el estado del corpus.
 **Cómo generarlo de nuevo:** `python 06_evaluacion/generar_avance_corpus.py`
 (lee los Parquet de `02_corpus/raw/`, no requiere red).
 
+**Archivo único con todo el corpus junto:** `python 02_corpus/consolidar_corpus.py`
+genera `02_corpus/raw/corpus_consolidado.{parquet,csv}` -- las 7 fuentes
+en un solo archivo, listo para abrir en Excel o cargar de una sola vez.
+Es el corpus crudo (1.250 ítems), **no** la muestra final de 800-1.000
+(eso todavía no se ha ejecutado, ver Metodología).
+
 ## Corte al 2026-09-22
 
 | Fuente | Tipo | Ítems | % del total |
