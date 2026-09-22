@@ -145,6 +145,14 @@ class ParquetWriterPipeline:
             return
         OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
         df = pd.DataFrame(self.items)
-        output_path = OUTPUT_DIR / f"{self.spider_name}.parquet"
-        df.to_parquet(output_path, index=False)
-        logger.info("Escritos %d ítems en %s", len(df), output_path)
+
+        parquet_path = OUTPUT_DIR / f"{self.spider_name}.parquet"
+        df.to_parquet(parquet_path, index=False)
+
+        # CSV en paralelo, solo para inspección humana (abrir en Excel,
+        # mostrar avance) -- Parquet sigue siendo el formato de trabajo del
+        # pipeline (ver M06-Methodology.tex, justificación de tipos/eficiencia).
+        csv_path = OUTPUT_DIR / f"{self.spider_name}.csv"
+        df.to_csv(csv_path, index=False, encoding="utf-8-sig")  # BOM para que Excel detecte UTF-8 solo
+
+        logger.info("Escritos %d ítems en %s y %s", len(df), parquet_path, csv_path)

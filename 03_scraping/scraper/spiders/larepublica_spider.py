@@ -1,13 +1,15 @@
-"""Spider de La República, sección Economía (medio de referencia, clase verdadera).
+"""Spider de La República (medio de referencia, clase verdadera).
 
-Verificado el 2026-09-22: la sección /economia es HTML servido por el
-servidor (no requiere JS), con artículos en
-`https://www.larepublica.co/economia/{slug}-{id}`. NO se encontró un
-mecanismo de paginación verificable: `?page=2` devuelve casi el mismo
-contenido que `?page=1` (no es paginación real), así que no se inventa un
-esquema de paginación. La cobertura histórica se logra por recolección
-periódica (GitHub Actions, ya planeado en criterios_seleccion_fuentes.md),
-no por paginación profunda en una sola corrida.
+Verificado el 2026-09-22: HTML servido por el servidor (no requiere JS).
+NO se encontró un mecanismo de paginación verificable dentro de una misma
+sección (`?page=2` devuelve casi el mismo contenido que `?page=1`), pero sí
+hay varias secciones independientes con su propio namespace de URL, cada
+una con ~25-65 artículos: `/economia`, `/finanzas` y `/globoeconomia` (se
+probó también `/hacienda`, pero sus artículos publican bajo `/economia/`,
+no bajo `/hacienda/`, así que no aporta URLs nuevas). La cobertura
+histórica adicional se logra por recolección periódica (GitHub Actions,
+ya planeado en criterios_seleccion_fuentes.md), no por paginación
+profunda en una sola corrida.
 
 label_fuente="verdadera" se asigna por la regla de fuente primaria de
 guia_anotacion.md. La condición de esa regla ("reporta datos/cifras
@@ -22,13 +24,17 @@ from ..extraction import extract_article
 from ..items import NoticiaItem
 from ..utils import make_id, parse_date_safe, today_iso
 
-ARTICLE_LINK_EXTRACTOR = LinkExtractor(allow=r"/economia/[\w-]+-\d+$")
+ARTICLE_LINK_EXTRACTOR = LinkExtractor(allow=r"/(?:economia|finanzas|globoeconomia)/[\w-]+-\d+$")
 
 
 class LaRepublicaSpider(scrapy.Spider):
     name = "larepublica"
     allowed_domains = ["larepublica.co"]
-    start_urls = ["https://www.larepublica.co/economia"]
+    start_urls = [
+        "https://www.larepublica.co/economia",
+        "https://www.larepublica.co/finanzas",
+        "https://www.larepublica.co/globoeconomia",
+    ]
 
     def parse(self, response):
         for link in ARTICLE_LINK_EXTRACTOR.extract_links(response):
