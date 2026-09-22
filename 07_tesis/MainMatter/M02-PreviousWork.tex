@@ -1,28 +1,76 @@
-El presente capítulo desarrolla el marco referencial del proyecto, abordando los fundamentos teóricos, el contexto tecnológico y los antecedentes científicos relevantes, organizados de lo general a lo específico.
+El presente capítulo desarrolla el marco referencial del proyecto: primero fija el significado preciso de los términos que se usan a lo largo de la tesis (marco conceptual), luego expone los fundamentos teóricos y tecnológicos (marco teórico y tecnológico), el marco normativo que rige el manejo de datos y el uso de IA en Colombia, y cierra con los antecedentes científicos (estado del arte) que sitúan este proyecto frente a la investigación existente.
+
+\section{Marco conceptual}
+
+Esta sección define los términos centrales de la tesis. El objetivo no es exhaustividad enciclopédica, sino fijar el sentido preciso con el que cada término se usa en los capítulos siguientes, para evitar ambigüedad en la metodología y en la discusión de resultados.
+
+\subsection{Desinformación, misinformación y malinformación}
+
+Estos tres términos se confunden con frecuencia en el lenguaje cotidiano, pero en la literatura académica se distinguen por un solo criterio: la intención. Wardle y Derakhshan~\cite{WardleDerakhshan2017}, en el marco de referencia adoptado por el Consejo de Europa, proponen la siguiente distinción, que esta tesis adopta:
+
+\begin{itemize}
+    \item \textbf{Desinformación} (\textit{disinformation}): información falsa creada y compartida deliberadamente para causar daño (motivación económica, política o simplemente el deseo de generar caos).
+    \item \textbf{Misinformación} (\textit{misinformation}): información falsa que se comparte sin que quien la comparte sepa que es falsa.
+    \item \textbf{Malinformación} (\textit{malinformation}): información \emph{verdadera} que se comparte con la intención de causar daño (por ejemplo, filtrar datos privados fuera de contexto).
+\end{itemize}
+
+Esta tesis se centra en la \textbf{desinformación financiera}, entendida como contenido falso o engañoso sobre el sistema financiero colombiano (tasas de interés, entidades vigiladas, política monetaria, tributación) que circula con apariencia de noticia real. La distinción con la misinformación es relevante metodológicamente: el corpus (Capítulo de Metodología) no intenta inferir la intención de quien publicó el contenido —tarea que ningún sistema automatizado resuelve de forma confiable—, sino evaluar la veracidad de la afirmación central, independientemente de si hubo intención de daño. Por eso el sistema propuesto se describe como un detector de \emph{desinformación} en sentido amplio (información falsa circulando como noticia), sin comprometerse a inferir intencionalidad.
+
+\subsection{Verificación de hechos (fact-checking)}
+
+La verificación de hechos es el proceso de evaluar la veracidad de una afirmación pública contrastándola con fuentes primarias y evidencia verificable. La International Fact-Checking Network (IFCN), operada por el Instituto Poynter, certifica organizaciones que cumplen su Código de Principios: no partidismo, transparencia de metodología, transparencia de fuentes, y una política de correcciones abierta y honesta. La certificación se renueva anualmente mediante auditoría. En Colombia, ColombiaCheck opera como verificador certificado por la IFCN (ver Capítulo de Metodología para la verificación de vigencia de esa certificación al momento del scraping).
+
+\subsection{Modelo de lenguaje de gran escala (LLM) y aprendizaje en contexto}
+
+Un modelo de lenguaje de gran escala (\textit{Large Language Model}, LLM) es un modelo de aprendizaje profundo entrenado sobre grandes volúmenes de texto para predecir la continuación probable de una secuencia, capacidad que en la práctica le permite comprender y generar lenguaje natural en tareas diversas sin entrenamiento específico por tarea. Brown et al.~\cite{Brown2020}, al presentar GPT-3, mostraron que escalar el tamaño del modelo permite resolver tareas nuevas únicamente a partir de instrucciones y ejemplos en el texto de entrada (\textit{aprendizaje en contexto} o \textit{in-context learning}), sin actualizar los pesos del modelo. Esta capacidad es la base de las tres configuraciones de \textit{prompting} que se comparan en esta tesis (ver Metodología): \textit{zero-shot} (solo instrucción), \textit{few-shot} (instrucción más 3-5 ejemplos) y \textit{chain-of-thought}, donde se le pide al modelo que exponga su razonamiento paso a paso antes de dar una respuesta, técnica que Wei et al.~\cite{Wei2022} mostraron que mejora el desempeño en tareas que requieren razonamiento de múltiples pasos.
+
+\subsection{Agente inteligente y el patrón ReAct}
+
+Un agente, en el sentido en que lo usa esta tesis, es un sistema que percibe su entorno (a través de las herramientas que tiene disponibles) y actúa sobre él para lograr un objetivo, en lugar de simplemente generar una respuesta a partir de su conocimiento interno. Yao et al.~\cite{Yao2023} formalizaron ReAct (\textit{Reasoning and Acting}) como un patrón donde el LLM intercala pasos de razonamiento explícito con acciones sobre herramientas externas (consultas a bases de datos, APIs o motores de búsqueda), y usa el resultado de cada acción para decidir el siguiente paso. El agente validador propuesto en esta tesis (Capítulo de Metodología) sigue este patrón: razona sobre qué fuente institucional consultar, ejecuta la consulta, e incorpora el resultado antes de emitir un veredicto.
+
+\subsection{Sistema híbrido}
+
+En esta tesis, \textbf{sistema híbrido} designa específicamente la arquitectura que combina un LLM clasificador (rápido, económico, usado para el volumen completo de noticias) con un agente verificador basado en ReAct (más lento y costoso, activado solo cuando el clasificador reporta baja confianza). No es un término genérico de la literatura, sino el nombre que este proyecto da a su arquitectura de activación condicional, siguiendo el precedente de Kolli et al.~\cite{Kolli2025} (ver Estado del Arte).
+
+\subsection{Explicabilidad}
+
+La explicabilidad (del inglés \textit{explainability}, XAI) es la propiedad de un sistema de aprendizaje automático de poder comunicar, en términos comprensibles para una persona, por qué llegó a una decisión particular. Gunning y Aha~\cite{GunningAha2019}, describiendo el programa XAI de DARPA, señalan que esta propiedad requiere tanto modelos que produzcan explicaciones como interfaces efectivas para comunicarlas. En esta tesis, la explicabilidad se mide de forma concreta (no como cualidad subjetiva) mediante dos métricas ya definidas en la Metodología: \textit{fidelidad} (consistencia entre la explicación del agente y el veredicto que emite) y \textit{trazabilidad} (porcentaje de veredictos con fuentes verificables citadas).
+
+\subsection{Clasificación trinaria (verdadera / dudosa / falsa)}
+
+A diferencia de buena parte de la literatura de detección de noticias falsas, que trabaja con clasificación binaria (verdadero/falso), esta tesis usa una taxonomía de tres clases, justificada por la naturaleza del contenido financiero: una afirmación puede mezclar datos verificables con interpretaciones engañosas, o carecer de evidencia suficiente para calificarla en un sentido u otro sin ser necesariamente falsa. \textbf{Verdadera} y \textbf{falsa} se asignan cuando la afirmación central es, respectivamente, corroborable o contradicha por una fuente primaria verificable; \textbf{dudosa} cubre los casos que no cumplen ninguno de los dos criterios con claridad (evidencia mixta, fuente no verificable, contenido viral sin verificación institucional). El protocolo operacional completo de esta taxonomía, incluyendo el checklist usado tanto por el anotador humano como por el LLM, está en \texttt{02\_corpus/guia\_anotacion.md}.
 
 \section{Marco teórico}
 
-\subsection{Desinformación y verificación de hechos}
+\subsection{Por qué la desinformación se propaga más rápido que la verdad}
 
-La desinformación se define como información falsa o engañosa creada y difundida deliberadamente con el propósito de causar daño o confundir~\cite{Lazer2018}. Vosoughi, Roy y Aral~\cite{Vosoughi2018} demostraron mediante el análisis de 126.000 historias de noticias que la información falsa se propaga aproximadamente seis veces más rápido que la verdadera en redes sociales, un hallazgo que subraya la urgencia de desarrollar mecanismos automatizados de detección.
+Más allá de la definición (ya fijada en el marco conceptual), interesa aquí el mecanismo. Vosoughi, Roy y Aral~\cite{Vosoughi2018} no se limitaron a documentar que la información falsa se propaga ~6 veces más rápido que la verdadera: propusieron una explicación, la \textbf{hipótesis de la novedad} (\textit{novelty hypothesis}). Al analizar el contenido emocional de las respuestas a cada tipo de noticia, encontraron que la desinformación genera predominantemente sorpresa, miedo y disgusto, mientras que la información verdadera genera tristeza, anticipación y confianza. La explicación propuesta es que las personas prestan más atención a lo novedoso (la desinformación suele presentar afirmaciones más sorprendentes que la realidad) y ganan estatus social al compartir información que perciben como "exclusiva". Esta mecánica importa para el diseño del sistema: implica que la desinformación financiera probablemente no se distribuye uniformemente en el tiempo, sino que aparece en picos correlacionados con eventos noticiosos reales (reformas tributarias, decisiones de tasas de interés) que la vuelven más "creíble" por su cercanía temporal a un hecho real — un patrón a tener en cuenta al interpretar la ventana temporal del corpus (ver Metodología).
 
-La verificación de hechos (\textit{fact-checking}) es el proceso de evaluar la veracidad de afirmaciones mediante la consulta de fuentes primarias y evidencia verificable. La International Fact-Checking Network (IFCN) certifica organizaciones que cumplen con principios de transparencia, imparcialidad y metodología rigurosa. En Colombia, ColombiaCheck opera como el principal verificador certificado por la IFCN desde 2016.
+\subsection{Por qué los LLMs solos no son confiables para verificación de hechos}
 
-\subsection{Modelos de lenguaje de gran escala (LLMs)}
-
-Los modelos de lenguaje de gran escala son sistemas de inteligencia artificial entrenados sobre grandes volúmenes de texto que pueden comprender y generar lenguaje natural. Modelos como GPT-4~\cite{OpenAI2023}, Gemini~\cite{Google2024} y Llama 3~\cite{Meta2024} han demostrado capacidades notables en tareas de clasificación, razonamiento y generación de texto.
-
-Sin embargo, evaluaciones recientes han demostrado que los LLMs utilizados de forma independiente presentan limitaciones significativas en tareas de verificación de hechos. Hoes et al.~\cite{Hoes2023} evaluaron ChatGPT (GPT-3.5) contra 21.152 afirmaciones calificadas por PolitiFact. El modelo coincidió con la calificación humana en 72\% de los casos a nivel agregado, pero la coincidencia \textit{exacta} de etiqueta con PolitiFact fue de solo 29,96\%. Caramancion~\cite{Caramancion2023} comparó GPT-3.5, GPT-4.0, Google Bard/LaMDA y Bing AI sobre 100 noticias verificadas por agencias independientes, con precisiones entre 62\% y 71\% (GPT-4.0 el mejor, con 71\%; promedio de 65,25\%). En ambos casos los LLMs solos quedan lejos de un desempeño confiable para verificación de hechos.
+La sección de Estado del Arte más adelante reporta las cifras empíricas (Hoes et al., Caramancion) de que los LLMs usados de forma independiente rinden mal en verificación de hechos. La razón teórica detrás de esas cifras es el fenómeno de \textbf{alucinación} (\textit{hallucination}): un LLM genera texto por máxima verosimilitud estadística sobre su distribución de entrenamiento, no por consulta a una base de conocimiento verificada en el momento de responder. Ji et al.~\cite{Ji2023}, en su revisión sistemática del fenómeno, distinguen alucinaciones \textit{intrínsecas} (el modelo contradice la información que se le dio como contexto) de \textit{extrínsecas} (el modelo afirma algo que no se puede verificar ni contradecir con la información disponible, incluyendo datos, cifras o entidades inventadas). Para el dominio financiero esto es particularmente riesgoso: un LLM puede generar con total fluidez una cifra de tasa de interés o una fecha regulatoria que suena plausible pero es falsa, sin ninguna señal superficial de incertidumbre. Esta es la justificación teórica central de por qué este proyecto no se limita a un LLM clasificador: el agente verificador (siguiente subsección) existe específicamente para contrastar las afirmaciones del LLM contra fuentes institucionales reales, en lugar de confiar en el conocimiento paramétrico del modelo.
 
 \subsection{Agentes inteligentes y el framework ReAct}
 
-Yao et al.~\cite{Yao2023} propusieron ReAct (\textit{Reasoning and Acting}), un framework que permite a los LLMs generar trazas de razonamiento intercaladas con acciones sobre herramientas externas. En ReAct, el modelo alterna entre pasos de ``pensamiento'' (donde planifica y razona) y pasos de ``acción'' (donde consulta bases de datos, APIs o motores de búsqueda). Este enfoque fue evaluado en benchmarks como HotPotQA y FEVER, demostrando mejoras significativas sobre métodos que solo razonan o solo actúan. ReAct constituye la base teórica del agente validador propuesto en este proyecto.
+Yao et al.~\cite{Yao2023} propusieron ReAct (\textit{Reasoning and Acting}) como una alternativa a dos enfoques previos que consideraban insuficientes por separado: el razonamiento puro sin acción (como \textit{chain-of-thought}~\cite{Wei2022}, que genera pasos de razonamiento pero no puede corregirse con información nueva del mundo exterior) y la acción pura sin razonamiento explícito (agentes que ejecutan herramientas sin un rastro interpretable de por qué las ejecutan). ReAct intercala ambos: el modelo genera un paso de razonamiento, decide una acción sobre una herramienta externa, observa el resultado, y usa esa observación para el siguiente paso de razonamiento. Evaluado en HotPotQA (razonamiento multi-salto) y FEVER (verificación de hechos), Yao et al. reportaron mejoras significativas sobre ambos enfoques por separado, particularmente en la reducción de errores de "alucinación de hechos" (ver subsección anterior), porque el modelo puede corregir una premisa incorrecta al observar el resultado real de una consulta, en lugar de razonar únicamente sobre lo que "recuerda" de su entrenamiento. Esta es la razón teórica por la que ReAct, y no un enfoque de solo \textit{prompting}, es la base del agente validador de esta tesis: el problema de las cifras y entidades regulatorias inventadas (subsección anterior) se ataca directamente forzando al modelo a consultar la fuente institucional real antes de emitir un veredicto, en vez de razonar solo sobre lo que el modelo "cree saber".
 
 \section{Marco tecnológico}
 
 \subsection{LangGraph como orquestador}
 
-LangGraph es una biblioteca de orquestación de agentes desarrollada por LangChain que permite definir flujos de trabajo basados en grafos de estados. Cada nodo del grafo representa una operación (clasificación, decisión, consulta de fuentes) y las aristas definen las transiciones condicionales entre ellos. Esta arquitectura es particularmente adecuada para el sistema propuesto, donde la activación del agente validador depende del nivel de confianza del clasificador.
+LangGraph es una biblioteca de orquestación de agentes desarrollada por LangChain que permite definir flujos de trabajo basados en grafos de estados: cada nodo representa una operación (clasificación, decisión, consulta de fuentes) y las aristas definen las transiciones condicionales entre ellos. Esta arquitectura es particularmente adecuada para el sistema propuesto, donde la activación del agente validador depende del nivel de confianza del clasificador.
+
+Una decisión de diseño tomada durante el desarrollo de esta tesis (documentada en el repositorio del proyecto) es usar LangGraph directamente, con las herramientas del agente implementadas como funciones Python simples, en lugar de adoptar el framework LangChain completo (con sus abstracciones de \textit{tools}, \textit{output parsers} y memoria empaquetadas). La razón es doble: reduce el número de dependencias y capas de abstracción entre el código y su comportamiento observable, y facilita explicar y depurar cada herramienta del agente (Superfinanciera, Banco de la República, etc.) como una función auditable de principio a fin, algo relevante dado que la trazabilidad es una de las métricas de explicabilidad del sistema (ver marco conceptual).
+
+\subsection{Selección del umbral de confianza: clasificación selectiva}
+
+El punto donde el sistema decide si aceptar el veredicto del clasificador o activar el agente verificador no es un valor arbitrario, sino un problema estudiado formalmente en la literatura de aprendizaje automático bajo el nombre de \textbf{clasificación selectiva} o \textit{reject option}. Chow~\cite{Chow1970} estableció el resultado clásico: dado un clasificador que produce una probabilidad posterior, existe una curva óptima que relaciona la tasa de error con la tasa de rechazo (o, en este caso, de derivación al agente), y el punto óptimo de esa curva depende del costo relativo de un error frente al costo de rechazar/diferir. Geifman y El-Yaniv~\cite{GeifmanElYaniv2017} formalizaron la versión moderna de este problema para redes neuronales profundas mediante la \textit{curva riesgo-cobertura}: se mide el riesgo (tasa de error de las predicciones aceptadas) en función de la cobertura (porcentaje de predicciones aceptadas sin diferir), variando el umbral de decisión.
+
+Esta tesis adopta ese marco para justificar empíricamente el umbral de activación del agente, en lugar de fijarlo por conveniencia: el umbral final no se elige a priori, sino que se selecciona sobre la curva riesgo-cobertura construida en un conjunto de calibración separado del conjunto de evaluación final, evitando así usar el mismo dato para calibrar y para reportar resultados. El protocolo completo, incluyendo la verificación previa de qué tan bien calibrada está la confianza que reporta el LLM (un supuesto que no puede darse por sentado, ver siguiente subsección), está documentado en \texttt{05\_agente/seleccion\_umbral\_confianza.md}.
+
+\subsection{Calibración de la confianza reportada por LLMs}
+
+Un supuesto implícito en usar la confianza autorreportada por un LLM como criterio de decisión es que esa confianza está \textit{calibrada}: que un 90\% de confianza reportado corresponda, en la práctica, a un 90\% de tasa de acierto real. La evidencia reciente sobre este punto es mixta y en general desfavorable: los LLMs tienden al exceso de confianza (\textit{overconfidence}), y la confianza verbalizada (el modelo diciendo en texto "estoy 90\% seguro") no siempre rastrea la corrección real de la respuesta tan bien como señales internas del modelo (como la probabilidad logarítmica de los tokens generados). Esta tesis no asume que la confianza del clasificador esté bien calibrada: como parte del protocolo de selección del umbral (subsección anterior), se verifica la calibración empíricamente antes de confiar en el valor numérico para tomar decisiones.
 
 \subsection{Técnicas de prompting para clasificación}
 
@@ -46,6 +94,20 @@ El Documento CONPES 3975 de 2019~\cite{CONPES3975} establece la política nacion
 
 El Marco Ético para la Inteligencia Artificial en Colombia (MinCiencias, 2021)~\cite{MarcoEticoIA2021}, complementado por la guía técnica de MinTIC (2022), establece cinco principios para sistemas de IA en el sector público: transparencia, explicabilidad, justicia, no discriminación y responsabilidad. De estos, la transparencia y la explicabilidad ya están incorporadas como objetivo de diseño del sistema propuesto: el agente validador debe retornar las fuentes consultadas y el razonamiento que sustenta su veredicto, y la evaluación del sistema (Metodología, sección de métricas de explicabilidad) mide explícitamente la fidelidad de esas explicaciones y la trazabilidad de las fuentes citadas.
 
+\section{Marco contextual}
+
+\subsection{Panorama digital colombiano}
+
+Según el informe Digital 2025: Colombia~\cite{Kemp2025}, Colombia tenía 41,1 millones de usuarios de internet a inicios de 2025 (77,3\% de penetración sobre la población total) y 36,8 millones de usuarios activos de redes sociales (69,2\%). WhatsApp es, por un margen amplio, el canal más usado (91,9\% de los usuarios de internet), seguido de Facebook e Instagram. Este dato es relevante metodológicamente: WhatsApp es una plataforma de mensajería cerrada, no indexable ni rastreable por scraping, lo que significa que una porción sustancial de la desinformación financiera que efectivamente circula en Colombia —precisamente la que se distribuye por el canal más usado del país— es estructuralmente invisible para el mecanismo de recolección de este proyecto (ver Metodología, limitaciones). El corpus construido captura desinformación ya identificada y verificada por fact-checkers o replicada en medios digitales indexables, no el flujo directo de WhatsApp.
+
+\subsection{Casos documentados de desinformación financiera en Colombia}
+
+Más allá de las cifras agregadas de ColombiaCheck, existe evidencia directa y reciente de que la suplantación de instituciones financieras es un vector activo de fraude en el país. La Superintendencia Financiera de Colombia~\cite{SFC2024Suplantacion} emitió en abril de 2024 una alerta pública documentando un esquema de fraude en el que se enviaban comunicados falsos a nombre de la entidad y de su Superintendente, exigiendo el pago de un supuesto impuesto como condición para el desembolso de un crédito. La SFC mantiene además, de forma continua, un listado público de firmas que se presentan falsamente como vigiladas por la entidad sin contar con autorización real para operar en el país. Estos casos ilustran el patrón exacto que este proyecto busca detectar: contenido que imita la forma y autoridad de un comunicado oficial (lenguaje institucional, referencias a entidades reales, formato de comunicado de prensa) para dar credibilidad a una afirmación falsa. Es, en efecto, el mismo patrón identificado en el corpus recolectado para esta tesis (ver Metodología): noticias falsas de ColombiaCheck que citan al Banco de la República o a la Superintendencia Financiera para dar verosimilitud a una afirmación fabricada.
+
+\subsection{El ecosistema regulatorio financiero como reto lingüístico}
+
+El sistema financiero colombiano tiene una terminología regulatoria propia que no está representada en los recursos de PLN en español disponibles (ver Estado del Arte, sección de recursos en español): circulares externas de la Superintendencia Financiera, el régimen de tasas de interés certificadas por la Superintendencia (interés bancario corriente), la estructura del sistema pensional colombiano (régimen de prima media vs. ahorro individual), y siglas específicas del sector (SFC, UGPP, FOGAFIN, entre otras). Un modelo entrenado predominantemente en inglés o en español genérico no tiene por qué reconocer estos términos como legítimos ni distinguir su uso correcto de un uso fabricado o fuera de contexto — precisamente el vacío que este proyecto aborda al construir un corpus y un checklist de verificación (\texttt{02\_corpus/guia\_anotacion.md}) específicos para este dominio y este país.
+
 \section{Antecedentes científicos}
 
 \subsection{Sistemas multi-agente para verificación de hechos}
@@ -61,6 +123,29 @@ Kolli et al.~\cite{Kolli2025} propusieron un \textbf{sistema híbrido} que integ
 Trinh, Nguyen y Hy~\cite{Trinh2025} presentaron un \textbf{sistema multi-agente con cuatro agentes especializados}: Input Ingestion (descomposición de afirmaciones), Query Generation (formulación de subconsultas), Evidence Retrieval (recuperación de evidencia verificable) y Verdict Prediction (síntesis de veredictos con explicaciones interpretables). Evaluado en FEVEROUS, HOVER y SciFact, el sistema logró una mejora del 12,3\% en Macro F1 sobre métodos de referencia. El código fuente está disponible públicamente.
 
 Xiong et al.~\cite{Xiong2025} propusieron \textbf{DelphiAgent}, un framework multi-agente de verificación confiable publicado en \textit{Information Processing \& Management}. DelphiAgent enfatiza la generación de justificaciones trazables a lo largo del flujo de verificación, reforzando el argumento de que los sistemas multi-agente mejoran no solo la precisión sino también la confiabilidad del proceso.
+
+\subsubsection{Síntesis comparativa}
+
+La Tabla~\ref{tab:multiagente} resume los cinco sistemas frente a tres criterios relevantes para el diseño de esta tesis: si activan el componente agéntico de forma condicional (solo cuando hace falta, como propone este proyecto) o siempre; si producen evidencia externa verificable citable, no solo una etiqueta; y si el código está disponible públicamente para replicar o comparar contra él.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{|l|l|c|c|c|}
+\hline
+\textbf{Sistema} & \textbf{Referencia} & \textbf{Activación condicional} & \textbf{Evidencia citable} & \textbf{Código público} \\
+\hline
+FactAgent & Li et al.~\cite{Li2024} & No (siempre agéntico) & Sí & No reportado \\
+EXCLAIM & Wu et al.~\cite{Wu2024} & No (siempre agéntico) & Sí (multimodal) & No reportado \\
+Sistema híbrido KG+LLM & Kolli et al.~\cite{Kolli2025} & Sí (\textit{fallback} por NEI) & Sí & Sí \\
+Multi-agente 4 roles & Trinh et al.~\cite{Trinh2025} & No (siempre agéntico) & Sí & Sí \\
+DelphiAgent & Xiong et al.~\cite{Xiong2025} & No (siempre agéntico) & Sí & No reportado \\
+\hline
+\end{tabular}
+\caption{Comparación de sistemas multi-agente de verificación de hechos}
+\label{tab:multiagente}
+\end{table}
+
+De los cinco, solo Kolli et al.~\cite{Kolli2025} comparten con esta tesis la característica arquitectónica central: activación condicional del componente costoso (agente/búsqueda) solo cuando el componente barato (grafo de conocimiento) no puede resolver el caso, en lugar de correr el pipeline agéntico completo sobre cada ítem. Los otros cuatro sistemas son agénticos de principio a fin, lo que los hace más precisos en promedio pero también más costosos y lentos por ítem procesado — un costo que, a la escala de un corpus de 800-1.000 noticias evaluadas en múltiples configuraciones de \textit{prompting}, no es trivial. Esta comparación es, en sí misma, la justificación de la arquitectura de activación condicional que adopta esta tesis: no es una simplificación por limitación de recursos, sino una decisión de diseño con precedente directo en la literatura y evidencia de que preserva desempeño (Kolli et al. reportan F1 de 0,93) sin pagar el costo de un agente sobre el 100\% del volumen.
 
 \subsection{Detección de noticias falsas en español}
 
