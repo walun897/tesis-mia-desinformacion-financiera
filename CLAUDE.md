@@ -118,3 +118,22 @@ resuelve explícitamente con el usuario antes de implementar, no se asume.
 
 ## Convención de commits
 - Mensajes cortos en español, formato: "fase X: qué se hizo" (ej. "fase 1: grafo LangGraph mínimo con stub de validador").
+
+## Modelo de Claude Code por fase (sesiones de trabajo)
+Distinto de los LLMs del clasificador. Criterio del asistente (2026-09-23), a revisar
+si cambian los modelos disponibles; cambiar con `/model` o `claude --model <id>`.
+
+| Fase / tarea | Modelo recomendado | Por qué |
+|---|---|---|
+| 1. Corpus: spiders, extracción, consolidación, commits | Sonnet 5 (`claude-sonnet-5`) | Trabajo rutinario, rápido y barato |
+| 1. Corpus: dudosas y QA del muestreo | Fable 5.1 (`claude-fable-5-1`, crédito $100) | Segunda opinión, razonamiento fino |
+| 2. Clasificador: código, prompts versionados, corridas | Sonnet 5 | Iteración frecuente |
+| 2. Clasificador: análisis de errores / mejora de prompts | Fable 5.1 (nunca evaluado en la tabla) | Razonamiento extendido |
+| 3. Agente ReAct (LangGraph): diseño y depuración | Opus 5.5 (`claude-opus-5-5`) | Arquitectura y bugs complejos |
+| 3. Agente ReAct: motor de razonamiento y tool-calling | Fable 5.1 (uso principal del crédito) | Ver tabla de recursos |
+| 4. Evaluación y redacción: análisis, discusión, literatura | Opus 5.5; Fable 5.1 para análisis cualitativo | Calidad de redacción/argumento |
+
+Regla para el asistente: al iniciar una sesión o cambiar de fase/tarea, indicar en
+una línea qué modelo de esta tabla conviene y avisar si el actual no coincide. El
+cambio de modelo no se puede automatizar desde la conversación; lo hace el usuario
+con `/model`.
