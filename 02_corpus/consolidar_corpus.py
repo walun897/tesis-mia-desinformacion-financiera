@@ -7,9 +7,13 @@ fuentes juntas. Es el corpus crudo recolectado (~1.250 ítems al
 muestra objetivo de 800-1.000, es el insumo de ese muestreo.
 """
 
+import sys
 from pathlib import Path
 
 import pandas as pd
+
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "03_scraping"))
+from scraper.utils import derivar_clase  # noqa: E402
 
 RAW_DIR = Path(__file__).resolve().parent / "raw"
 FUENTES = [
@@ -38,6 +42,12 @@ def main() -> None:
         return
 
     consolidado = pd.concat(frames, ignore_index=True)
+
+    # Columna `clase` explícita (verdadera|falsa|dudosa), agregada junto a
+    # label_fuente -- ver derivar_clase() en 03_scraping/scraper/utils.py
+    # y REGISTRO_CORRECCIONES.md #7 (label_fuente=None sin esto se veía
+    # como una celda vacía sin explicación en el CSV).
+    consolidado["clase"] = consolidado["label_fuente"].apply(derivar_clase)
 
     # Sanity check: el id (hash de la URL) debe ser único en todo el
     # corpus consolidado -- si no lo es, hay un duplicado real entre

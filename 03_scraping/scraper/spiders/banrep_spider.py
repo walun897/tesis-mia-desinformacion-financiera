@@ -18,6 +18,7 @@ import re
 
 import scrapy
 
+from ..categoria_tematica import clasificar_categoria_tematica
 from ..extraction import extract_article
 from ..items import NoticiaItem
 from ..utils import make_id, today_iso
@@ -60,7 +61,7 @@ class BanRepSpider(scrapy.Spider):
         item["tipo_fuente"] = "comunicado_oficial"
         item["fecha_publicacion"] = fecha_publicacion  # del listado, no de la página de detalle (ver docstring)
         item["fecha_recoleccion"] = today_iso()
-        item["categoria_tematica"] = "otro"  # se ajusta en la calibración inicial
+        item["categoria_tematica"] = clasificar_categoria_tematica(f"{item['titulo']} {item['texto']}")
         item["idioma"] = "es-CO"
         item["fact_checker_url"] = None
         item["fact_checker_rating_original"] = None

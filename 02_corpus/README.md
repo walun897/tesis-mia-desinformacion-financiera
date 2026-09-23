@@ -25,6 +25,7 @@ preferido si el volumen de texto lo justifica).
 | `fact_checker_url` | string\|null | Enlace a la verificación, si existe |
 | `fact_checker_rating_original` | string\|null | Calificación original del fact-checker, antes de mapear a la taxonomía trinaria |
 | `label_fuente` | enum\|null | `verdadera`\|`falsa`, asignada automáticamente por regla de fuente primaria (ver `guia_anotacion.md`); `null` si es candidata a "dudosa" |
+| `clase` | enum | `verdadera`\|`falsa`\|`dudosa` — igual a `label_fuente`, pero siempre con un valor visible (nunca vacío) para que la fila se lea sin cruzar columnas. Agregada 2026-09-22 (ver `REGISTRO_CORRECCIONES.md` #7) porque un `label_fuente` vacío sin explicación se confundía con un dato faltante. No reemplaza `label_fuente` (que sigue siendo la fuente de verdad del pipeline) ni anticipa `label_final` (que viene de la fase de anotación humano-LLM, todavía no ejecutada) |
 | `es_candidata_dudosa` | bool | Si requiere anotación manual |
 | `label_humano` | enum\|null | Primera pasada del usuario (solo candidatas dudosas) |
 | `label_llm_segunda_opinion` | enum\|null | Etiqueta del LLM de segunda opinión |

@@ -14,6 +14,7 @@ import re
 
 import scrapy
 
+from ..categoria_tematica import clasificar_categoria_tematica
 from ..extraction import extract_article
 from ..items import NoticiaItem
 from ..utils import make_id, today_iso
@@ -69,7 +70,7 @@ class BloombergLineaSpider(scrapy.Spider):
         item["tipo_fuente"] = "medio_referencia"
         item["fecha_publicacion"] = fecha_publicacion
         item["fecha_recoleccion"] = today_iso()
-        item["categoria_tematica"] = "otro"
+        item["categoria_tematica"] = clasificar_categoria_tematica(f"{item['titulo']} {item['texto']}")
         item["idioma"] = "es-CO"
         item["fact_checker_url"] = None
         item["fact_checker_rating_original"] = None

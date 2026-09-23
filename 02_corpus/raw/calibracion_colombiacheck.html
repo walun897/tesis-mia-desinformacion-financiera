@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Calibración inicial — candidatos dudosos de ColombiaCheck</title>
+<style>
+  :root { --bg:#fff; --fg:#1a1a1a; --muted:#666; --border:#ddd; --accent:#2563eb; }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg:#15181d; --fg:#e6e6e6; --muted:#9aa0a6; --border:#333; --accent:#60a5fa; }
+  }
+  body { font-family: -apple-system, Segoe UI, Arial, sans-serif; background:var(--bg); color:var(--fg); margin:0; padding:24px; }
+  h1 { font-size:1.3rem; }
+  p.intro { color:var(--muted); max-width:800px; }
+  table { border-collapse: collapse; width:100%; margin-top:16px; font-size:0.85rem; }
+  th, td { border:1px solid var(--border); padding:7px; vertical-align:top; text-align:left; }
+  th { background: rgba(128,128,128,0.1); position:sticky; top:0; }
+  .muted { color:var(--muted); font-size:0.8em; }
+  .num { text-align:center; color:var(--muted); }
+  .ctx { max-width:340px; font-size:0.85em; color:var(--muted); font-style:italic; }
+  a { color:var(--accent); }
+  .check label { font-size:0.82em; }
+  .nota { width:100%; margin-top:4px; font-size:0.85em; padding:2px 4px; box-sizing:border-box; }
+  tr.marcada-mantener { background: rgba(16,185,129,0.08); }
+  tr.marcada-excluir { background: rgba(239,68,68,0.08); }
+  .resumen { margin-top:24px; padding:12px; border:1px solid var(--border); border-radius:8px; max-width:400px; position:sticky; bottom:16px; background:var(--bg); box-shadow:0 2px 8px rgba(0,0,0,0.15); }
+  .resumen button { margin-top:8px; padding:8px 14px; border-radius:6px; border:1px solid var(--accent); background:var(--accent); color:#fff; cursor:pointer; font-size:0.85em; }
+  .guardado-ok { color:#059669; font-size:0.8em; }
+</style>
+</head>
+<body>
+<h1>Calibración inicial — candidatos con coincidencia incidental de dominio</h1>
+<p class="intro">
+  Estos 58 ítems de ColombiaCheck coincidieron con el filtro de dominio financiero
+  por una sola mención, y esa mención no está en el título — el patrón típico de
+  falso positivo (ver conversación). No se descartan automáticamente: revisa el
+  fragmento donde coincidió la palabra clave y decide si el ítem sí trata de
+  desinformación financiera o si es ruido político/otro tema con una mención
+  incidental. Ojo: no todos son ruido — hay casos legítimos con una sola mención
+  (ej. "inflación" en una nota sobre pobreza), por eso se revisa a mano y no con
+  una regla automática. Se guarda en este navegador al marcar.
+</p>
+<table>
+<thead><tr>
+  <th>#</th><th>Título</th><th>Fecha</th><th>Calificación</th>
+  <th>Dónde coincidió</th><th>Tu decisión</th>
+</tr></thead>
+<tbody>
+
+    <tr data-idx="0">
+      <td class="num">1</td>
+      <td><a href="https://colombiacheck.com/chequeos/estas-fotografias-no-corresponden-con-el-conflicto-actual-entre-iran-e-israel" target="_blank" rel="noopener">Estas fotografías no corresponden con el conflicto actual entre Irán e Israel</a></td>
+      <td>2025-06-19</td>
+      <td class="muted">Falso</td>
+      <td class="ctx">“…srael desde Ciudad de Gaza el martes (9 de mayo). Crédito: Mahmud Hams/Agence France-Presse — Getty Images”…”</td>
+      <td class="check">
+        <label><input type="radio" name="q0" value="mantener" class="ans"> Mantener (sí es del dominio)</label><br>
+        <label><input type="radio" name="q0" value="excluir" class="ans"> Excluir (no es financiero)</label><br>
+        <input type="text" class="nota" placeholder="nota (opcional)">
+      </td>
+    </tr>
+    <tr data-idx="1">
+      <td class="num">2</td>
+      <td><a href="https://colombiacheck.com/chequeos/el-congreso-de-eu-acaba-de-frenar-el-poder-de-trump-falso" target="_blank" rel="noopener">¿El Congreso de EU acaba de “frenar” el poder de Trump? Falso</a></td>
+      <td>2025-07-07</td>
+      <td class="muted">Falso</td>
+      <td class="ctx">“…hecho, se acaba de aprobar el proyecto de ley de impuestos y gastos de Trump, gracias al voto de los republ…”</td>
+      <td class="check">
+        <label><input type="radio" name="q1" value="mantener" class="ans"> Mantener (sí es del dominio)</label><br>
+        <label><input type="radio" name="q1" value="excluir" class="ans"> Excluir (no es financiero)</label><br>
+        <input type="text" class="nota" placeholder="nota (opcional)">
+      </td>
+    </tr>
+    <tr data-idx="2">
+      <td class="num">3</td>
+      <td><a href="https://colombiacheck.com/chequeos/petro-difundio-foto-manipulada-con-ia-de-narcosubmarino-teledirigido-confiscado-por-la" target="_blank" rel="noopener">Petro difundió foto manipulada con IA de narcosubmarino teledirigido confiscado por la Armada</a></td>
+      <td>2025-07-08</td>
+      <td class="muted">Falso</td>
+      <td class="ctx">“…e esta fotografía en Google, la encontramos en el banco de imágenes Getty Images, con fecha del 18 de feb…”</td>
+      <td class="check">
+        <label><input type="radio" name="q2" value="mantener" class="ans"> Mantener (sí es del dominio)</label><br>
+        <label><input type="radio" name="q2" value="excluir" class="ans"> Excluir (no es financiero)</label><br>
+        <input type="text" class="nota" placeholder="nota (opcional)">
+      </td>
+    </tr>
+    <tr data-idx="3">
+      <td class="num">4</td>
+      <td><a href="https://colombiacheck.com/chequeos/pastrana-y-santos-ya-no-hacen-parte-de-la-junta-directiva-de-thomas-greg-sons" target="_blank" rel="noopener">Pastrana y Santos ya no hacen parte de la junta directiva de Thomas Greg &amp; Sons</a></td>
+      <td>2025-07-16</td>
+      <td class="muted">Cuestionable</td>
+      <td class="ctx">“…o de contratación de la entidad y exigieron la suspensión. La razón es que estaba hecho a la medida de TGS,…”</td>
+      <td class="check">
+        <label><input type="radio" name="q3" value="mantener" class="ans"> Mantener (sí es del dominio)</label><br>
+        <label><input type="radio" name="q3" value="excluir" class="ans"> Excluir (no es financiero)</label><br>
+        <input type="text" class="nota" placeholder="nota (opcional)">
+      </td>
+    </tr>
+    <tr data-idx="4">
+      <td class="num">5</td>
+      <td><a href="https://colombiacheck.com/chequeos/estas-fotos-no-corresponden-un-tsunami-en-julio-de-2025" target="_blank" rel="noopener">Estas fotos no corresponden a un tsunami en julio de 2025</a></td>
+      <td>2025-07-30</td>
+      <td class="muted">Falso</td>
+      <td class="ctx">“…o de la agencia AFP en la que está la foto con el crédito “El tsunami del 11 de marzo de 2011 invade la peq…”</td>
+      <td class="check">
+        <label><input type="radio" name="q4" value="mantener" class="ans"> Mantener (sí es del dominio)</label><br>
+        <label><input type="radio" name="q4" value="excluir" class="ans"> Excluir (no es financiero)</label><br>
+        <input type="text" class="nota" placeholder="nota (opcional)">
+      </td>
+    </tr>
+    <tr data-idx="5">
+      <td class="num">6</td>
+      <td><a href="https://colombiacheck.com/chequeos/petro-trato-de-descalificar-foto-verdadera-de-marcha-contra-la-condena-de-alvaro-uribe" target="_blank" rel="noopener">Petro trató de descalificar foto verdadera de marcha contra la condena de Álvaro Uribe</a></td>
+      <td>2025-08-13</td>
+      <td class="muted">Verdadero</td>
+      <td class="ctx">“…nteriores.
+Ya los bodegueros pagados con nuestros impuestos están diciendo que la Plaza de Bolívar no se lle…”</td>
+      <td class="check">
+        <label><input type="radio" name="q5" value="mantener" class="ans"> Mantener (sí es del dominio)</label><br>
+        <label><input type="radio" name="q5" value="excluir" class="ans"> Excluir (no es financiero)</label><br>
+        <input type="text" class="nota" placeholder="nota (opcional)">
+      </td>
+    </tr>
+    <tr data-idx="6">
+      <td class="num">7</td>
+      <td><a href="https://colombiacheck.com/chequeos/petro-amana-avances-en-nuevos-cupos-universitarios-y-castillo-se-precipita-declarar" target="_blank" rel="noopener">Petro amaña avances en nuevos cupos universitarios y Castillo se precipita a declarar incumplimiento</a></td>
+      <td>2025-08-14</td>
+      <td class="muted">Chequeo Múltiple</td>
+      <td class="ctx">“…stionó las políticas de sus antecesores que daban créditos condonables para estudios superiores en instituc…”</td>
+      <td class="check">
+        <label><input type="radio" name="q6" value="mantener" class="ans"> Mantener (sí es del dominio)</label><br>
+        <label><input type="radio" name="q6" value="excluir" class="ans"> Excluir (no es financiero)</label><br>
+        <input type="text" class="nota" placeholder="nota (opcional)">
+      </td>
+    </tr>
+    <tr data-idx="7">
+      <td class="num">8</td>
+      <td><a href="https://colombiacheck.com/chequeos/mensaje-contra-miguel-uribe-tras-su-muerte-recicla-montaje-que-le-atribuye-frase-sobre-eps" target="_blank" rel="noopener">Mensaje contra Miguel Uribe tras su muerte recicla montaje que le atribuye frase sobre EPS</a></td>
+      <td>2025-08-14</td>
+      <td class="muted">Falso</td>
+      <td class="ctx">“…falsa.
+Por más que las bodegas pagas con nuestros impuestos quieran sembrar mentiras, a mí no me van a amedr…”</td>
+      <td class="check">
+        <label><input type="radio" name="q7" value="mantener" class="ans"> Mantener (sí es del dominio)</label><br>
+        <label><input type="radio" name="q7" value="excluir" class="ans"> Excluir (no es financiero)</label><br>
+        <input type="text" class="nota" placeholder="nota (opcional)">
+      </td>
+    </tr>
+    <tr data-idx="8">
+      <td class="num">9</td>
+      <td><a href="https://colombiacheck.com/chequeos/montaje-con-ia-simula-la-presidenta-de-mexico-pidiendo-la-extradicion-de-alvaro-uribe" target="_blank" rel="noopener">Montaje con IA simula a la presidenta de México pidiendo la extradición de Álvaro Uribe</a></td>
+      <td>2025-08-25</td>
+      <td class="muted">Falso</td>
+      <td class="ctx">“…en convenciones multilaterales, relacionados con impuestos, genocidio, actos de terrorismo, etc.
+En el vide…”</td>
+      <td class="check">
+        <label><input type="radio" name="q8" value="mantener" class="ans"> Mantener (sí es del dominio)</label><br>
+        <label><input type="radio" name="q8" value="excluir" class="ans"> Excluir (no es financiero)</label><br>
+        <input type="text" class="nota" placeholder="nota (opcional)">
+      </td>
+    </tr>
+    <tr data-idx="9">
+      <td class="num">10</td>
+      <td><a href="https://colombiacheck.com/chequeos/juicios-al-duelo-de-claudia-tarazona-y-sus-hijas-por-miguel-uribe-sacan-de-contexto-fotos" target="_blank" rel="noopener">Juicios al duelo de Claudia Tarazona y sus hijas por Miguel Uribe sacan de contexto fotos viejas</a></td>
+      <td>2025-09-03</td>
+      <td class="muted">Falso</td>
+      <td class="ctx">“…eto de otras que aluden a una supuesta millonaria pensión que le deja Miguel Uribe Turbay a su viuda, otra…”</td>
+      <td class="check">
+        <label><input type="radio" name="q9" value="mantener" class="ans"> Mantener (sí es del dominio)</label><br>
+        <label><input type="radio" name="q9" value="excluir" class="ans"> Excluir (no es financiero)</label><br>
+        <input type="text" class="nota" placeholder="nota (opcional)">
+      </td>
+    </tr>
+    <tr data-idx="10">
+      <td class="num">11</td>
+      <td><a href="https://colombiacheck.com/chequeos/quienes-piden-declarar-incapacidad-mental-de-petro-son-politicos-no-la-asociacion-de" target="_blank" rel="noopener">Quienes piden declarar incapacidad mental de Petro son políticos, no la Asociación de Psiquiatría</a></td>
+      <td>2025-09-03</td>
+      <td class="muted">Falso</td>
+      <td class="ctx">“…ltas temporales son por licencia, enfermedad o suspensión decretada por el Senado tras admitir una acusació…”</td>
+      <td class="check">
+        <label><input type="radio" name="q10" value="mantener" class="ans"> Mantener (sí es del dominio)</label><br>
+        <label><input type="radio" name="q10" value="excluir" class="ans"> Excluir (no es financiero)</label><br>
+        <input type="text" class="nota" placeholder="nota (opcional)">
+      </td>
+    </tr>
+    <tr data-idx="11">
+      <td class="num">12</td>
+      <td><a href="https://colombiacheck.com/chequeos/presuntas-confesiones-de-el-pollo-carvajal-provienen-de-una-entrevista-que-nunca-sucedio" target="_blank" rel="noopener">Presuntas «confesiones» de El Pollo Carvajal provienen de una entrevista que nunca sucedió</a></td>
+      <td>2025-09-12</td>
+      <td class="muted">Falso</td>
+      <td class="ctx">“…iales, aprovechando los algoritmos y el actual descrédito en organismos internacionales, científicos, medio…”</td>
+      <td class="check">
+        <label><input type="radio" name="q11" value="mantener" class="ans"> Mantener (sí es del dominio)</label><br>
+        <label><input type="radio" name="q11" value="excluir" class="ans"> Excluir (no es financiero)</label><br>
+        <input type="text" class="nota" placeholder="nota (opcional)">
+      </td>
+    </tr>
+    <tr data-idx="12">
+      <td class="num">13</td>
+      <td><a href="https://colombiacheck.com/chequeos/video-de-pesqueros-chinos-circula-como-si-fuera-la-flotilla-global-sumud-rumbo-gaza" target="_blank" rel="noopener">Video de pesqueros chinos circula como si fuera la Flotilla Global Sumud rumbo a Gaza</a></td>
+      <td>2025-09-16</td>
+      <td class="muted">Falso</td>
+      <td class="ctx">“…tencia humanitaria en Gaza para romper el bloqueo impuesto por Israel sobre este territorio palestino.
+En re…”</td>
+      <td class="check">
+        <label><input type="radio" name="q12" value="mantener" class="ans"> Mantener (sí es del dominio)</label><br>
+        <label><input type="radio" name="q12" value="excluir" class="ans"> Excluir (no es financiero)</label><br>
+        <input type="text" class="nota" placeholder="nota (opcional)">
+      </td>
+    </tr>
+    <tr data-idx="13">
+      <td class="num">14</td>
+      <td><a href="https://colombiacheck.com/chequeos/busto-del-expresidente-nieto-en-alocucion-de-petro-fue-reemplazado-por-el-de-stalin-con-ia" target="_blank" rel="noopener">Busto del expresidente Nieto en alocución de Petro fue reemplazado por el de Stalin con IA</a></td>
+      <td>2025-09-16</td>
+      <td class="muted">Falso</td>
+      <td class="ctx">“…m/0tW0PtgxY9
+Nieto Gil, según la Enciclopedia del Banco de la República, fue un militar, político y estad…”<br>“…m/0tW0PtgxY9
+Nieto Gil, según la Enciclopedia del Banco de la República, fue un militar, político y estadista nacido en e…”</td>
+      <td class="check">
+        <label><input type="radio" name="q13" value="mantener" class="ans"> Mantener (sí es del dominio)</label><br>
+        <label><input type="radio" name="q13" value="excluir" class="ans"> Excluir (no es financiero)</label><br>
+        <input type="text" class="nota" placeholder="nota (opcional)">
+      </td>
+    </tr>
+    <tr data-idx="14">
+      <td class="num">15</td>
+      <td><a href="https://colombiacheck.com/chequeos/ee-uu-si-es-el-mas-consumidor-de-cocaina-y-colombia-el-mas-incautador-pero-con-produccion" target="_blank" rel="noopener">EE. UU. sí es el más consumidor de cocaína y Colombia el más incautador, pero con producción récord</a></td>
+      <td>2025-09-19</td>
+      <td class="muted">Verdadero pero...</td>
+      <td class="ctx">“…importantes recortes en la ayuda económica, la suspensión de la financiación, la imposición de aranceles e…”</td>
+      <td class="check">
+        <label><input type="radio" name="q14" value="mantener" class="ans"> Mantener (sí es del dominio)</label><br>
+        <label><input type="radio" name="q14" value="excluir" class="ans"> Excluir (no es financiero)</label><br>
+        <input type="text" class="nota" placeholder="nota (opcional)">
+      </td>
+    </tr>
+    <tr data-idx="15">
+      <td class="num">16</td>
+      <td><a href="https://colombiacheck.com/chequeos/kirk-musk-y-metallica-carnada-para-clics-con-mentira-sobre-manutencion-de-los-hijos-del" target="_blank" rel="noopener">Kirk, Musk y Metallica: carnada para clics con mentira sobre manutención de los hijos del activista</a></td>
+      <td>2025-09-22</td>
+      <td class="muted">Falso</td>
+      <td class="ctx">“…sultados, aparece una noticia de The Guardian.
+El crédito de la foto se le da a Ross D. Franklin, de la age…”</td>
+      <td class="check">
+        <label><input type="radio" name="q15" value="mantener" class="ans"> Mantener (sí es del dominio)</label><br>
+        <label><input type="radio" name="q15" value="excluir" class="ans"> Excluir (no es financiero)</label><br>
+        <input type="text" class="nota" placeholder="nota (opcional)">
+      </td>
+    </tr>
+    <tr data-idx="16">
+      <td class="num">17</td>
+      <td><a href="https://colombiacheck.com/chequeos/video-usa-voces-de-petro-y-catalina-gomez-clonadas-con-ia-para-prometer-ganancias" target="_blank" rel="noopener">Video usa voces de Petro y Catalina Gómez clonadas con IA para prometer ganancias millonarias</a></td>
+      <td>2025-10-03</td>
+      <td class="muted">Falso</td>
+      <td class="ctx">“…IA invita a supuesta inversión con Sarmiento y el BanRep”, “Video de supuesto proyecto de inversión usa vo…”</td>
+      <td class="check">
+        <label><input type="radio" name="q16" value="mantener" class="ans"> Mantener (sí es del dominio)</label><br>
+        <label><input type="radio" name="q16" value="excluir" class="ans"> Excluir (no es financiero)</label><br>
+        <input type="text" class="nota" placeholder="nota (opcional)">
+      </td>
+    </tr>
+    <tr data-idx="17">
+      <td class="num">18</td>
+      <td><a href="https://colombiacheck.com/chequeos/montaje-acomoda-audio-de-petro-para-que-parezca-decir-que-va-expropiar-al-estilo-de-chavez" target="_blank" rel="noopener">Montaje acomoda audio de Petro para que parezca decir que va a expropiar “al estilo de Chávez”</a></td>
+      <td>2025-10-08</td>
+      <td class="muted">Falso</td>
+      <td class="ctx">“…s y cosas de esas, que no es cierto, mientras los bancos están ordeñando a la clase media”.
+Del minuto 1:…”</td>
+      <td class="check">
+        <label><input type="radio" name="q17" value="mantener" class="ans"> Mantener (sí es del dominio)</label><br>
+        <label><input type="radio" name="q17" value="excluir" class="ans"> Excluir (no es financiero)</label><br>
+        <input type="text" class="nota" placeholder="nota (opcional)">
+      </td>
+    </tr>
+    <tr data-idx="18">
+      <td class="num">19</td>
+      <td><a href="https://colombiacheck.com/chequeos/aunque-petro-hablo-de-sacar-trump-no-dijo-que-deba-irse-por-las-buenas-o-por-las-malas" target="_blank" rel="noopener">Aunque Petro habló de ‘sacar a Trump’, no dijo que deba ‘irse por las buenas o por las malas’</a></td>
+      <td>2025-10-23</td>
+      <td class="muted">Cuestionable</td>
+      <td class="ctx">“…icados al narcotráfico. De hecho, ya aunció la suspensión de la ayuda exterior a Colombia, aunque el presup…”</td>
+      <td class="check">
+        <label><input type="radio" name="q18" value="mantener" class="ans"> Mantener (sí es del dominio)</label><br>
+        <label><input type="radio" name="q18" value="excluir" class="ans"> Excluir (no es financiero)</label><br>
+        <input type="text" class="nota" placeholder="nota (opcional)">
+      </td>
+    </tr>
+    <tr data-idx="19">
+      <td class="num">20</td>
+      <td><a href="https://colombiacheck.com/chequeos/video-viejo-de-logo-chino-bajo-la-bandera-de-ee-uu-en-un-puerto-circula-por-guerra" target="_blank" rel="noopener">Video viejo de logo chino bajo la bandera de EE. UU. en un puerto circula por guerra comercial</a></td>
+      <td>2025-10-27</td>
+      <td class="muted">Cuestionable</td>
+      <td class="ctx">“…ón.
+Una búsqueda inversa con Google Lens llevó al banco de imágenes Getty, donde reposan registros del ev…”</td>
+      <td class="check">
+        <label><input type="radio" name="q19" value="mantener" class="ans"> Mantener (sí es del dominio)</label><br>
+        <label><input type="radio" name="q19" value="excluir" class="ans"> Excluir (no es financiero)</label><br>
+        <input type="text" class="nota" placeholder="nota (opcional)">
+      </td>
+    </tr>
+    <tr data-idx="20">
+      <td class="num">21</td>
+      <td><a href="https://colombiacheck.com/chequeos/pelea-entre-gustavo-petro-y-dilian-francisca-toro-revive-falso-audio-atribuido-w-radio" target="_blank" rel="noopener">Pelea entre Gustavo Petro y Dilian Francisca Toro revive falso audio atribuido a W Radio</a></td>
+      <td>2025-11-14</td>
+      <td class="muted">Falso</td>
+      <td class="ctx">“…Juan Pablo Calvás hablando de Alejandro Char y el banco Serfinanza.
+La desinformación se movió pocos días…”</td>
+      <td class="check">
+        <label><input type="radio" name="q20" value="mantener" class="ans"> Mantener (sí es del dominio)</label><br>
+        <label><input type="radio" name="q20" value="excluir" class="ans"> Excluir (no es financiero)</label><br>
+        <input type="text" class="nota" placeholder="nota (opcional)">
+      </td>
+    </tr>
+    <tr data-idx="21">
+      <td class="num">22</td>
+      <td><a href="https://colombiacheck.com/chequeos/sofia-petro-no-advirtio-de-un-estallido-social-si-ivan-cepeda-no-gana-en-2026" target="_blank" rel="noopener">Sofía Petro no advirtió de un “estallido social” si Iván Cepeda no gana en 2026</a></td>
+      <td>2025-11-18</td>
+      <td class="muted">Falso</td>
+      <td class="ctx">“…del gobierno de Iván Duque, como su propuesta de reforma tributaria, y las desigualdades agravadas por la pandemia de…”</td>
+      <td class="check">
+        <label><input type="radio" name="q21" value="mantener" class="ans"> Mantener (sí es del dominio)</label><br>
+        <label><input type="radio" name="q21" value="excluir" class="ans"> Excluir (no es financiero)</label><br>
+        <input type="text" class="nota" placeholder="nota (opcional)">
+      </td>
+    </tr>
+    <tr data-idx="22">
+      <td class="num">23</td>
+      <td><a href="https://colombiacheck.com/chequeos/ley-que-obligaria-candidatos-asistir-debates-todavia-no-se-ha-aprobado-apenas-esta-en" target="_blank" rel="noopener">Ley que obligaría a candidatos a asistir a debates todavía no se ha aprobado: apenas está en trámite</a></td>
+      <td>2025-11-20</td>
+      <td class="muted">Cuestionable</td>
+      <td class="ctx">“…istan a los debates electorales, tales como la suspensión de sus espacios en medios de comunicación, la col…”</td>
+      <td class="check">
+        <label><input type="radio" name="q22" value="mantener" class="ans"> Mantener (sí es del dominio)</label><br>
+        <label><input type="radio" name="q22" value="excluir" class="ans"> Excluir (no es financiero)</label><br>
+        <input type="text" class="nota" placeholder="nota (opcional)">
+      </td>
+    </tr>
+    <tr data-idx="23">
+      <td class="num">24</td>
+      <td><a href="https://colombiacheck.com/chequeos/usan-imagen-de-supuesto-libro-de-petro-generada-por-ia-para-atacarlo-con-mensajes" target="_blank" rel="noopener">Usan imagen de supuesto libro de Petro generada por IA, para atacarlo con mensajes transfóbicos</a></td>
+      <td>2025-11-21</td>
+      <td class="muted">Falso</td>
+      <td class="ctx">“…aureen Maya (Pisando Callos, 2006), y El caso del Banco del Pacífico (Intermedio, 2005). El resto son ens…”</td>
+      <td class="check">
+        <label><input type="radio" name="q23" value="mantener" class="ans"> Mantener (sí es del dominio)</label><br>
+        <label><input type="radio" name="q23" value="excluir" class="ans"> Excluir (no es financiero)</label><br>
+        <input type="text" class="nota" placeholder="nota (opcional)">
+      </td>
+    </tr>
+    <tr data-idx="24">
+      <td class="num">25</td>
+      <td><a href="https://colombiacheck.com/chequeos/con-datos-imprecisos-repiten-la-mentira-de-que-petro-no-le-ha-hecho-reformas-la" target="_blank" rel="noopener">Con datos imprecisos repiten la mentira de que Petro no le ha hecho reformas a la Constitución</a></td>
+      <td>2025-11-25</td>
+      <td class="muted">Cuestionable</td>
+      <td class="ctx">“…ica’) y el acto 1 de 2005 cambió varias políticas pensionales, entre ellas, suprimió la mesada 14 (excepto…”</td>
+      <td class="check">
+        <label><input type="radio" name="q24" value="mantener" class="ans"> Mantener (sí es del dominio)</label><br>
+        <label><input type="radio" name="q24" value="excluir" class="ans"> Excluir (no es financiero)</label><br>
+        <input type="text" class="nota" placeholder="nota (opcional)">
+      </td>
+    </tr>
+    <tr data-idx="25">
+      <td class="num">26</td>
+      <td><a href="https://colombiacheck.com/chequeos/el-gobierno-esta-dando-un-nuevo-bono-de-hasta-200000-segun-el-estrato" target="_blank" rel="noopener">¿El Gobierno está dando un nuevo bono de hasta $200.000 según el estrato?</a></td>
+      <td>2025-11-26</td>
+      <td class="muted">Falso</td>
+      <td class="ctx">“…Mayor es pa’ adultos mayores que no alcanzaron la pensión, son vulnerables o pobres. El subsidio es de $80…”</td>
+      <td class="check">
+        <label><input type="radio" name="q25" value="mantener" class="ans"> Mantener (sí es del dominio)</label><br>
+        <label><input type="radio" name="q25" value="excluir" class="ans"> Excluir (no es financiero)</label><br>
+        <input type="text" class="nota" placeholder="nota (opcional)">
+      </td>
+    </tr>
+    <tr data-idx="26">
+      <td class="num">27</td>
+      <td><a href="https://colombiacheck.com/chequeos/ivan-mordisco-no-anuncio-que-colaborara-con-la-fiscalia-para-entregar-pruebas-sobre" target="_blank" rel="noopener">‘Iván Mordisco’ no anunció que colaborará con la Fiscalía para entregar pruebas sobre financiación de la campaña de Petro</a></td>
+      <td>2025-12-03</td>
+      <td class="muted">Falso</td>
+      <td class="ctx">“…pública entre Petro e ‘Iván Mordisco’, tras la suspensión del cese al fuego bilateral en varios departament…”</td>
+      <td class="check">
+        <label><input type="radio" name="q26" value="mantener" class="ans"> Mantener (sí es del dominio)</label><br>
+        <label><input type="radio" name="q26" value="excluir" class="ans"> Excluir (no es financiero)</label><br>
+        <input type="text" class="nota" placeholder="nota (opcional)">
+      </td>
+    </tr>
+    <tr data-idx="27">
+      <td class="num">28</td>
+      <td><a href="https://colombiacheck.com/chequeos/petro-no-ha-anunciado-que-fijara-por-decreto-un-salario-minimo-de-mas-de-17-millones-para" target="_blank" rel="noopener">Petro no ha anunciado que fijará por decreto un salario mínimo de más de 1,7 millones para 2026</a></td>
+      <td>2025-12-03</td>
+      <td class="muted">Falso</td>
+      <td class="ctx">“…e incremento se consideran varios índices como la inflación, productividad nacional, crecimiento del PIB, ent…”</td>
+      <td class="check">
+        <label><input type="radio" name="q27" value="mantener" class="ans"> Mantener (sí es del dominio)</label><br>
+        <label><input type="radio" name="q27" value="excluir" class="ans"> Excluir (no es financiero)</label><br>
+        <input type="text" class="nota" placeholder="nota (opcional)">
+      </td>
+    </tr>
+    <tr data-idx="28">
+      <td class="num">29</td>
+      <td><a href="https://colombiacheck.com/chequeos/petro-no-ordeno-las-aerolineas-del-mundo-restablecer-sus-vuelos-hacia-venezuela" target="_blank" rel="noopener">Petro no ordenó a las aerolíneas del mundo restablecer sus vuelos hacia Venezuela</a></td>
+      <td>2025-12-11</td>
+      <td class="muted">Falso</td>
+      <td class="ctx">“…ltados.
+La desinformación hace referencia a la suspensión de vuelos de varias aerolíneas internacionales, l…”</td>
+      <td class="check">
+        <label><input type="radio" name="q28" value="mantener" class="ans"> Mantener (sí es del dominio)</label><br>
+        <label><input type="radio" name="q28" value="excluir" class="ans"> Excluir (no es financiero)</label><br>
+        <input type="text" class="nota" placeholder="nota (opcional)">
+      </td>
+    </tr>
+    <tr data-idx="29">
+      <td class="num">30</td>
+      <td><a href="https://colombiacheck.com/chequeos/calarca-no-agradece-petro-o-su-gobierno-en-chats-revelados-por-noticias-caracol" target="_blank" rel="noopener">‘Calarcá’ no agradece a Petro o a su gobierno en chats revelados por Noticias Caracol</a></td>
+      <td>2025-12-22</td>
+      <td class="muted">Falso</td>
+      <td class="ctx">“…n que el grupo aprovechó el cese al fuego y la suspensión de las órdenes de captura de sus líderes para exp…”</td>
+      <td class="check">
+        <label><input type="radio" name="q29" value="mantener" class="ans"> Mantener (sí es del dominio)</label><br>
+        <label><input type="radio" name="q29" value="excluir" class="ans"> Excluir (no es financiero)</label><br>
+        <input type="text" class="nota" placeholder="nota (opcional)">
+      </td>
+    </tr>
+    <tr data-idx="30">
+      <td class="num">31</td>
+      <td><a href="https://colombiacheck.com/chequeos/foto-vieja-circula-como-si-fuera-un-arresto-de-ice-venezolanos-que-celebraban-la-captura" target="_blank" rel="noopener">Foto vieja circula como si fuera un arresto de ICE a venezolanos que celebraban la captura de Maduro</a></td>
+      <td>2026-01-14</td>
+      <td class="muted">Falso</td>
+      <td class="ctx">“…no de los resultados de la búsqueda arrojó, en el banco de imágenes Getty Images, una descripción más pro…”</td>
+      <td class="check">
+        <label><input type="radio" name="q30" value="mantener" class="ans"> Mantener (sí es del dominio)</label><br>
+        <label><input type="radio" name="q30" value="excluir" class="ans"> Excluir (no es financiero)</label><br>
+        <input type="text" class="nota" placeholder="nota (opcional)">
+      </td>
+    </tr>
+    <tr data-idx="31">
+      <td class="num">32</td>
+      <td><a href="https://colombiacheck.com/chequeos/luis-carlos-sarmiento-no-ha-dicho-que-se-va-ir-del-pais-si-pierde-el-manejo-de-los-peajes" target="_blank" rel="noopener">Luis Carlos Sarmiento no ha dicho que se va a ir del país si pierde el manejo de los peajes</a></td>
+      <td>2026-01-30</td>
+      <td class="muted">Falso</td>
+      <td class="ctx">“…lternativas para financiar megaproyectos, como un impuesto a la valorización.
+En Facebook por las páginas de…”</td>
+      <td class="check">
+        <label><input type="radio" name="q31" value="mantener" class="ans"> Mantener (sí es del dominio)</label><br>
+        <label><input type="radio" name="q31" value="excluir" class="ans"> Excluir (no es financiero)</label><br>
+        <input type="text" class="nota" placeholder="nota (opcional)">
+      </td>
+    </tr>
+    <tr data-idx="32">
+      <td class="num">33</td>
+      <td><a href="https://colombiacheck.com/chequeos/sueldos-de-500-nuevos-cargos-en-mintrabajo-estan-muy-lejos-de-los-45-millones-mensuales" target="_blank" rel="noopener">Sueldos de 500 nuevos cargos en MinTrabajo están muy lejos de los $45 millones mensuales</a></td>
+      <td>2026-01-30</td>
+      <td class="muted">Falso</td>
+      <td class="ctx">“…o con dicho ajuste, que se hace de acuerdo con la inflación (5,1% en 2025), la disposición presupuestal real…”</td>
+      <td class="check">
+        <label><input type="radio" name="q32" value="mantener" class="ans"> Mantener (sí es del dominio)</label><br>
+        <label><input type="radio" name="q32" value="excluir" class="ans"> Excluir (no es financiero)</label><br>
+        <input type="text" class="nota" placeholder="nota (opcional)">
+      </td>
+    </tr>
+    <tr data-idx="33">
+      <td class="num">34</td>
+      <td><a href="https://colombiacheck.com/chequeos/montaje-pone-cepeda-en-la-liberacion-de-santrich-equivocada-fue-la-fiscalia-no-la-picota" target="_blank" rel="noopener">Montaje pone a Cepeda en la liberación de Santrich equivocada: fue a la Fiscalía, no a La Picota</a></td>
+      <td>2026-01-30</td>
+      <td class="muted">Falso</td>
+      <td class="ctx">“…blicada por El País de España y El Colombiano con crédito de la agencia EFE.
+Como se ve, en la fotografía o…”</td>
+      <td class="check">
+        <label><input type="radio" name="q33" value="mantener" class="ans"> Mantener (sí es del dominio)</label><br>
+        <label><input type="radio" name="q33" value="excluir" class="ans"> Excluir (no es financiero)</label><br>
+        <input type="text" class="nota" placeholder="nota (opcional)">
+      </td>
+    </tr>
+    <tr data-idx="34">
+      <td class="num">35</td>
+      <td><a href="https://colombiacheck.com/chequeos/valla-contra-la-corte-constitucional-que-invita-votar-por-el-pacto-historico-es-un-montaje" target="_blank" rel="noopener">Valla contra la Corte Constitucional que invita a votar por el Pacto Histórico es un montaje con IA</a></td>
+      <td>2026-02-10</td>
+      <td class="muted">Falso</td>
+      <td class="ctx">“…stir en que la Corte Constitucional levante la suspensión de la emergencia económica, esta vez en el marco…”</td>
+      <td class="check">
+        <label><input type="radio" name="q34" value="mantener" class="ans"> Mantener (sí es del dominio)</label><br>
+        <label><input type="radio" name="q34" value="excluir" class="ans"> Excluir (no es financiero)</label><br>
+        <input type="text" class="nota" placeholder="nota (opcional)">
+      </td>
+    </tr>
+    <tr data-idx="35">
+      <td class="num">36</td>
+      <td><a href="https://colombiacheck.com/chequeos/video-de-hombres-con-cuchillos-en-las-calles-de-bogota-no-muestra-colectivos-petristas-ni" target="_blank" rel="noopener">Video de hombres con cuchillos en las calles de Bogotá no muestra a “colectivos petristas” ni tiene relación con alocución de Petro</a></td>
+      <td>2026-02-19</td>
+      <td class="muted">Falso</td>
+      <td class="ctx">“…ución presidencial donde se pronunció sobre la suspensión provisional del salario mínimo. Allí, Petro afirm…”</td>
+      <td class="check">
+        <label><input type="radio" name="q35" value="mantener" class="ans"> Mantener (sí es del dominio)</label><br>
+        <label><input type="radio" name="q35" value="excluir" class="ans"> Excluir (no es financiero)</label><br>
+        <input type="text" class="nota" placeholder="nota (opcional)">
+      </td>
+    </tr>
+    <tr data-idx="36">
+      <td class="num">37</td>
+      <td><a href="https://colombiacheck.com/chequeos/esta-foto-de-reses-muertas-por-las-inundaciones-en-cordoba-fue-generada-con-ia" target="_blank" rel="noopener">Esta foto de reses muertas por las inundaciones en Córdoba fue generada con IA</a></td>
+      <td>2026-02-20</td>
+      <td class="muted">Falso</td>
+      <td class="ctx">“…brero por el periódico La Libertad, pero no tiene crédito ni describe el lugar del departamento donde supue…”</td>
+      <td class="check">
+        <label><input type="radio" name="q36" value="mantener" class="ans"> Mantener (sí es del dominio)</label><br>
+        <label><input type="radio" name="q36" value="excluir" class="ans"> Excluir (no es financiero)</label><br>
+        <input type="text" class="nota" placeholder="nota (opcional)">
+      </td>
+    </tr>
+    <tr data-idx="37">
+      <td class="num">38</td>
+      <td><a href="https://colombiacheck.com/chequeos/montaje-atribuye-ivan-cepeda-falsa-frase-sobre-que-el-estado-administrara-la-riqueza" target="_blank" rel="noopener">Montaje atribuye a Iván Cepeda falsa frase sobre que el Estado administrará la riqueza</a></td>
+      <td>2026-02-24</td>
+      <td class="muted">Falso</td>
+      <td class="ctx">“…po atribuye a Cepeda falsa promesa de eliminar el Banco de la República”.
+Al menos dos de esos contenidos…”<br>“…po atribuye a Cepeda falsa promesa de eliminar el Banco de la República”.
+Al menos dos de esos contenidos también fueron…”</td>
+      <td class="check">
+        <label><input type="radio" name="q37" value="mantener" class="ans"> Mantener (sí es del dominio)</label><br>
+        <label><input type="radio" name="q37" value="excluir" class="ans"> Excluir (no es financiero)</label><br>
+        <input type="text" class="nota" placeholder="nota (opcional)">
+      </td>
+    </tr>
+    <tr data-idx="38">
+      <td class="num">39</td>
+      <td><a href="https://colombiacheck.com/chequeos/ia-creo-este-video-del-regano-de-una-mujer-therians-en-un-centro-comercial-de-colombia" target="_blank" rel="noopener">IA creó este video del regaño de una mujer a ‘therians’ en un centro comercial de Colombia</a></td>
+      <td>2026-02-26</td>
+      <td class="muted">Falso</td>
+      <td class="ctx">“…rpo.
+Por último, dentro de la supuesta oficina de Bancolombia que se ve en el video, hay objetos sin sent…”</td>
+      <td class="check">
+        <label><input type="radio" name="q38" value="mantener" class="ans"> Mantener (sí es del dominio)</label><br>
+        <label><input type="radio" name="q38" value="excluir" class="ans"> Excluir (no es financiero)</label><br>
+        <input type="text" class="nota" placeholder="nota (opcional)">
+      </td>
+    </tr>
+    <tr data-idx="39">
+      <td class="num">40</td>
+      <td><a href="https://colombiacheck.com/chequeos/peticion-de-investigar-cepeda-por-farc-politica-usa-montaje-que-lo-junta-con-ivan-marquez" target="_blank" rel="noopener">Petición de investigar a Cepeda por FARC-política usa montaje que lo junta con Iván Márquez rearmado</a></td>
+      <td>2026-02-27</td>
+      <td class="muted">Falso</td>
+      <td class="ctx">“…e. La imagen aparece en una nota de Semana con el crédito de las FARC.
+Al comparar la imagen viral con la r…”</td>
+      <td class="check">
+        <label><input type="radio" name="q39" value="mantener" class="ans"> Mantener (sí es del dominio)</label><br>
+        <label><input type="radio" name="q39" value="excluir" class="ans"> Excluir (no es financiero)</label><br>
+        <input type="text" class="nota" placeholder="nota (opcional)">
+      </td>
+    </tr>
+    <tr data-idx="40">
+      <td class="num">41</td>
+      <td><a href="https://colombiacheck.com/chequeos/imitacion-el-tiempo-le-atribuye-al-gobierno-petro-la-entrega-de-ps5-presos-de-itagui" target="_blank" rel="noopener">Imitación a El Tiempo le atribuye al gobierno Petro la entrega de PS5 a presos de Itagüí</a></td>
+      <td>2026-04-16</td>
+      <td class="muted">Falso</td>
+      <td class="ctx">“…rregularidades dentro del penal y derivó en la suspensión de varios funcionarios y la apertura de investiga…”</td>
+      <td class="check">
+        <label><input type="radio" name="q40" value="mantener" class="ans"> Mantener (sí es del dominio)</label><br>
+        <label><input type="radio" name="q40" value="excluir" class="ans"> Excluir (no es financiero)</label><br>
+        <input type="text" class="nota" placeholder="nota (opcional)">
+      </td>
+    </tr>
+    <tr data-idx="41">
+      <td class="num">42</td>
+      <td><a href="https://colombiacheck.com/chequeos/ia-disfraza-al-exsenador-mario-laserna-abuelo-de-paloma-valencia-como-guerrillero-del-m-19" target="_blank" rel="noopener">IA disfraza al exsenador Mario Laserna, abuelo de Paloma Valencia, como guerrillero del M-19</a></td>
+      <td>2026-04-22</td>
+      <td class="muted">Falso</td>
+      <td class="ctx">“…de leer en la Enciclopedia de la red cultural del Banco de la República.
+Sin embargo, en esa fotografía,…”<br>“…de leer en la Enciclopedia de la red cultural del Banco de la República.
+Sin embargo, en esa fotografía, ni Laserna ni Gr…”</td>
+      <td class="check">
+        <label><input type="radio" name="q41" value="mantener" class="ans"> Mantener (sí es del dominio)</label><br>
+        <label><input type="radio" name="q41" value="excluir" class="ans"> Excluir (no es financiero)</label><br>
+        <input type="text" class="nota" placeholder="nota (opcional)">
+      </td>
+    </tr>
+    <tr data-idx="42">
+      <td class="num">43</td>
+      <td><a href="https://colombiacheck.com/chequeos/engano-sobre-interesados-en-traslado-de-hipopotamos-invasores-alienta-indignacion-por" target="_blank" rel="noopener">Engaño sobre interesados en traslado de hipopótamos invasores alienta indignación por eutanasias</a></td>
+      <td>2026-04-27</td>
+      <td class="muted">Cuestionable</td>
+      <td class="ctx">“…ntara también estuvo bajo una recomendación de suspensión de comercio por parte de la Secretaría de Cites a…”</td>
+      <td class="check">
+        <label><input type="radio" name="q42" value="mantener" class="ans"> Mantener (sí es del dominio)</label><br>
+        <label><input type="radio" name="q42" value="excluir" class="ans"> Excluir (no es financiero)</label><br>
+        <input type="text" class="nota" placeholder="nota (opcional)">
+      </td>
+    </tr>
+    <tr data-idx="43">
+      <td class="num">44</td>
+      <td><a href="https://colombiacheck.com/chequeos/senalamientos-infundados-uribe-por-atentados-sacan-de-contexto-frase-sobre-bombardear" target="_blank" rel="noopener">Señalamientos infundados a Uribe por atentados sacan de contexto frase sobre ‘bombardear a Colombia’</a></td>
+      <td>2026-04-28</td>
+      <td class="muted">Cuestionable</td>
+      <td class="ctx">“…Colombia.
+Respetaremos la Reforma Laboral y bajar impuestos. pic.twitter.com/Xcvpf9LwZ4
+El clip desinformado…”</td>
+      <td class="check">
+        <label><input type="radio" name="q43" value="mantener" class="ans"> Mantener (sí es del dominio)</label><br>
+        <label><input type="radio" name="q43" value="excluir" class="ans"> Excluir (no es financiero)</label><br>
+        <input type="text" class="nota" placeholder="nota (opcional)">
+      </td>
+    </tr>
+    <tr data-idx="44">
+      <td class="num">45</td>
+      <td><a href="https://colombiacheck.com/chequeos/falsa-relacion-madre-hija-entre-juliana-guerrero-y-jefa-del-eln-se-basa-en-su-alias" target="_blank" rel="noopener">Falsa relación madre-hija entre Juliana Guerrero y jefa del ELN se basa en su alias</a></td>
+      <td>2026-04-29</td>
+      <td class="muted">Falso</td>
+      <td class="ctx">“…nde sus dos hijas estudiaron. Su papá, a punto de pensionarse, es orgulloso líder de la clase obrera y trab…”</td>
+      <td class="check">
+        <label><input type="radio" name="q44" value="mantener" class="ans"> Mantener (sí es del dominio)</label><br>
+        <label><input type="radio" name="q44" value="excluir" class="ans"> Excluir (no es financiero)</label><br>
+        <input type="text" class="nota" placeholder="nota (opcional)">
+      </td>
+    </tr>
+    <tr data-idx="45">
+      <td class="num">46</td>
+      <td><a href="https://colombiacheck.com/chequeos/pagina-huilense-de-facebook-preve-triunfo-de-valencia-con-base-en-datos-de-portal-de" target="_blank" rel="noopener">Página huilense de Facebook prevé triunfo de Valencia con base en datos de portal de apuestas</a></td>
+      <td>2026-05-23</td>
+      <td class="muted">Cuestionable</td>
+      <td class="ctx">“…a la publicación de encuestas antes de noviembre, impuesto por la nueva ley que las regula.
+En Facebook:
+* E…”</td>
+      <td class="check">
+        <label><input type="radio" name="q45" value="mantener" class="ans"> Mantener (sí es del dominio)</label><br>
+        <label><input type="radio" name="q45" value="excluir" class="ans"> Excluir (no es financiero)</label><br>
+        <input type="text" class="nota" placeholder="nota (opcional)">
+      </td>
+    </tr>
+    <tr data-idx="46">
+      <td class="num">47</td>
+      <td><a href="https://colombiacheck.com/chequeos/video-recorta-discurso-de-petro-para-insinuar-que-gastara-toda-la-plata-antes-del-cambio" target="_blank" rel="noopener">Video recorta discurso de Petro para insinuar que “gastará toda la plata” antes del cambio de presidente</a></td>
+      <td>2026-05-23</td>
+      <td class="muted">Cuestionable</td>
+      <td class="ctx">“…país depende de lo que le entre mes a mes por los impuestos. Es decir, el próximo gobierno recibirá el recau…”</td>
+      <td class="check">
+        <label><input type="radio" name="q46" value="mantener" class="ans"> Mantener (sí es del dominio)</label><br>
+        <label><input type="radio" name="q46" value="excluir" class="ans"> Excluir (no es financiero)</label><br>
+        <input type="text" class="nota" placeholder="nota (opcional)">
+      </td>
+    </tr>
+    <tr data-idx="47">
+      <td class="num">48</td>
+      <td><a href="https://colombiacheck.com/chequeos/petro-basa-narrativa-de-fraude-por-desfase-en-el-censo-electoral-en-mentiras-sobre" target="_blank" rel="noopener">Petro basa narrativa de fraude por supuesto desfase del censo electoral en mentiras sobre ‘software’</a></td>
+      <td>2026-06-03</td>
+      <td class="muted">Falso</td>
+      <td class="ctx">“…ación de la cédula), así como algunos casos de suspensión de derechos políticos (9.084), como se ha indicad…”</td>
+      <td class="check">
+        <label><input type="radio" name="q47" value="mantener" class="ans"> Mantener (sí es del dominio)</label><br>
+        <label><input type="radio" name="q47" value="excluir" class="ans"> Excluir (no es financiero)</label><br>
+        <input type="text" class="nota" placeholder="nota (opcional)">
+      </td>
+    </tr>
+    <tr data-idx="48">
+      <td class="num">49</td>
+      <td><a href="https://colombiacheck.com/chequeos/imagen-falsa-atribuye-abelardo-de-la-espriella-frase-sobre-acabar-el-sisben" target="_blank" rel="noopener">Imagen falsa atribuye a Abelardo De la Espriella frase sobre “acabar el Sisbén”</a></td>
+      <td>2026-06-10</td>
+      <td class="muted">Falso</td>
+      <td class="ctx">“…ios eliminando su regresividad (cruce Sisbén IV – DIAN)”.
+En Colombiacheck hemos verificados otras frase…”</td>
+      <td class="check">
+        <label><input type="radio" name="q48" value="mantener" class="ans"> Mantener (sí es del dominio)</label><br>
+        <label><input type="radio" name="q48" value="excluir" class="ans"> Excluir (no es financiero)</label><br>
+        <input type="text" class="nota" placeholder="nota (opcional)">
+      </td>
+    </tr>
+    <tr data-idx="49">
+      <td class="num">50</td>
+      <td><a href="https://colombiacheck.com/chequeos/de-la-espriella-no-propuso-congelar-el-salario-minimo-por-cuatro-anos-como-afirma-un" target="_blank" rel="noopener">De la Espriella no propuso congelar el salario mínimo por cuatro años, como afirma un montaje a El Tiempo</a></td>
+      <td>2026-07-06</td>
+      <td class="muted">Falso</td>
+      <td class="ctx">“…rio mínimo seguirá incrementándose con base en la inflación y la productividad.
+La desinformación comenzó a c…”</td>
+      <td class="check">
+        <label><input type="radio" name="q49" value="mantener" class="ans"> Mantener (sí es del dominio)</label><br>
+        <label><input type="radio" name="q49" value="excluir" class="ans"> Excluir (no es financiero)</label><br>
+        <input type="text" class="nota" placeholder="nota (opcional)">
+      </td>
+    </tr>
+    <tr data-idx="50">
+      <td class="num">51</td>
+      <td><a href="https://colombiacheck.com/chequeos/pobreza-bajo-y-crecio-la-clase-media-pero-petro-infla-cifra-de-personas-que-salieron-de-la" target="_blank" rel="noopener">Pobreza bajó y creció la clase media, pero Petro infla cifra de personas que salieron de la pobreza</a></td>
+      <td>2026-07-28</td>
+      <td class="muted">Chequeo Múltiple</td>
+      <td class="ctx">“…muchos más factores que deben ser analizados: la inflación controlada, porque permite que los hogares manten…”</td>
+      <td class="check">
+        <label><input type="radio" name="q50" value="mantener" class="ans"> Mantener (sí es del dominio)</label><br>
+        <label><input type="radio" name="q50" value="excluir" class="ans"> Excluir (no es financiero)</label><br>
+        <input type="text" class="nota" placeholder="nota (opcional)">
+      </td>
+    </tr>
+    <tr data-idx="51">
+      <td class="num">52</td>
+      <td><a href="https://colombiacheck.com/chequeos/la-corte-suprema-no-ha-ratificado-que-el-gobierno-petro-este-al-dia-con-las-eps" target="_blank" rel="noopener">La Corte Suprema no ha “ratificado” que el Gobierno Petro esté al día con las EPS</a></td>
+      <td>2026-07-31</td>
+      <td class="muted">Falso</td>
+      <td class="ctx">“…n en salud, pues se sustentó principalmente en la inflación y no en estudios actuariales.
+Posteriormente, med…”</td>
+      <td class="check">
+        <label><input type="radio" name="q51" value="mantener" class="ans"> Mantener (sí es del dominio)</label><br>
+        <label><input type="radio" name="q51" value="excluir" class="ans"> Excluir (no es financiero)</label><br>
+        <input type="text" class="nota" placeholder="nota (opcional)">
+      </td>
+    </tr>
+    <tr data-idx="52">
+      <td class="num">53</td>
+      <td><a href="https://colombiacheck.com/chequeos/video-que-asegura-que-se-anula-la-eleccion-de-abelardo-de-la-espriella-es-clickbait-y" target="_blank" rel="noopener">Video que asegura que “se anula la elección de Abelardo De la Espriella” es ‘clickbait’ y falso</a></td>
+      <td>2026-07-31</td>
+      <td class="muted">Falso</td>
+      <td class="ctx">“…nsiones, ni implica siquiera ninguna acción de suspensión provisional. El auto admisorio es un trámite estr…”</td>
+      <td class="check">
+        <label><input type="radio" name="q52" value="mantener" class="ans"> Mantener (sí es del dominio)</label><br>
+        <label><input type="radio" name="q52" value="excluir" class="ans"> Excluir (no es financiero)</label><br>
+        <input type="text" class="nota" placeholder="nota (opcional)">
+      </td>
+    </tr>
+    <tr data-idx="53">
+      <td class="num">54</td>
+      <td><a href="https://colombiacheck.com/chequeos/es-falso-que-abelardo-de-la-espriella-no-pueda-posesionarse-el-7-de-agosto" target="_blank" rel="noopener">Es falso que Abelardo de la Espriella no pueda posesionarse el 7 de agosto</a></td>
+      <td>2026-08-07</td>
+      <td class="muted">Falso</td>
+      <td class="ctx">“…iene la razón, y de ninguna manera implica una suspensión provisional. Por tanto, la credencial de Abelardo…”</td>
+      <td class="check">
+        <label><input type="radio" name="q53" value="mantener" class="ans"> Mantener (sí es del dominio)</label><br>
+        <label><input type="radio" name="q53" value="excluir" class="ans"> Excluir (no es financiero)</label><br>
+        <input type="text" class="nota" placeholder="nota (opcional)">
+      </td>
+    </tr>
+    <tr data-idx="54">
+      <td class="num">55</td>
+      <td><a href="https://colombiacheck.com/chequeos/trino-hace-comparacion-cuestionable-sobre-la-magnitud-de-los-terremotos-en-colombia-y" target="_blank" rel="noopener">Trino hace comparación cuestionable sobre la magnitud de los terremotos en Colombia y Venezuela</a></td>
+      <td>2026-08-11</td>
+      <td class="muted">Cuestionable</td>
+      <td class="ctx">“…, sobre todo por las afectaciones en vías y la suspensión de los servicios de energía, telefonía e internet…”</td>
+      <td class="check">
+        <label><input type="radio" name="q54" value="mantener" class="ans"> Mantener (sí es del dominio)</label><br>
+        <label><input type="radio" name="q54" value="excluir" class="ans"> Excluir (no es financiero)</label><br>
+        <input type="text" class="nota" placeholder="nota (opcional)">
+      </td>
+    </tr>
+    <tr data-idx="55">
+      <td class="num">56</td>
+      <td><a href="https://colombiacheck.com/chequeos/petro-viajo-mexico-para-dar-una-conferencia-en-la-unam-no-para-asumir-como-asesor" target="_blank" rel="noopener">Petro viajó a México para dar una conferencia en la UNAM, no para asumir como asesor internacional</a></td>
+      <td>2026-09-09</td>
+      <td class="muted">Falso</td>
+      <td class="ctx">“…: “GUSTAVO PETRO NO SE CONFORMÓ CON SU MILLONARIA PENSIÓN Y CONSIGUIÓ UN PRESTIGIOSO TRABAJO EN MÉXICO. NUE…”</td>
+      <td class="check">
+        <label><input type="radio" name="q55" value="mantener" class="ans"> Mantener (sí es del dominio)</label><br>
+        <label><input type="radio" name="q55" value="excluir" class="ans"> Excluir (no es financiero)</label><br>
+        <input type="text" class="nota" placeholder="nota (opcional)">
+      </td>
+    </tr>
+    <tr data-idx="56">
+      <td class="num">57</td>
+      <td><a href="https://colombiacheck.com/chequeos/supuesto-trino-del-bolillo-gomez-en-apoyo-petro-es-un-montaje" target="_blank" rel="noopener">Supuesto trino del ‘Bolillo’ Gómez en apoyo a Petro es un montaje</a></td>
+      <td>2026-09-15</td>
+      <td class="muted">Falso</td>
+      <td class="ctx">“…s ricos del país le tiran porque los puso a pagar impuestos, y deberían ser ellos quienes paguen más, porque…”</td>
+      <td class="check">
+        <label><input type="radio" name="q56" value="mantener" class="ans"> Mantener (sí es del dominio)</label><br>
+        <label><input type="radio" name="q56" value="excluir" class="ans"> Excluir (no es financiero)</label><br>
+        <input type="text" class="nota" placeholder="nota (opcional)">
+      </td>
+    </tr>
+    <tr data-idx="57">
+      <td class="num">58</td>
+      <td><a href="https://colombiacheck.com/chequeos/samuel-adrian-fue-detenido-por-desacato-judicial-no-por-exponer-red-de-maltrato-infantil" target="_blank" rel="noopener">Samuel Adrián fue detenido por desacato judicial, no por “exponer red de maltrato infantil” con su documental</a></td>
+      <td>2026-09-18</td>
+      <td class="muted">Falso</td>
+      <td class="ctx">“…ontra la ética médica y contempla sanciones de suspensión del ejercicio profesional de hasta cinco años, ad…”</td>
+      <td class="check">
+        <label><input type="radio" name="q57" value="mantener" class="ans"> Mantener (sí es del dominio)</label><br>
+        <label><input type="radio" name="q57" value="excluir" class="ans"> Excluir (no es financiero)</label><br>
+        <input type="text" class="nota" placeholder="nota (opcional)">
+      </td>
+    </tr>
+</tbody>
+</table>
+<div class="resumen" id="resumen">
+  <strong>Resumen (en vivo):</strong><br>
+  Revisados: <span id="n-revisados">0</span> / 58<br>
+  Mantener: <span id="n-mantener">0</span><br>
+  Excluir: <span id="n-excluir">0</span><br>
+  <button id="btn-descargar">Descargar decisiones (CSV)</button>
+  <span class="guardado-ok" id="guardado-msg"></span>
+</div>
+<script>
+
+(function() {
+  const STORAGE_KEY = 'revision_calibracion_colombiacheck_v1';
+
+  function estadoActual() {
+    const estado = {};
+    document.querySelectorAll('tr[data-idx]').forEach(function(tr) {
+      const idx = tr.dataset.idx;
+      const marcada = tr.querySelector('input.ans:checked');
+      const nota = tr.querySelector('input.nota').value;
+      estado[idx] = { respuesta: marcada ? marcada.value : null, nota: nota };
+    });
+    return estado;
+  }
+
+  function guardar() {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(estadoActual()));
+      document.getElementById('guardado-msg').textContent = 'Guardado ' + new Date().toLocaleTimeString('es-CO');
+    } catch (e) {
+      document.getElementById('guardado-msg').textContent = 'No se pudo guardar (localStorage no disponible)';
+    }
+    actualizarResumen();
+  }
+
+  function restaurar() {
+    let estado = {};
+    try {
+      estado = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+    } catch (e) { estado = {}; }
+    document.querySelectorAll('tr[data-idx]').forEach(function(tr) {
+      const idx = tr.dataset.idx;
+      const guardado = estado[idx];
+      if (!guardado) return;
+      if (guardado.respuesta) {
+        const input = tr.querySelector('input.ans[value="' + guardado.respuesta + '"]');
+        if (input) input.checked = true;
+      }
+      if (guardado.nota) tr.querySelector('input.nota').value = guardado.nota;
+    });
+    actualizarResumen();
+  }
+
+  function actualizarResumen() {
+    let revisados = 0, mantener = 0, excluir = 0;
+    document.querySelectorAll('tr[data-idx]').forEach(function(tr) {
+      const marcada = tr.querySelector('input.ans:checked');
+      tr.classList.remove('marcada-mantener', 'marcada-excluir');
+      if (marcada) {
+        revisados++;
+        if (marcada.value === 'mantener') { mantener++; tr.classList.add('marcada-mantener'); }
+        else { excluir++; tr.classList.add('marcada-excluir'); }
+      }
+    });
+    document.getElementById('n-revisados').textContent = revisados;
+    document.getElementById('n-mantener').textContent = mantener;
+    document.getElementById('n-excluir').textContent = excluir;
+  }
+
+  document.querySelectorAll('input.ans, input.nota').forEach(function(el) {
+    el.addEventListener('change', guardar);
+  });
+
+  document.getElementById('btn-descargar').addEventListener('click', function() {
+    const estado = estadoActual();
+    let csv = 'idx,respuesta,nota\n';
+    for (const idx in estado) {
+      const e = estado[idx];
+      const nota = (e.nota || '').replace(/"/g, '""');
+      csv += idx + ',' + (e.respuesta || '') + ',"' + nota + '"\n';
+    }
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'revision_calibracion_colombiacheck.csv';
+    a.click();
+  });
+
+  restaurar();
+})();
+
+</script>
+</body>
+</html>

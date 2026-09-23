@@ -11,6 +11,7 @@ import re
 
 import scrapy
 
+from ..categoria_tematica import clasificar_categoria_tematica
 from ..extraction import extract_article
 from ..items import NoticiaItem
 from ..rating_maps import es_chequeo_individual, map_colombiacheck_rating
@@ -77,7 +78,7 @@ class ColombiaCheckSpider(scrapy.Spider):
         item["tipo_fuente"] = "fact_checker"
         item["fecha_publicacion"] = parse_date_safe(extracted.fecha_publicacion)
         item["fecha_recoleccion"] = today_iso()
-        item["categoria_tematica"] = "otro"  # se ajusta en la calibración inicial (ver criterios_seleccion_fuentes.md)
+        item["categoria_tematica"] = clasificar_categoria_tematica(f"{item['titulo']} {item['texto']}")
         item["idioma"] = "es-CO"
         item["fact_checker_url"] = response.url
         item["fact_checker_rating_original"] = rating_raw

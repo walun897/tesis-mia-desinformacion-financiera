@@ -13,6 +13,7 @@ from scrapy.exceptions import DropItem
 from .dedup import DuplicateIndex
 from .domain_filter import matches_financial_domain
 from .exclusiones_manuales import EXCLUSIONES_MANUALES
+from .utils import derivar_clase
 
 logger = logging.getLogger(__name__)
 
@@ -156,6 +157,9 @@ class ParquetWriterPipeline:
             return
         OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
         df = pd.DataFrame(self.items)
+        # Columna legible agregada junto a label_fuente, no en su
+        # reemplazo -- ver derivar_clase() en utils.py.
+        df["clase"] = df["label_fuente"].apply(derivar_clase)
 
         parquet_path = OUTPUT_DIR / f"{self.spider_name}.parquet"
         df.to_parquet(parquet_path, index=False)

@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>QA 10% — corpus desinformación financiera</title>
+<style>
+  :root { --bg:#fff; --fg:#1a1a1a; --muted:#666; --border:#ddd; --accent:#2563eb; }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg:#15181d; --fg:#e6e6e6; --muted:#9aa0a6; --border:#333; --accent:#60a5fa; }
+  }
+  body { font-family: -apple-system, Segoe UI, Arial, sans-serif; background:var(--bg); color:var(--fg); margin:0; padding:24px; }
+  h1 { font-size:1.3rem; }
+  p.intro { color:var(--muted); max-width:800px; }
+  table { border-collapse: collapse; width:100%; margin-top:16px; font-size:0.88rem; }
+  th, td { border:1px solid var(--border); padding:8px; vertical-align:top; text-align:left; }
+  th { background: rgba(128,128,128,0.1); position:sticky; top:0; }
+  .muted { color:var(--muted); font-size:0.8em; }
+  .num { text-align:center; color:var(--muted); }
+  .snippet { max-width:320px; font-size:0.85em; color:var(--muted); }
+  .badge { display:inline-block; padding:2px 8px; border-radius:10px; font-size:0.78em; font-weight:600; }
+  .badge-verdadera { background:#d1fae5; color:#065f46; }
+  .badge-falsa { background:#fee2e2; color:#991b1b; }
+  a { color:var(--accent); }
+  .check label { font-size:0.85em; }
+  .nota { width:100%; margin-top:4px; font-size:0.85em; padding:2px 4px; box-sizing:border-box; }
+  tr.marcada-correcto { background: rgba(16,185,129,0.08); }
+  tr.marcada-error { background: rgba(239,68,68,0.08); }
+  .resumen { margin-top:24px; padding:12px; border:1px solid var(--border); border-radius:8px; max-width:400px; position:sticky; bottom:16px; background:var(--bg); box-shadow:0 2px 8px rgba(0,0,0,0.15); }
+  .resumen button { margin-top:8px; padding:8px 14px; border-radius:6px; border:1px solid var(--accent); background:var(--accent); color:#fff; cursor:pointer; font-size:0.85em; }
+  .guardado-ok { color:#059669; font-size:0.8em; }
+</style>
+</head>
+<body>
+<h1>Control de calidad — muestra 10% del etiquetado automático</h1>
+<p class="intro">
+  Muestra estratificada por fuente (semilla fija = 42, reproducible), tomada de los
+  25 ítems auto-etiquetados verdadera/falsa. Ver <code>guia_anotacion.md</code>.
+  Revisa cada fila: ¿el título/texto corresponde de verdad a la fuente indicada?
+  ¿el link abre la noticia correcta? ¿el texto extraído tiene sentido (no es basura
+  de la página)? Meta: si el error rate supera 5%, hay que revisar el proceso de
+  scraping antes de seguir escalando.
+  <br><strong>Tus marcas se guardan automáticamente en este navegador (localStorage)</strong>
+  al hacer clic — puedes cerrar y volver, no se pierden. Usa el botón de abajo para
+  descargar los resultados a un archivo real cuando termines.
+</p>
+<table>
+<thead><tr>
+  <th>#</th><th>Fuente</th><th>Título (clic para abrir)</th><th>Fecha</th>
+  <th>Etiqueta asignada</th><th>Extracto del texto</th><th>Tu revisión</th>
+</tr></thead>
+<tbody>
+
+    <tr data-idx="0">
+      <td class="num">1</td>
+      <td>Banco de la República<br><span class="muted">comunicado_oficial</span></td>
+      <td><a href="https://www.banrep.gov.co/es/noticias/bre-b-recibio-reconocimiento-central-banking-2026" target="_blank" rel="noopener">Bre B, el sistema de pagos inmediatos de Colombia, recibió reconocimiento de Central Banking</a></td>
+      <td>2026-03-19</td>
+      <td><span class="badge badge-verdadera">verdadera</span><br><span class="muted">—</span></td>
+      <td class="snippet">Bre B, el sistema de pagos inmediatos de Colombia, recibió reconocimiento de Central Banking
+El Banco Central de Colombia recibió el premio en la categoría “Desarrollo de pagos e infraestructura de mercado – segmento minorista”, otorgado por Central Banking, gracias a los avances…</td>
+      <td class="check">
+        <label><input type="radio" name="q0" value="correcto" class="ans"> Correcto</label><br>
+        <label><input type="radio" name="q0" value="error" class="ans"> Error</label><br>
+        <input type="text" class="nota" placeholder="nota (si hay error)">
+      </td>
+    </tr>
+    <tr data-idx="1">
+      <td class="num">2</td>
+      <td>Banco de la República<br><span class="muted">comunicado_oficial</span></td>
+      <td><a href="https://www.banrep.gov.co/es/noticias/breb-b-novedades-regulatorias" target="_blank" rel="noopener">Nuevas medidas regulatorias en Bre-B</a></td>
+      <td>2026-03-20</td>
+      <td><span class="badge badge-verdadera">verdadera</span><br><span class="muted">—</span></td>
+      <td class="snippet">Nuevas medidas regulatorias en Bre-B
+El Banco de la República actualizó la regulación de Bre‑B para fortalecer la continuidad y transparencia en las transferencias inmediatas.
+Ahora, las entidades financieras deberán informar con mayor claridad y oportunidad el origen de cualquie…</td>
+      <td class="check">
+        <label><input type="radio" name="q1" value="correcto" class="ans"> Correcto</label><br>
+        <label><input type="radio" name="q1" value="error" class="ans"> Error</label><br>
+        <input type="text" class="nota" placeholder="nota (si hay error)">
+      </td>
+    </tr>
+    <tr data-idx="2">
+      <td class="num">3</td>
+      <td>ColombiaCheck<br><span class="muted">fact_checker</span></td>
+      <td><a href="https://colombiacheck.com/chequeos/estas-fotos-no-corresponden-un-tsunami-en-julio-de-2025" target="_blank" rel="noopener">Estas fotos no corresponden a un tsunami en julio de 2025</a></td>
+      <td>2025-07-30</td>
+      <td><span class="badge badge-falsa">falsa</span><br><span class="muted">Falso</span></td>
+      <td class="snippet">Falso
+En Facebook circula una publicación que advierte sobre un terremoto de magnitud 7.7 ocurrido “hace minutos” y muestra una serie de imágenes relacionadas con el supuesto desastre natural. No se especifica en dónde se dio ni da otro tipo de información.
+La publicación es fals…</td>
+      <td class="check">
+        <label><input type="radio" name="q2" value="correcto" class="ans"> Correcto</label><br>
+        <label><input type="radio" name="q2" value="error" class="ans"> Error</label><br>
+        <input type="text" class="nota" placeholder="nota (si hay error)">
+      </td>
+    </tr>
+    <tr data-idx="3">
+      <td class="num">4</td>
+      <td>ColombiaCheck<br><span class="muted">fact_checker</span></td>
+      <td><a href="https://colombiacheck.com/chequeos/petro-trato-de-descalificar-foto-verdadera-de-marcha-contra-la-condena-de-alvaro-uribe" target="_blank" rel="noopener">Petro trató de descalificar foto verdadera de marcha contra la condena de Álvaro Uribe</a></td>
+      <td>2025-08-13</td>
+      <td><span class="badge badge-verdadera">verdadera</span><br><span class="muted">Verdadero</span></td>
+      <td class="snippet">Verdadero
+El presidente, Gustavo Petro, y otros usuarios de X afirmaron que una de las fotos que se viralizaron de la Plaza de Bolívar llena por la protesta del 7 de agosto contra la condena del expresidente Álvaro Uribe es falsa, argumentando que supuestamente se trata de una im…</td>
+      <td class="check">
+        <label><input type="radio" name="q3" value="correcto" class="ans"> Correcto</label><br>
+        <label><input type="radio" name="q3" value="error" class="ans"> Error</label><br>
+        <input type="text" class="nota" placeholder="nota (si hay error)">
+      </td>
+    </tr>
+    <tr data-idx="4">
+      <td class="num">5</td>
+      <td>ColombiaCheck<br><span class="muted">fact_checker</span></td>
+      <td><a href="https://colombiacheck.com/chequeos/montaje-el-tiempo-atribuye-cepeda-falsa-promesa-de-eliminar-el-banco-de-la-republica" target="_blank" rel="noopener">Montaje a El Tiempo atribuye a Cepeda falsa promesa de eliminar el Banco de la República</a></td>
+      <td>2026-01-28</td>
+      <td><span class="badge badge-falsa">falsa</span><br><span class="muted">Falso</span></td>
+      <td class="snippet">Falso
+La cuenta desinformadora de X ‘Misión Cumplida’ (@ojocolombia2026) publicó una pieza falsa que usa los logos de El Tiempo y Citytv con una frase apócrifa atribuida al precandidato presidencial del Pacto Histórico, Iván Cepeda, en la que advierte que, si gana la Presidencia…</td>
+      <td class="check">
+        <label><input type="radio" name="q4" value="correcto" class="ans"> Correcto</label><br>
+        <label><input type="radio" name="q4" value="error" class="ans"> Error</label><br>
+        <input type="text" class="nota" placeholder="nota (si hay error)">
+      </td>
+    </tr>
+    <tr data-idx="5">
+      <td class="num">6</td>
+      <td>ColombiaCheck<br><span class="muted">fact_checker</span></td>
+      <td><a href="https://colombiacheck.com/chequeos/sueldos-de-500-nuevos-cargos-en-mintrabajo-estan-muy-lejos-de-los-45-millones-mensuales" target="_blank" rel="noopener">Sueldos de 500 nuevos cargos en MinTrabajo están muy lejos de los $45 millones mensuales</a></td>
+      <td>2026-01-30</td>
+      <td><span class="badge badge-falsa">falsa</span><br><span class="muted">Falso</span></td>
+      <td class="snippet">Falso
+Una publicación del usuario de X Misión Cumplida (@ojocolombia2026) asegura falsamente que, mediante el Decreto 0052 de 2026, “PETRO acaba de crear 1.000 cargos en el ministerio del trabajo con sueldos entre $15.000.000 y $ 45.000.000 mensuales”.
+Sin embargo, al revisar el…</td>
+      <td class="check">
+        <label><input type="radio" name="q5" value="correcto" class="ans"> Correcto</label><br>
+        <label><input type="radio" name="q5" value="error" class="ans"> Error</label><br>
+        <input type="text" class="nota" placeholder="nota (si hay error)">
+      </td>
+    </tr>
+    <tr data-idx="6">
+      <td class="num">7</td>
+      <td>ColombiaCheck<br><span class="muted">fact_checker</span></td>
+      <td><a href="https://colombiacheck.com/chequeos/imagen-viral-atribuye-valencia-falsa-propuesta-de-bajar-el-salario-minimo-14500000" target="_blank" rel="noopener">Imagen viral atribuye a Valencia falsa propuesta de bajar el salario mínimo a $1.450.0000</a></td>
+      <td>2026-05-14</td>
+      <td><span class="badge badge-falsa">falsa</span><br><span class="muted">Falso</span></td>
+      <td class="snippet">Falso
+Una imagen de la candidata presidencial del Centro Democrático, Paloma Valencia, le hace una atribución de la frase: “Bajaremos el mínimo a $1.450.000 para frenar el desastre que dejó Petro y rescatar a las empresas. El sacrificio vale la pena: ¡en el tercer año daremos el…</td>
+      <td class="check">
+        <label><input type="radio" name="q6" value="correcto" class="ans"> Correcto</label><br>
+        <label><input type="radio" name="q6" value="error" class="ans"> Error</label><br>
+        <input type="text" class="nota" placeholder="nota (si hay error)">
+      </td>
+    </tr>
+    <tr data-idx="7">
+      <td class="num">8</td>
+      <td>ColombiaCheck<br><span class="muted">fact_checker</span></td>
+      <td><a href="https://colombiacheck.com/chequeos/de-la-espriella-no-propuso-congelar-el-salario-minimo-por-cuatro-anos-como-afirma-un" target="_blank" rel="noopener">De la Espriella no propuso congelar el salario mínimo por cuatro años, como afirma un montaje a El Tiempo</a></td>
+      <td>2026-07-06</td>
+      <td><span class="badge badge-falsa">falsa</span><br><span class="muted">Falso</span></td>
+      <td class="snippet">Falso
+Una foto falsa que simula ser una publicación de El Tiempo afirma que el presidente electo Abelardo de la Espriella congelará el salario mínimo durante cuatro años como parte de su plan para “estabilizar la economía”.
+Se trata de un montaje. No hay registros de que De la Es…</td>
+      <td class="check">
+        <label><input type="radio" name="q7" value="correcto" class="ans"> Correcto</label><br>
+        <label><input type="radio" name="q7" value="error" class="ans"> Error</label><br>
+        <input type="text" class="nota" placeholder="nota (si hay error)">
+      </td>
+    </tr>
+    <tr data-idx="8">
+      <td class="num">9</td>
+      <td>ColombiaCheck<br><span class="muted">fact_checker</span></td>
+      <td><a href="https://colombiacheck.com/chequeos/cuidado-con-la-pagina-falsa-que-suplanta-el-tiempo-para-promocionar-una-supuesta" target="_blank" rel="noopener">Cuidado con la página falsa que suplanta a El Tiempo para promocionar una supuesta plataforma de inversiones</a></td>
+      <td>2026-07-30</td>
+      <td><span class="badge badge-falsa">falsa</span><br><span class="muted">Falso</span></td>
+      <td class="snippet">Falso
+Un lector nos pidió verificar una página falsa que aparenta ser del diario El Tiempo con una supuesta noticia titulada: “¡Ustedes están robando a las familias colombianas! El programa en Canal RCN terminó en escándalo: el gerente del Banco de la República de Colombia abando…</td>
+      <td class="check">
+        <label><input type="radio" name="q8" value="correcto" class="ans"> Correcto</label><br>
+        <label><input type="radio" name="q8" value="error" class="ans"> Error</label><br>
+        <input type="text" class="nota" placeholder="nota (si hay error)">
+      </td>
+    </tr>
+    <tr data-idx="9">
+      <td class="num">10</td>
+      <td>ColombiaCheck<br><span class="muted">fact_checker</span></td>
+      <td><a href="https://colombiacheck.com/chequeos/petro-viajo-mexico-para-dar-una-conferencia-en-la-unam-no-para-asumir-como-asesor" target="_blank" rel="noopener">Petro viajó a México para dar una conferencia en la UNAM, no para asumir como asesor internacional</a></td>
+      <td>2026-09-09</td>
+      <td><span class="badge badge-falsa">falsa</span><br><span class="muted">Falso</span></td>
+      <td class="snippet">Falso
+Un lector nos pidió verificar una imagen con el texto: “GUSTAVO PETRO NO SE CONFORMÓ CON SU MILLONARIA PENSIÓN Y CONSIGUIÓ UN PRESTIGIOSO TRABAJO EN MÉXICO. NUEVO CARGO ASESOR INTERNACIONAL PARA LA JUSTICIA SOCIAL Y LA TRANSICIÓN ENERGÉTICA. ORGANIZACIÓN INTERNACIONAL CON S…</td>
+      <td class="check">
+        <label><input type="radio" name="q9" value="correcto" class="ans"> Correcto</label><br>
+        <label><input type="radio" name="q9" value="error" class="ans"> Error</label><br>
+        <input type="text" class="nota" placeholder="nota (si hay error)">
+      </td>
+    </tr>
+    <tr data-idx="10">
+      <td class="num">11</td>
+      <td>Halcones y Palomas<br><span class="muted">medio_referencia</span></td>
+      <td><a href="https://www.halconesypalomas.com/2026/08/04/grupo-cibest-realizo-el-cierre-oficial-de-la-adquisicion-del-100-de-las-acciones-de-la-fintech-avista-colombia/" target="_blank" rel="noopener">Grupo Cibest realizó el cierre oficial de la adquisición del 100% de las acciones de la fintech Avista Colombia</a></td>
+      <td>2026-08-04</td>
+      <td><span class="badge badge-verdadera">verdadera</span><br><span class="muted">—</span></td>
+      <td class="snippet">Medellín.- Grupo Cibest realizó el cierre oficial de la adquisición del 100% de las acciones de Avista Colombia S.A.S. BIC, en una operación que cumplió con todas las condiciones propias de este tipo de transacciones y que convierte a esa fintech colombiana en parte del Grupo.
+Av…</td>
+      <td class="check">
+        <label><input type="radio" name="q10" value="correcto" class="ans"> Correcto</label><br>
+        <label><input type="radio" name="q10" value="error" class="ans"> Error</label><br>
+        <input type="text" class="nota" placeholder="nota (si hay error)">
+      </td>
+    </tr>
+    <tr data-idx="11">
+      <td class="num">12</td>
+      <td>Halcones y Palomas<br><span class="muted">medio_referencia</span></td>
+      <td><a href="https://www.halconesypalomas.com/2026/08/05/gran-tierra-energy-decidio-vender-sus-activos-de-petroleo-en-colombia-y-ecuador-a-la-freancesa-maurel-prom-por-us1-330-millones/" target="_blank" rel="noopener">Gran Tierra Energy decidió vender sus activos de petróleo</a></td>
+      <td>2026-08-05</td>
+      <td><span class="badge badge-verdadera">verdadera</span><br><span class="muted">—</span></td>
+      <td class="snippet">Calgary.- Gran Tierra Energy Inc. (Nyse American:GTE) (TSX: GTE) (LSE: GTE) anunció la firma de un acuerdo definitivo de compraventa de acciones para vender la totalidad de su negocio petrolero en Colombia y Ecuador a Établissements Maurel &amp; Prom S.A., compañía internacional de e…</td>
+      <td class="check">
+        <label><input type="radio" name="q11" value="correcto" class="ans"> Correcto</label><br>
+        <label><input type="radio" name="q11" value="error" class="ans"> Error</label><br>
+        <input type="text" class="nota" placeholder="nota (si hay error)">
+      </td>
+    </tr>
+    <tr data-idx="12">
+      <td class="num">13</td>
+      <td>Halcones y Palomas<br><span class="muted">medio_referencia</span></td>
+      <td><a href="https://www.halconesypalomas.com/2026/08/21/banco-union-recibio-20-000-millones-en-credito-subordinado-otorgado-por-bid-invest-para-apoyar-la-economia-plateada/" target="_blank" rel="noopener">Banco Unión recibió $20.000 millones en crédito subordinado otorgado por BID Invest para apoyar la Economía Plateada</a></td>
+      <td>2026-08-21</td>
+      <td><span class="badge badge-verdadera">verdadera</span><br><span class="muted">—</span></td>
+      <td class="snippet">Bogotá.- Banco Unión S.A. recibió el desembolso de un crédito subordinado por un monto de $20.000.000.000, otorgado por BID Invest en calidad de acreedor (herramienta del Banco Interamericano de Desarrollo que poya de forma exclusiva a las empresas y proyectos del mercado privado…</td>
+      <td class="check">
+        <label><input type="radio" name="q12" value="correcto" class="ans"> Correcto</label><br>
+        <label><input type="radio" name="q12" value="error" class="ans"> Error</label><br>
+        <input type="text" class="nota" placeholder="nota (si hay error)">
+      </td>
+    </tr>
+    <tr data-idx="13">
+      <td class="num">14</td>
+      <td>Halcones y Palomas<br><span class="muted">medio_referencia</span></td>
+      <td><a href="https://www.halconesypalomas.com/2026/09/11/acusado-en-carolina-del-sur-colombiano-que-lavo-us135-millones-de-narcotrafico-a-traves-de-plataforma-cripto/" target="_blank" rel="noopener">Acusado en Carolina del Sur colombiano que lavó US$135 millones</a></td>
+      <td>2026-09-11</td>
+      <td><span class="badge badge-verdadera">verdadera</span><br><span class="muted">—</span></td>
+      <td class="snippet">Greenville (Carolina del Sur).- Un gran jurado federal en Greenville emitió una acusación formal de un solo cargo, presentada por la Fiscalía Federal, contra William Andrés Holguín Méndez, de 40 años y nacionalidad colombiana, por su participación en una conspiración de lavado de…</td>
+      <td class="check">
+        <label><input type="radio" name="q13" value="correcto" class="ans"> Correcto</label><br>
+        <label><input type="radio" name="q13" value="error" class="ans"> Error</label><br>
+        <input type="text" class="nota" placeholder="nota (si hay error)">
+      </td>
+    </tr>
+    <tr data-idx="14">
+      <td class="num">15</td>
+      <td>Halcones y Palomas<br><span class="muted">medio_referencia</span></td>
+      <td><a href="https://www.halconesypalomas.com/2026/09/17/grupo-cibest-preve-adquirir-100-del-capital-de-compania-paisa-comercial-card-de-la-familia-tobon-antes-de-finalizar-el-2026/" target="_blank" rel="noopener">Grupo Cibest prevé adquirir 100% del capital de compañía paisa Comercial Card (de la familia Tobón), antes de finalizar el 2026</a></td>
+      <td>2026-09-17</td>
+      <td><span class="badge badge-verdadera">verdadera</span><br><span class="muted">—</span></td>
+      <td class="snippet">Por Rolando Lozano Garzón – Bogotá.- Grupo Cibest S.A. prevé someter a avales de las autoridades financieras y de competencia la compra en Colombia del 100% de las acciones en circulación de Comercial Card S.A.S., compañía que es propiedad actualmente de la familia Tobón.
+La movi…</td>
+      <td class="check">
+        <label><input type="radio" name="q14" value="correcto" class="ans"> Correcto</label><br>
+        <label><input type="radio" name="q14" value="error" class="ans"> Error</label><br>
+        <input type="text" class="nota" placeholder="nota (si hay error)">
+      </td>
+    </tr>
+    <tr data-idx="15">
+      <td class="num">16</td>
+      <td>Halcones y Palomas<br><span class="muted">medio_referencia</span></td>
+      <td><a href="https://www.halconesypalomas.com/2026/09/21/fintech-colombiana-bold-adquirio-facilitador-de-pagos-vendemas-y-espera-por-licencia-en-peru-para-actuar-como-entidad-financiera-nativa/" target="_blank" rel="noopener">Fintech colombiana Bold adquirió facilitador de pagos VendeMás y espera por licencia en Perú para actuar como entidad financiera nativa</a></td>
+      <td>2026-09-21</td>
+      <td><span class="badge badge-verdadera">verdadera</span><br><span class="muted">—</span></td>
+      <td class="snippet">Bogotá. – La fintech Bold informó que Perú será su primer mercado fuera de Colombia.
+Para iniciar la operación, la empresa colombiana adquirió VendeMás, facilitador de pagos de Niubiz, con lo que incorporó 30.000 clientes y adaptó la plataforma tecnológica con el fin de operar en…</td>
+      <td class="check">
+        <label><input type="radio" name="q15" value="correcto" class="ans"> Correcto</label><br>
+        <label><input type="radio" name="q15" value="error" class="ans"> Error</label><br>
+        <input type="text" class="nota" placeholder="nota (si hay error)">
+      </td>
+    </tr>
+    <tr data-idx="16">
+      <td class="num">17</td>
+      <td>La República<br><span class="muted">medio_referencia</span></td>
+      <td><a href="https://www.larepublica.co/economia/incendio-en-villa-de-leyva-esta-controlado-en-75-pese-a-que-hay-dos-focos-activos-4487471" target="_blank" rel="noopener">Incendio en Villa de Leyva está controlado en 75%, pese a que hay dos focos activos</a></td>
+      <td>2026-09-21</td>
+      <td><span class="badge badge-verdadera">verdadera</span><br><span class="muted">—</span></td>
+      <td class="snippet">Según el reporte de la Ungrd, la emergencia ha afectado cerca de 1.200 hectáreas, de las cuales aproximadamente 715 corresponden al Santuario de Fauna
+A pesar de que dos focos siguen activos en el Cerro de San Marcos, el incendio que amenaza a Villa de Leyva y al Santuario de Fau…</td>
+      <td class="check">
+        <label><input type="radio" name="q16" value="correcto" class="ans"> Correcto</label><br>
+        <label><input type="radio" name="q16" value="error" class="ans"> Error</label><br>
+        <input type="text" class="nota" placeholder="nota (si hay error)">
+      </td>
+    </tr>
+    <tr data-idx="17">
+      <td class="num">18</td>
+      <td>Superintendencia Financiera de Colombia<br><span class="muted">comunicado_oficial</span></td>
+      <td><a href="https://www.superfinanciera.gov.co/publicaciones/10116046/sfc-en-el-toque-de-campana-de-bvc-para-conmemorar-la-equidad-de-genero/" target="_blank" rel="noopener">SFC, en el toque de campana de BVC para conmemorar la equidad de género</a></td>
+      <td>2026-03-06</td>
+      <td><span class="badge badge-verdadera">verdadera</span><br><span class="muted">—</span></td>
+      <td class="snippet">SFC, en el toque de campana de BVC para conmemorar la equidad de género
+6 de marzo de 2026
+El Superintendente Financiero, profesor César Ferrari, participó este viernes en el toque de campana de la Bolsa de Valores de Colombia (BVC), que se dio para destacar los avances logrados…</td>
+      <td class="check">
+        <label><input type="radio" name="q17" value="correcto" class="ans"> Correcto</label><br>
+        <label><input type="radio" name="q17" value="error" class="ans"> Error</label><br>
+        <input type="text" class="nota" placeholder="nota (si hay error)">
+      </td>
+    </tr>
+    <tr data-idx="18">
+      <td class="num">19</td>
+      <td>Superintendencia Financiera de Colombia<br><span class="muted">comunicado_oficial</span></td>
+      <td><a href="https://www.superfinanciera.gov.co/publicaciones/10116112/en-bucaramanga-se-realizara-una-nueva-jornada-de-la-campana-me-informo-y-cuido-mi-dinero/" target="_blank" rel="noopener">En Bucaramanga se realizará una nueva jornada de la campaña “Me informo y cuido mi dinero”</a></td>
+      <td>2026-05-04</td>
+      <td><span class="badge badge-verdadera">verdadera</span><br><span class="muted">—</span></td>
+      <td class="snippet">En Bucaramanga se realizará una nueva jornada de la campaña “Me informo y cuido mi dinero”
+Bogotá, 4 de mayo de 2026. – Los días 7 y 8 de mayo, Bucaramanga será escenario de una nueva jornada de la campaña conjunta “Me informo y cuido mi dinero”, una iniciativa liderada por las S…</td>
+      <td class="check">
+        <label><input type="radio" name="q18" value="correcto" class="ans"> Correcto</label><br>
+        <label><input type="radio" name="q18" value="error" class="ans"> Error</label><br>
+        <input type="text" class="nota" placeholder="nota (si hay error)">
+      </td>
+    </tr>
+    <tr data-idx="19">
+      <td class="num">20</td>
+      <td>Superintendencia Financiera de Colombia<br><span class="muted">comunicado_oficial</span></td>
+      <td><a href="https://www.superfinanciera.gov.co/publicaciones/10116203/sfc-lanza-el-micrositio-del-muric-que-centraliza-la-informacion-tecnica-y-facilita-la-transmision-de-datos-de-cartera-de-credito/" target="_blank" rel="noopener">SFC lanza el micrositio del MURIC que centraliza la información técnica y facilita la transmisión de datos de cartera de crédito</a></td>
+      <td>2026-07-30</td>
+      <td><span class="badge badge-verdadera">verdadera</span><br><span class="muted">—</span></td>
+      <td class="snippet">SFC lanza el micrositio del MURIC que centraliza la información técnica y facilita la transmisión de datos de cartera de crédito
+- Este módulo está alojado en el sitio web de la Superfinanciera y centraliza toda la normativa, las especificaciones técnicas, schemas AVRO y guías op…</td>
+      <td class="check">
+        <label><input type="radio" name="q19" value="correcto" class="ans"> Correcto</label><br>
+        <label><input type="radio" name="q19" value="error" class="ans"> Error</label><br>
+        <input type="text" class="nota" placeholder="nota (si hay error)">
+      </td>
+    </tr>
+    <tr data-idx="20">
+      <td class="num">21</td>
+      <td>Superintendencia Financiera de Colombia<br><span class="muted">comunicado_oficial</span></td>
+      <td><a href="https://www.superfinanciera.gov.co/publicaciones/10116214/superfinanciero-profesor-cesar-ferrari-presento-renuncia-irrevocable-a-su-cargo/" target="_blank" rel="noopener">Superfinanciero, profesor César Ferrari, presentó renuncia irrevocable a su cargo</a></td>
+      <td>2026-08-13</td>
+      <td><span class="badge badge-verdadera">verdadera</span><br><span class="muted">—</span></td>
+      <td class="snippet">Superfinanciero, profesor César Ferrari, presentó renuncia irrevocable a su cargo
+Bogotá, 13 de agosto de 2026. – El Superintendente Financiero de Colombia, profesor César Ferrari, presentó su carta de renuncia irrevocable ante el Presidente de la República, Abelardo de la Esprie…</td>
+      <td class="check">
+        <label><input type="radio" name="q20" value="correcto" class="ans"> Correcto</label><br>
+        <label><input type="radio" name="q20" value="error" class="ans"> Error</label><br>
+        <input type="text" class="nota" placeholder="nota (si hay error)">
+      </td>
+    </tr>
+    <tr data-idx="21">
+      <td class="num">22</td>
+      <td>Superintendencia Financiera de Colombia<br><span class="muted">comunicado_oficial</span></td>
+      <td><a href="https://www.superfinanciera.gov.co/publicaciones/10116230/instrucciones-para-mitigar-el-impacto-de-la-situacion-de-desastre-sobre-los-consumidores-financieros-afectados/" target="_blank" rel="noopener">Instrucciones para mitigar el impacto de la situación de desastre sobre los consumidores financieros afectados</a></td>
+      <td>2026-08-26</td>
+      <td><span class="badge badge-verdadera">verdadera</span><br><span class="muted">—</span></td>
+      <td class="snippet">Instrucciones para mitigar el impacto de la situación de desastre sobre los consumidores financieros afectados
+La Superintendencia Financiera de Colombia (SFC) expidió la Circular Externa 007 del 26 de agosto de 2026, mediante la cual imparte instrucciones a las entidades vigilad…</td>
+      <td class="check">
+        <label><input type="radio" name="q21" value="correcto" class="ans"> Correcto</label><br>
+        <label><input type="radio" name="q21" value="error" class="ans"> Error</label><br>
+        <input type="text" class="nota" placeholder="nota (si hay error)">
+      </td>
+    </tr>
+    <tr data-idx="22">
+      <td class="num">23</td>
+      <td>Valora Analitik<br><span class="muted">medio_referencia</span></td>
+      <td><a href="https://www.valoraanalitik.com/gobierno-habilita-creditos-seguros-y-entrega-de-ahorros-para-afectados-por-terremoto/" target="_blank" rel="noopener">Gobierno habilita créditos, seguros y entrega de ahorros para afectados por terremoto</a></td>
+      <td>2026-09-18</td>
+      <td><span class="badge badge-verdadera">verdadera</span><br><span class="muted">—</span></td>
+      <td class="snippet">El Gobierno Nacional expidió el Decreto Legislativo 1416 del 17 de septiembre de 2026, con medidas financieras dirigidas a las familias, empresas y personas afectadas por el terremoto del pasado 10 de agosto.
+La norma se expide bajo el Estado de Emergencia declarado por el Gobier…</td>
+      <td class="check">
+        <label><input type="radio" name="q22" value="correcto" class="ans"> Correcto</label><br>
+        <label><input type="radio" name="q22" value="error" class="ans"> Error</label><br>
+        <input type="text" class="nota" placeholder="nota (si hay error)">
+      </td>
+    </tr>
+    <tr data-idx="23">
+      <td class="num">24</td>
+      <td>Valora Analitik<br><span class="muted">medio_referencia</span></td>
+      <td><a href="https://www.valoraanalitik.com/con-esta-app-puede-recibir-hasta-50-mas-por-cada-dolar-que-convierta-a-pesos/" target="_blank" rel="noopener">Así puede recibir hasta $50 más por cada dólar que convierta a pesos</a></td>
+      <td>2026-09-18</td>
+      <td><span class="badge badge-verdadera">verdadera</span><br><span class="muted">—</span></td>
+      <td class="snippet">Para muchas familias colombianas, los dólares que llegan desde el exterior representan un ingreso importante para cubrir gastos, ahorrar o responder por compromisos en el país. Por eso, cuando llega el momento de convertir esos recursos a pesos colombianos, cada peso que se pueda…</td>
+      <td class="check">
+        <label><input type="radio" name="q23" value="correcto" class="ans"> Correcto</label><br>
+        <label><input type="radio" name="q23" value="error" class="ans"> Error</label><br>
+        <input type="text" class="nota" placeholder="nota (si hay error)">
+      </td>
+    </tr>
+    <tr data-idx="24">
+      <td class="num">25</td>
+      <td>Valora Analitik<br><span class="muted">medio_referencia</span></td>
+      <td><a href="https://www.valoraanalitik.com/dolar-en-colombia-rozo-los-3-200-y-cerro-al-alza-por-tercera-jornada-consecutiva/" target="_blank" rel="noopener">Dólar en Colombia rozó los $3.200 y cerró al alza por tercera jornada consecutiva</a></td>
+      <td>2026-09-21</td>
+      <td><span class="badge badge-verdadera">verdadera</span><br><span class="muted">—</span></td>
+      <td class="snippet">La cotización del dólar en Colombia acumuló su tercera jornada consecutiva de ganancias y cerró este lunes en $3.199, registrando una variación del 0,68 % frente al dato del pasado viernes ($3.177,50).
+Durante la sesiónh, la divisa abrió a la baja en $3.170 y marcó un mínimo intr…</td>
+      <td class="check">
+        <label><input type="radio" name="q24" value="correcto" class="ans"> Correcto</label><br>
+        <label><input type="radio" name="q24" value="error" class="ans"> Error</label><br>
+        <input type="text" class="nota" placeholder="nota (si hay error)">
+      </td>
+    </tr>
+</tbody>
+</table>
+<div class="resumen" id="resumen">
+  <strong>Resumen (en vivo):</strong><br>
+  Revisados: <span id="n-revisados">0</span> / 25<br>
+  Correctos: <span id="n-correctos">0</span><br>
+  Errores: <span id="n-errores">0</span><br>
+  Tasa de error: <span id="n-tasa">0</span>%  (umbral: 5%)<br>
+  <button id="btn-descargar">Descargar resultados (CSV)</button>
+  <span class="guardado-ok" id="guardado-msg"></span>
+</div>
+<script>
+
+(function() {
+  const STORAGE_KEY = 'qa_corpus_muestra_10pct_v1';
+
+  function estadoActual() {
+    const estado = {};
+    document.querySelectorAll('tr[data-idx]').forEach(function(tr) {
+      const idx = tr.dataset.idx;
+      const marcada = tr.querySelector('input.ans:checked');
+      const nota = tr.querySelector('input.nota').value;
+      estado[idx] = { respuesta: marcada ? marcada.value : null, nota: nota };
+    });
+    return estado;
+  }
+
+  function guardar() {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(estadoActual()));
+      document.getElementById('guardado-msg').textContent = 'Guardado ' + new Date().toLocaleTimeString('es-CO');
+    } catch (e) {
+      document.getElementById('guardado-msg').textContent = 'No se pudo guardar (localStorage no disponible)';
+    }
+    actualizarResumen();
+  }
+
+  function restaurar() {
+    let estado = {};
+    try {
+      estado = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+    } catch (e) { estado = {}; }
+    document.querySelectorAll('tr[data-idx]').forEach(function(tr) {
+      const idx = tr.dataset.idx;
+      const guardado = estado[idx];
+      if (!guardado) return;
+      if (guardado.respuesta) {
+        const input = tr.querySelector('input.ans[value="' + guardado.respuesta + '"]');
+        if (input) input.checked = true;
+      }
+      if (guardado.nota) tr.querySelector('input.nota').value = guardado.nota;
+    });
+    actualizarResumen();
+  }
+
+  function actualizarResumen() {
+    let revisados = 0, correctos = 0, errores = 0;
+    document.querySelectorAll('tr[data-idx]').forEach(function(tr) {
+      const marcada = tr.querySelector('input.ans:checked');
+      tr.classList.remove('marcada-correcto', 'marcada-error');
+      if (marcada) {
+        revisados++;
+        if (marcada.value === 'correcto') { correctos++; tr.classList.add('marcada-correcto'); }
+        else { errores++; tr.classList.add('marcada-error'); }
+      }
+    });
+    document.getElementById('n-revisados').textContent = revisados;
+    document.getElementById('n-correctos').textContent = correctos;
+    document.getElementById('n-errores').textContent = errores;
+    document.getElementById('n-tasa').textContent = revisados ? (100 * errores / revisados).toFixed(1) : '0';
+  }
+
+  document.querySelectorAll('input.ans, input.nota').forEach(function(el) {
+    el.addEventListener('change', guardar);
+  });
+
+  document.getElementById('btn-descargar').addEventListener('click', function() {
+    const estado = estadoActual();
+    let csv = 'idx,respuesta,nota\n';
+    for (const idx in estado) {
+      const e = estado[idx];
+      const nota = (e.nota || '').replace(/"/g, '""');
+      csv += idx + ',' + (e.respuesta || '') + ',"' + nota + '"\n';
+    }
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'qa_resultados_10pct.csv';
+    a.click();
+  });
+
+  restaurar();
+})();
+
+</script>
+</body>
+</html>
